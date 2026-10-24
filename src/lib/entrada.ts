@@ -1,4 +1,5 @@
 import type { EntradaAnalisis } from "./gemini.ts";
+import { leerContexto } from "./preguntas.ts";
 
 export const MAX_TEXTO = 5000;
 export const MAX_IMAGEN_BYTES = 4 * 1024 * 1024;
@@ -65,6 +66,7 @@ export async function leerEntrada(request: Request): Promise<EntradaAnalisis> {
 
   let texto = "";
   let imagen: EntradaAnalisis["imagen"];
+  let contexto: EntradaAnalisis["contexto"];
 
   if (tipo.includes("multipart/form-data")) {
     let form: FormData;
@@ -74,24 +76,27 @@ export async function leerEntrada(request: Request): Promise<EntradaAnalisis> {
       throw new EntradaError("No pudimos leer lo que mandaste. Probá de nuevo.");
     }
     texto = validarTexto(form.get("texto"));
+    contexto = leerContexto(form.get("contexto"));
     const archivo = form.get("imagen");
     if (archivo && typeof archivo !== "string" && archivo.size > 0) {
       if (archivo.size > MAX_IMAGEN_BYTES) throw new EntradaError("La imagen pesa más de 4 MB. Probá con una captura más liviana.", 413);
       imagen = validarImagen(new Uint8Array(await archivo.arrayBuffer()));
     }
   } else {
-    let body: { texto?: unknown; imagen?: unknown };
+    let body: { texto?: unknown; imagen?: unknown; contexto?: unknown };
     try {
       body = await request.json();
     } catch {
       throw new EntradaError("Mandanos el mensaje en formato JSON.");
     }
     texto = validarTexto(body?.texto);
+    contexto = leerContexto(body?.contexto);
     if (typeof body?.imagen === "string" && body.imagen.trim()) {
       imagen = validarImagen(decodificarBase64(body.imagen));
     }
   }
 
   if (!texto && !imagen) throw new EntradaError("Pegá el mensaje o subí una captura para revisar.");
-  return { ...(texto ? { texto } : {}), ...(imagen ? { imagen } : {}) };
+  const conContexto = contexto && Object.keys(contexto).length > 0;
+  return { ...(texto ? { texto } : {}), ...(imagen ? { imagen } : {}), ...(conContexto ? { contexto } : {}) };
 }

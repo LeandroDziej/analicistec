@@ -109,3 +109,97 @@ body {
     scroll-behavior: auto !important;
   }
 }
+/* Manual de usuario dentro de la app (/ayuda) */
+@layer components {
+  .manual-ayuda {
+    @apply rounded-2xl border border-line bg-white p-5 text-ink sm:p-7;
+    line-height: 1.65;
+  }
+
+  .manual-ayuda h2 {
+    @apply mt-8 mb-3 border-b-2 border-brand-700 pb-1.5 text-2xl text-brand-900;
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+    scroll-margin-top: 1rem;
+  }
+
+  .manual-ayuda h2:first-of-type {
+    @apply mt-4;
+  }
+
+  .manual-ayuda h3 {
+    @apply mt-5 mb-2 text-lg font-bold text-brand-700;
+  }
+
+  .manual-ayuda p {
+    @apply mb-3;
+  }
+
+  .manual-ayuda ul,
+  .manual-ayuda ol {
+    @apply mb-4 pl-6;
+  }
+
+  .manual-ayuda ul {
+    @apply list-disc;
+  }
+
+  .manual-ayuda ol {
+    @apply list-decimal;
+  }
+
+  .manual-ayuda li {
+    @apply mb-1.5;
+  }
+
+  .manual-ayuda li::marker {
+    @apply font-bold text-brand-700;
+  }
+
+  .manual-ayuda strong {
+    @apply text-brand-900;
+  }
+
+  .manual-ayuda a {
+    @apply text-brand-700 underline underline-offset-2 hover:text-brand-800;
+  }
+
+  .manual-ayuda hr {
+    @apply my-4 border-0;
+  }
+
+  .manual-ayuda blockquote {
+    @apply mt-3 mb-4 rounded-r-xl border-l-4 border-warn-600 bg-warn-50 px-4 py-3 text-warn-800;
+  }
+
+  .manual-ayuda blockquote p {
+    @apply m-0;
+  }
+
+  .manual-ayuda blockquote strong {
+    @apply text-warn-800;
+  }
+
+  .manual-ayuda table {
+    @apply mt-2 mb-4 block w-full overflow-x-auto text-sm;
+    border-collapse: collapse;
+  }
+
+  .manual-ayuda th {
+    @apply bg-brand-700 px-3 py-2 text-left font-bold text-white;
+  }
+
+  .manual-ayuda td {
+    @apply border-t border-line px-3 py-2 align-top;
+  }
+
+  .manual-ayuda tr:nth-child(even) td {
+    @apply bg-paper;
+  }
+
+  .manual-ayuda code {
+    @apply rounded bg-brand-50 px-1 text-brand-900;
+  }
+}

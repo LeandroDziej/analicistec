@@ -249,3 +249,9 @@ test("límite total: no espera un 429 si la espera se pasa del límite", async (
   assert.deepEqual(esperas, []);
   assert.equal(llamados.length, 1);
 });
+
+test("configThinking: nivel bajo en Gemini 3+ y presupuesto 0 en anteriores", async () => {
+  const { configThinking } = await import("../src/lib/gemini.ts");
+  assert.deepEqual(configThinking("gemini-3.8-flash"), { thinkingConfig: { thinkingLevel: "LOW" } });
+  assert.deepEqual(configThinking("gemini-2.5-flash-lite"), { thinkingConfig: { thinkingBudget: 0 } });
+});

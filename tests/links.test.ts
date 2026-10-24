@@ -49,10 +49,10 @@ test("extraerLinks: con y sin esquema, sin duplicados ni puntuación final", () 
   assert.deepEqual(links, ["https://mercadopag0-validar.com/login", "http://www.arca-pagos.xyz/"]);
 });
 
-test("extraerLinks: máximo 5 y nada si no hay links", () => {
+test("extraerLinks: máximo 3 y nada si no hay links", () => {
   assert.deepEqual(extraerLinks("hola mamá, cambié de número"), []);
   const muchos = Array.from({ length: 8 }, (_, i) => `https://sitio${i}.com`).join(" ");
-  assert.equal(extraerLinks(muchos).length, 5);
+  assert.equal(extraerLinks(muchos).length, 3);
 });
 
 test("dominioRegistrable maneja com.ar y gob.ar", () => {

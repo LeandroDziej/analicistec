@@ -6,6 +6,10 @@ import EjemplosRapidos from "./EjemplosRapidos";
 import DominioResaltado from "./DominioResaltado";
 import LeerEnVozAlta from "./LeerEnVozAlta";
 import GenerarDenuncia from "./GenerarDenuncia";
+import ProgresoAnalisis from "./ProgresoAnalisis";
+import PreguntasAfinar from "./PreguntasAfinar";
+import AsiSeVeElReal from "./AsiSeVeElReal";
+import type { ContextoUsuario } from "@/lib/preguntas";
 import { Icono } from "./Iconos";
 import { guardarEntrada } from "./historialStore";
 import { textoParaLeer } from "@/lib/voz";
@@ -29,6 +33,7 @@ export default function Analizador() {
   const [resultado, setResultado] = useState<Resultado | null>(null);
   const [mensajeAnalizado, setMensajeAnalizado] = useState("");
   const [modoAbuela, setModoAbuela] = useState(false);
+  const [contexto, setContexto] = useState<ContextoUsuario>({});
   const inputArchivo = useRef<HTMLInputElement>(null);
 
   function elegirImagen(archivo: File | undefined) {
@@ -69,6 +74,7 @@ export default function Analizador() {
       const datos = new FormData();
       if (texto.trim()) datos.append("texto", texto.trim());
       if (imagen) datos.append("imagen", imagen);
+      if (Object.keys(contexto).length > 0) datos.append("contexto", JSON.stringify(contexto));
       const res = await fetch("/api/analyze", { method: "POST", body: datos });
       const cuerpo: unknown = await res.json().catch(() => null);
       if (!res.ok) {
@@ -93,6 +99,7 @@ export default function Analizador() {
   function reiniciar() {
     setResultado(null);
     setTexto("");
+    setContexto({});
     quitarImagen();
   }
 
@@ -151,6 +158,8 @@ export default function Analizador() {
           )}
         </div>
 
+        <PreguntasAfinar valor={contexto} onCambio={setContexto} />
+
         {error && (
           <p role="alert" className="flex gap-3 rounded-xl border border-danger-200 bg-danger-50 p-4 text-base text-danger-800">
             <Icono nombre="alerta" className="mt-0.5 h-5 w-5" />
@@ -169,9 +178,10 @@ export default function Analizador() {
           )}
         </button>
         {cargando && (
-          <p role="status" className="text-center text-sm text-ink-soft">
-            Estamos revisando el mensaje y sus links. Si hay mucha demanda puede tardar hasta un minuto.
-          </p>
+          <div className="flex flex-col gap-2">
+            <ProgresoAnalisis texto={texto} />
+            <p className="text-center text-sm text-ink-soft">Si hay mucha demanda puede tardar hasta un minuto.</p>
+          </div>
         )}
       </form>
 
@@ -331,6 +341,8 @@ function Veredicto({
           )}
         </>
       )}
+
+      <AsiSeVeElReal links={resultado.links} />
 
       <CompartirAlerta resultado={resultado} />
 

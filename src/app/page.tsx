@@ -1,4 +1,7 @@
+import Link from "next/link";
 import Herramientas from "@/components/Herramientas";
+import BotonInstalar from "@/components/BotonInstalar";
+import Creditos from "@/components/Creditos";
 import MasAyuda from "@/components/MasAyuda";
 import { Icono, type NombreIcono } from "@/components/Iconos";
 
@@ -34,12 +37,18 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="mx-auto grid w-full max-w-6xl flex-1 gap-x-12 gap-y-8 px-4 py-8 sm:px-6 sm:py-12 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] lg:grid-rows-[auto_1fr]">
+      <main className="mx-auto grid w-full max-w-6xl flex-1 grid-cols-1 gap-x-12 gap-y-8 px-4 py-8 sm:px-6 sm:py-12 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] lg:grid-rows-[auto_1fr]">
         <section className="flex flex-col gap-4 lg:pt-4">
           <h1 className="titulo text-4xl text-ink sm:text-5xl">¿Te llegó un mensaje raro? Revisalo antes de responder.</h1>
           <p className="max-w-prose text-lg text-ink-soft">
             Pegá el mensaje o subí la captura. Te decimos si parece una estafa, por qué, y qué hacer ahora.
           </p>
+          <div className="grid items-start gap-2 sm:grid-cols-2">
+            <Link href="/ayuda" className="btn btn-primary">
+              📘 ¿Cómo se usa?
+            </Link>
+            <BotonInstalar />
+          </div>
         </section>
 
         <div className="lg:row-span-2 lg:row-start-1 lg:col-start-2">
@@ -63,9 +72,21 @@ export default function Home() {
       </main>
 
       <footer className="border-t border-line bg-white">
-        <p className="mx-auto w-full max-w-6xl px-4 py-5 text-sm text-ink-mute sm:px-6">
-          Ante la duda, llamá a tu banco por el número que figura en tu tarjeta. Esta herramienta orienta, pero no reemplaza una denuncia ni el consejo de tu banco.
-        </p>
+        <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-4 py-5 text-sm text-ink-mute sm:px-6">
+          <p>
+            Ante la duda, llamá a tu banco por el número que figura en tu tarjeta. Esta herramienta orienta, pero no reemplaza una denuncia ni el consejo de tu banco.
+          </p>
+          <p>
+            <Link href="/ayuda" className="font-semibold text-brand-800 underline">
+              Manual de usuario
+            </Link>
+            {" · "}
+            <a href="/docs/AntiEstafa-AR_Documentacion-funcional.pdf" download className="font-semibold text-brand-800 underline">
+              Documentación funcional (PDF)
+            </a>
+          </p>
+          <Creditos />
+        </div>
       </footer>
     </>
   );

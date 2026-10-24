@@ -1,4 +1,5 @@
 import { GoogleGenAI, Type } from "@google/genai";
+import { textoContexto, type ContextoUsuario } from "./preguntas.ts";
 
 export type Veredicto = "seguro" | "sospechoso" | "estafa";
 
@@ -13,6 +14,7 @@ export interface AnalisisLLM {
 export interface EntradaAnalisis {
   texto?: string;
   imagen?: { mimeType: string; base64: string };
+  contexto?: ContextoUsuario;
 }
 
 export const MODELO_PREFERIDO = "gemini-3.8-flash";
@@ -62,6 +64,12 @@ export const RESPONSE_SCHEMA = {
   required: ["veredicto", "score", "banderas", "que_hacer", "resumen_abuela"],
   propertyOrdering: ["veredicto", "score", "banderas", "que_hacer", "resumen_abuela"],
 };
+
+/** Pensar lo mínimo que acepta el modelo: "thinkingLevel" LOW (MINIMAL da 400 en gemini-3.8-flash) en Gemini 3+, "thinkingBudget" 0 en versiones anteriores. */
+export function configThinking(model: string): Record<string, unknown> {
+  const version = Number(/gemini-(\d+(?:\.\d+)?)/.exec(model)?.[1] ?? 0);
+  return { thinkingConfig: version >= 3 ? { thinkingLevel: "LOW" } : { thinkingBudget: 0 } };
+}
 
 export class GeminiError extends Error {
   status: number;
@@ -188,9 +196,10 @@ function construirContenido(entrada: EntradaAnalisis) {
   if (entrada.imagen) parts.push({ inlineData: { mimeType: entrada.imagen.mimeType, data: entrada.imagen.base64 } });
   const texto = entrada.texto?.trim();
   parts.push({
-    text: texto
-      ? `Analizá este mensaje recibido:\n"""\n${texto}\n"""`
-      : "Analizá la captura de pantalla adjunta (leé todo el texto visible).",
+    text:
+      (texto
+        ? `Analizá este mensaje recibido:\n"""\n${texto}\n"""`
+        : "Analizá la captura de pantalla adjunta (leé todo el texto visible).") + textoContexto(entrada.contexto),
   });
   return [{ role: "user", parts }];
 }
@@ -260,6 +269,7 @@ export async function analizarConGemini(
                   responseMimeType: "application/json",
                   responseSchema: RESPONSE_SCHEMA,
                   temperature: 0.2,
+                  ...configThinking(model),
                   abortSignal,
                 },
               }),

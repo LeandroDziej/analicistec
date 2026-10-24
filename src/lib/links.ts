@@ -1,6 +1,7 @@
 import { lookup as dnsLookup } from "node:dns/promises";
 import { isIP } from "node:net";
 import tls from "node:tls";
+import { crearCacheTtl } from "./cacheTtl.ts";
 
 export interface Marca {
   nombre: string;
@@ -51,10 +52,19 @@ export interface DepsLinks {
   ahora: () => number;
 }
 
-const MAX_LINKS = 5;
+const MAX_LINKS = 3;
 const MAX_REDIRECCIONES = 5;
-const TIMEOUT_FETCH_MS = 5_000;
-const TIMEOUT_RDAP_MS = 8_000;
+const TIMEOUT_FETCH_MS = 4_000;
+const TIMEOUT_RDAP_MS = 4_000;
+const CACHE_MS = 60 * 60 * 1000;
+
+// RDAP y SSL por dominio: solo con las dependencias reales y solo se guardan datos obtenidos (no fallos).
+const cacheRdap = crearCacheTtl<string>(CACHE_MS);
+const cacheSsl = crearCacheTtl<boolean>(CACHE_MS);
+export const _vaciarCachesLinks = () => {
+  cacheRdap.clear();
+  cacheSsl.clear();
+};
 const DOMINIO_NUEVO_DIAS = 90;
 const USER_AGENT = "AntiEstafaAR/1.0 (+https://antiestafa-ar-2.vercel.app)";
 
@@ -340,9 +350,24 @@ export async function verificarLink(url: string, deps: DepsLinks = depsReales): 
   }
 
   const esIp = isIP(u.hostname.replace(/^\[|\]$/g, "")) !== 0;
+  const usarCache = deps === depsReales;
+  const rdap = async () => {
+    const guardado = usarCache ? cacheRdap.get(dominio) : undefined;
+    if (guardado) return guardado;
+    const fecha = await consultarRdap(dominio, deps);
+    if (fecha && usarCache) cacheRdap.set(dominio, fecha);
+    return fecha;
+  };
+  const tlsOk = async () => {
+    const guardado = usarCache ? cacheSsl.get(u.hostname) : undefined;
+    if (guardado !== undefined) return guardado;
+    const ok = await deps.chequearTls(ip, u.hostname, TIMEOUT_FETCH_MS).catch(() => false);
+    if (ok && usarCache) cacheSsl.set(u.hostname, ok);
+    return ok;
+  };
   const [fechaRegistro, ssl, seguimiento] = await Promise.all([
-    esIp ? Promise.resolve(null) : consultarRdap(dominio, deps),
-    deps.chequearTls(ip, u.hostname, TIMEOUT_FETCH_MS).catch(() => false),
+    esIp ? Promise.resolve(null) : rdap(),
+    tlsOk(),
     seguirRedirecciones(url, deps),
   ]);
 
