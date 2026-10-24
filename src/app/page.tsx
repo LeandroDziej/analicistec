@@ -1,6 +1,7 @@
 import Analizador from "@/components/Analizador";
 import DetectorComprobante from "@/components/DetectorComprobante";
 import ChequeoTransferencia from "@/components/ChequeoTransferencia";
+import BotonInstalar from "@/components/BotonInstalar";
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
       <Analizador />
       <DetectorComprobante />
       <ChequeoTransferencia />
+      <BotonInstalar />
       <footer className="mt-auto pt-6 text-center text-xs text-zinc-500">
         Gratis y sin registro. No guardamos tus mensajes. Ante la duda, llamá a tu banco por el número que figura en tu tarjeta.
       </footer>

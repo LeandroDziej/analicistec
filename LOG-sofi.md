@@ -39,3 +39,6 @@ Qué falta / notas: el proyecto no tiene rate limit propio ni reintento ante 429
 
 ## Historial local
 - Últimos 10 análisis guardados solo en localStorage (try/catch, no rompe sin almacenamiento), con botón "Ver mis últimos análisis" y "Borrar historial"; nada se envía al servidor. `src/lib/historial.ts`, `src/components/HistorialLocal.tsx`, `tests/historial.test.ts`; unas líneas en `Analizador.tsx`. Tests 112 OK, lint y build OK.
+
+## PWA instalable
+- Manifest "AntiEstafa AR" (`src/app/manifest.ts` + `src/lib/pwa.ts`), ícono SVG `public/icono.svg`, theme color en `layout.tsx` y botón "Agregar a la pantalla de inicio" (`src/components/BotonInstalar.tsx`, solo aparece si el navegador dispara `beforeinstallprompt`). Tests 113 OK, lint y build OK.
