@@ -17,3 +17,131 @@ body {
   color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
 }
+
+/* Manual de usuario dentro de la app (/ayuda) */
+@layer components {
+  .manual-ayuda {
+  background: #fff;
+  border: 1px solid #e4e4e7;
+  border-radius: 1rem;
+  padding: 1.25rem;
+  color: #27272a;
+  line-height: 1.6;
+  font-size: 1rem;
+  }
+
+  .manual-ayuda h2 {
+  margin: 2rem 0 0.75rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 2px solid #0369a1;
+  color: #0c4a6e;
+  font-size: 1.35rem;
+  font-weight: 800;
+  scroll-margin-top: 1rem;
+  }
+
+  .manual-ayuda h2:first-of-type {
+  margin-top: 1rem;
+  }
+
+  .manual-ayuda h3 {
+  margin: 1.25rem 0 0.5rem;
+  color: #0369a1;
+  font-size: 1.1rem;
+  font-weight: 700;
+  }
+
+  .manual-ayuda p {
+  margin: 0 0 0.75rem;
+  }
+
+  .manual-ayuda ul,
+  .manual-ayuda ol {
+  margin: 0 0 0.9rem;
+  padding-left: 1.4rem;
+  }
+
+  .manual-ayuda ul {
+  list-style: disc;
+  }
+
+  .manual-ayuda ol {
+  list-style: decimal;
+  }
+
+  .manual-ayuda li {
+  margin-bottom: 0.35rem;
+  }
+
+  .manual-ayuda li::marker {
+  color: #0369a1;
+  font-weight: 700;
+  }
+
+  .manual-ayuda strong {
+  color: #0c4a6e;
+  }
+
+  .manual-ayuda a {
+  color: #0369a1;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  }
+
+  .manual-ayuda hr {
+  border: 0;
+  margin: 1rem 0;
+  }
+
+  .manual-ayuda blockquote {
+  margin: 0.75rem 0 1rem;
+  padding: 0.75rem 1rem;
+  background: #fffbeb;
+  border-left: 4px solid #f59e0b;
+  border-radius: 0 0.6rem 0.6rem 0;
+  color: #78350f;
+  }
+
+  .manual-ayuda blockquote p {
+  margin: 0;
+  }
+
+  .manual-ayuda blockquote strong {
+  color: #78350f;
+  }
+
+  .manual-ayuda table {
+  display: block;
+  overflow-x: auto;
+  width: 100%;
+  margin: 0.5rem 0 1rem;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  }
+
+  .manual-ayuda th {
+  background: #0369a1;
+  color: #fff;
+  text-align: left;
+  padding: 0.5rem 0.65rem;
+  font-weight: 700;
+  }
+
+  .manual-ayuda td {
+  padding: 0.5rem 0.65rem;
+  border-top: 1px solid #e4e4e7;
+  vertical-align: top;
+  }
+
+  .manual-ayuda tr:nth-child(even) td {
+  background: #f8fafc;
+  }
+
+  .manual-ayuda code {
+  background: #e0f2fe;
+  color: #0c4a6e;
+  padding: 0.05rem 0.3rem;
+  border-radius: 0.3rem;
+  font-size: 0.9em;
+  }
+}

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Analizador from "@/components/Analizador";
 import DetectorComprobante from "@/components/DetectorComprobante";
 import ChequeoTransferencia from "@/components/ChequeoTransferencia";
@@ -13,15 +14,32 @@ export default function Home() {
         <p className="text-zinc-600">
           ¿Te llegó un mensaje raro por WhatsApp, SMS o mail? Pegalo o subí la captura y te decimos si huele a estafa.
         </p>
-        <div className="mt-2">
+        <div className="mt-2 grid items-start gap-2 sm:grid-cols-2">
+          <Link
+            href="/ayuda"
+            className="flex h-12 items-center justify-center rounded-xl border border-sky-700 bg-sky-700 font-semibold text-white hover:bg-sky-800"
+          >
+            📘 ¿Cómo se usa?
+          </Link>
           <BotonInstalar />
         </div>
       </header>
       <Analizador />
       <DetectorComprobante />
       <ChequeoTransferencia />
-      <footer className="mt-auto pt-6 text-center text-xs text-zinc-500">
-        Gratis y sin registro. No guardamos tus mensajes. Ante la duda, llamá a tu banco por el número que figura en tu tarjeta.
+      <footer className="mt-auto flex flex-col gap-2 pt-6 text-center text-xs text-zinc-500">
+        <p>
+          Gratis y sin registro. No guardamos tus mensajes. Ante la duda, llamá a tu banco por el número que figura en tu tarjeta.
+        </p>
+        <p>
+          <Link href="/ayuda" className="font-semibold text-sky-800 underline">
+            Manual de usuario
+          </Link>
+          {" · "}
+          <a href="/docs/AntiEstafa-AR_Documentacion-funcional.pdf" download className="font-semibold text-sky-800 underline">
+            Documentación funcional (PDF)
+          </a>
+        </p>
       </footer>
     </main>
   );
