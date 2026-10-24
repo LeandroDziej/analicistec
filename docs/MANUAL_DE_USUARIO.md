@@ -28,19 +28,19 @@ Así la tenés como un ícono más, sin tener que buscar la página.
 
 1. Tocá **📲 Instalar app**, arriba de todo.
 2. Según tu dispositivo:
-   - **Chrome o Edge (compu o Android):** se instala con un toque. Si no, te muestra dónde está la opción "Instalar".
-   - **iPhone o iPad:** tocá **Compartir** (el cuadrado con la flecha hacia arriba) y después **Agregar a inicio**.
-   - **Celular Samsung:** menú **☰** → **Agregar página a** → **Pantalla de inicio**.
-   - **Mac con Safari:** menú **Archivo** → **Agregar al Dock**.
-   - **Firefox en la compu:** no permite instalar apps; guardala en favoritos con **Ctrl+D** o copiá el link con el botón que aparece.
+    - **Chrome o Edge (compu o Android):** se instala con un toque. Si no, te muestra dónde está la opción "Instalar".
+    - **iPhone o iPad:** tocá **Compartir** (el cuadrado con la flecha hacia arriba) y después **Agregar a inicio**.
+    - **Celular Samsung:** menú **☰** → **Agregar página a** → **Pantalla de inicio**.
+    - **Mac con Safari:** menú **Archivo** → **Agregar al Dock**.
+    - **Firefox en la compu:** no permite instalar apps; guardala en favoritos con **Ctrl+D** o copiá el link con el botón que aparece.
 
 Cuando ya está instalada, el botón desaparece.
 
 ## 2. Revisar si un mensaje es estafa
 
 1. **Cargá el mensaje.** Tenés dos opciones:
-   - **Pegá el texto** en el cuadro grande. (En WhatsApp: mantené apretado el mensaje → **Copiar**.)
-   - O tocá **📷 Elegir captura de WhatsApp** y subí una foto de pantalla del mensaje.
+    - **Pegá el texto** en el cuadro grande. (En WhatsApp: mantené apretado el mensaje → **Copiar**.)
+    - O tocá **📷 Elegir captura de WhatsApp** y subí una foto de pantalla del mensaje.
 2. **(Opcional) Respondé las preguntas** de "Para afinar el análisis": ¿te pidieron plata o datos?, ¿conocés a quien te lo mandó?, ¿te apuran? Ayudan a que el resultado sea más preciso, sobre todo en mensajes cortos.
 3. Tocá **¿Es estafa? Analizar**.
 4. Esperá unos segundos. Vas a ver en qué paso va: "Revisando links…", "Analizando el mensaje…", "Calculando el riesgo…".
@@ -56,6 +56,7 @@ Cuando ya está instalada, el botón desaparece.
 | 🟢 **Seguro** | No encontramos señales de estafa. | Igual usá el sentido común: nunca compartas claves ni códigos. |
 
 Además del color vas a ver:
+
 - **El puntaje de riesgo** (de 0 a 100): cuanto más alto, más peligroso.
 - **🚩 Banderas rojas:** qué cosas del mensaje son sospechosas.
 - **✅ Qué hacer ahora:** los pasos concretos a seguir.
@@ -66,12 +67,14 @@ Además del color vas a ver:
 ## 4. Avisar a tu familia
 
 En **📢 Alerta para compartir** ya tenés un mensaje armado para que nadie más caiga.
+
 - **Mandar por WhatsApp:** abre WhatsApp con el texto listo; elegí el grupo de la familia y enviá.
 - **Copiar texto:** para pegarlo donde quieras.
 
 ## 5. Hacer la denuncia
 
 En **📄 Denuncia** se arma un texto formal con todo lo necesario: fecha, el mensaje, los links y las señales detectadas.
+
 - **Copiar:** para pegarlo en un formulario de denuncia online.
 - **Descargar .txt:** guarda un archivo de texto.
 - **Imprimir / PDF:** para llevarla impresa o guardarla como PDF.
@@ -128,6 +131,7 @@ Sí, es gratis, y no necesitás registrarte.
 Sí. Es una ayuda para decidir, no una garantía. Ante la duda, no hagas nada y consultá por un canal oficial.
 
 **¿Qué hago si ya caí?**
+
 1. Llamá a tu banco o billetera **ya**, por el número oficial, para bloquear cuentas o tarjetas.
 2. Cambiá tus claves.
 3. Generá la denuncia con la app y presentala.

@@ -69,6 +69,7 @@ Los mensajes son cada vez más creíbles (hoy también los escriben con IA) y lo
 
 - 📘 **[Manual de usuario](docs/MANUAL_DE_USUARIO.md):** cómo usar cada funcionalidad, paso a paso, y preguntas frecuentes.
 - 📗 **[Documentación funcional](docs/DOCUMENTACION_FUNCIONAL.md):** usuarios, alcance, requisitos funcionales y no funcionales, flujos, mensajes del sistema y limitaciones.
+- 📄 **Versiones en PDF:** [Manual de usuario](docs/pdf/AntiEstafa-AR_Manual-de-usuario.pdf) · [Documentación funcional](docs/pdf/AntiEstafa-AR_Documentacion-funcional.pdf)
 
 ---
 
