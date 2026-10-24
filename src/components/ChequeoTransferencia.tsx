@@ -9,11 +9,12 @@ import {
   type AnalisisTransferencia,
 } from "@/lib/transferenciaUi";
 import { mensajeError } from "@/lib/ui";
+import { Icono } from "./Iconos";
 
-const COLORES = {
-  rojo: "bg-red-50 border-red-300 text-red-800",
-  amarillo: "bg-amber-50 border-amber-300 text-amber-900",
-  verde: "bg-emerald-50 border-emerald-300 text-emerald-800",
+const TONOS = {
+  rojo: "border-danger-200 bg-danger-50 text-danger-800",
+  amarillo: "border-warn-200 bg-warn-50 text-warn-800",
+  verde: "border-safe-200 bg-safe-50 text-safe-800",
 } as const;
 
 export default function ChequeoTransferencia() {
@@ -49,13 +50,15 @@ export default function ChequeoTransferencia() {
   const etiqueta = resultado ? etiquetaTransferencia(resultado.riesgo) : null;
 
   return (
-    <section aria-labelledby="transferencia-titulo" className="flex flex-col gap-3 rounded-2xl border border-zinc-200 bg-white p-4">
-      <h2 id="transferencia-titulo" className="text-xl font-bold text-zinc-900">
-        ¿Te pidieron que transfieras?
-      </h2>
-      <p className="text-sm text-zinc-600">Pegá el alias, CBU o CVU y el mensaje que te mandaron. Revisamos el formato y el contexto.</p>
-      <form onSubmit={revisar} className="flex flex-col gap-3">
-        <label className="flex flex-col gap-1 text-sm font-semibold text-zinc-800">
+    <section aria-labelledby="transferencia-titulo" className="flex flex-col gap-4">
+      <div>
+        <h2 id="transferencia-titulo" className="titulo text-3xl text-ink">
+          ¿Te pidieron que transfieras?
+        </h2>
+        <p className="mt-1 text-ink-soft">Pegá el alias, CBU o CVU y el mensaje que te mandaron. Revisamos el formato y el contexto.</p>
+      </div>
+      <form onSubmit={revisar} className="flex flex-col gap-4" aria-busy={cargando}>
+        <label className="flex flex-col gap-1.5 text-base font-bold text-ink">
           Alias, CBU o CVU
           <input
             type="text"
@@ -63,10 +66,10 @@ export default function ChequeoTransferencia() {
             onChange={(e) => setDestino(e.target.value)}
             autoComplete="off"
             aria-label="Alias, CBU o CVU de destino"
-            className="min-h-12 rounded-xl border border-zinc-300 px-3 py-2 text-base font-normal text-zinc-900 focus:outline-none focus:ring-2 focus:ring-sky-300"
+            className="field min-h-12 font-normal"
           />
         </label>
-        <label className="flex flex-col gap-1 text-sm font-semibold text-zinc-800">
+        <label className="flex flex-col gap-1.5 text-base font-bold text-ink">
           Mensaje que lo acompaña
           <textarea
             value={mensaje}
@@ -74,25 +77,29 @@ export default function ChequeoTransferencia() {
             maxLength={MAX_MENSAJE_TRANSFERENCIA}
             rows={4}
             aria-label="Mensaje que acompaña el pedido de transferencia"
-            className="rounded-xl border border-zinc-300 px-3 py-2 text-base font-normal text-zinc-900 focus:outline-none focus:ring-2 focus:ring-sky-300"
+            className="field font-normal"
           />
         </label>
-        <button
-          type="submit"
-          disabled={cargando || !destino.trim()}
-          className="min-h-12 rounded-xl bg-sky-700 px-4 py-3 text-lg font-bold text-white hover:bg-sky-800 focus:outline-none focus:ring-2 focus:ring-sky-300 disabled:opacity-50"
-        >
-          {cargando ? "Revisando…" : "Revisar antes de transferir"}
+        <button type="submit" disabled={cargando || !destino.trim()} className="btn btn-primary min-h-14 text-lg">
+          {cargando ? (
+            <>
+              <Icono nombre="cargando" className="h-5 w-5" />
+              Revisando…
+            </>
+          ) : (
+            "Revisar antes de transferir"
+          )}
         </button>
       </form>
       {error && (
-        <p role="alert" className="rounded-xl border border-red-300 bg-red-50 p-3 text-red-800">
-          {error}
+        <p role="alert" className="flex gap-3 rounded-xl border border-danger-200 bg-danger-50 p-4 text-danger-800">
+          <Icono nombre="alerta" className="mt-0.5 h-5 w-5" />
+          <span>{error}</span>
         </p>
       )}
       {resultado && etiqueta && (
-        <div role="status" className={`flex flex-col gap-2 rounded-xl border p-4 ${COLORES[etiqueta.luz]}`}>
-          <strong className="text-lg">{etiqueta.titulo}</strong>
+        <div role="status" className={`flex flex-col gap-3 rounded-2xl border-2 p-5 ${TONOS[etiqueta.luz]}`}>
+          <strong className="titulo text-2xl">{etiqueta.titulo}</strong>
           {resultado.senales.length > 0 && (
             <ul className="list-disc pl-5">
               {resultado.senales.map((s, i) => (
@@ -101,7 +108,7 @@ export default function ChequeoTransferencia() {
             </ul>
           )}
           <p>{resultado.recomendacion}</p>
-          <p className="text-sm font-semibold">{AVISO_TRANSFERIR}</p>
+          <p className="text-sm font-bold">{AVISO_TRANSFERIR}</p>
         </div>
       )}
     </section>

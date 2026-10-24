@@ -6,10 +6,10 @@ export default function DominioResaltado({ link }: { link: Pick<ResultadoLink, "
   const antiguedad = textoAntiguedad(link.antiguedadDias);
   return (
     <div>
-      <div className="font-mono font-semibold text-zinc-900">
+      <div className="font-mono text-base font-semibold text-ink">
         {tramos.map((t, i) =>
           t.distinto ? (
-            <mark key={i} className="rounded bg-red-200 px-0.5 font-extrabold text-red-900">
+            <mark key={i} className="rounded bg-danger-200 px-0.5 font-extrabold text-danger-800">
               {t.texto}
             </mark>
           ) : (
@@ -18,11 +18,11 @@ export default function DominioResaltado({ link }: { link: Pick<ResultadoLink, "
         )}
       </div>
       {link.dominioOficial && link.marcaImitada && (
-        <div className="text-xs text-red-800">
+        <div className="mt-1 text-sm text-danger-800">
           Se parece a {link.marcaImitada.marca}, pero el oficial es <span className="font-mono font-semibold">{link.dominioOficial}</span>
         </div>
       )}
-      {antiguedad && <div className="text-xs font-medium text-zinc-700">{antiguedad}</div>}
+      {antiguedad && <div className="mt-1 text-sm font-medium text-ink-soft">{antiguedad}</div>}
     </div>
   );
 }
