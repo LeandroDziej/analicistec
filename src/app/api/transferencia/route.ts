@@ -1,8 +1,18 @@
 import { GeminiError } from "@/lib/gemini";
 import { EntradaError } from "@/lib/entrada";
 import { analizarTransferencia, validarEntradaTransferencia } from "@/lib/transferencia";
+import { crearLimitador, ipDe } from "@/lib/rateLimit";
+
+const limitador = crearLimitador();
 
 export async function POST(request: Request) {
+  const limite = limitador(ipDe(request.headers));
+  if (!limite.permitido) {
+    return Response.json(
+      { error: `Hiciste muchas consultas seguidas. Esperá ${limite.reintentarEn} segundos y probá de nuevo.` },
+      { status: 429, headers: { "Retry-After": String(limite.reintentarEn) } },
+    );
+  }
   try {
     let cuerpo: unknown;
     try {
