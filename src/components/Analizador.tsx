@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { AnalisisFinal } from "@/lib/score";
 import EjemplosRapidos from "./EjemplosRapidos";
 import DominioResaltado from "./DominioResaltado";
@@ -35,6 +35,56 @@ export default function Analizador() {
   const [modoAbuela, setModoAbuela] = useState(false);
   const [contexto, setContexto] = useState<ContextoUsuario>({});
   const inputArchivo = useRef<HTMLInputElement>(null);
+  const campoTexto = useRef<HTMLTextAreaElement>(null);
+  const [puedePegar, setPuedePegar] = useState(false);
+  const [arrastrando, setArrastrando] = useState(false);
+  const [avisoPegar, setAvisoPegar] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Solo se ofrece el botón "Pegar" si el navegador permite leer el portapapeles.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setPuedePegar(typeof navigator !== "undefined" && typeof navigator.clipboard?.readText === "function");
+  }, []);
+
+  async function pegarDelPortapapeles() {
+    setAvisoPegar(null);
+    try {
+      const pegado = await navigator.clipboard.readText();
+      if (!pegado.trim()) {
+        setAvisoPegar("No hay texto copiado. Copiá el mensaje y volvé a tocar Pegar.");
+        return;
+      }
+      setTexto(pegado.slice(0, 5000));
+      setError(null);
+      campoTexto.current?.focus();
+    } catch {
+      setAvisoPegar("No pudimos pegar solo: mantené apretado el cuadro y elegí Pegar.");
+    }
+  }
+
+  /** Si pegan una imagen (Ctrl+V o mantener apretado → Pegar), la tomamos como captura. */
+  function alPegar(e: React.ClipboardEvent<HTMLTextAreaElement>) {
+    const archivo = Array.from(e.clipboardData.files).find((f) => f.type.startsWith("image/"));
+    if (archivo) {
+      e.preventDefault();
+      elegirImagen(archivo);
+    }
+  }
+
+  function alSoltar(e: React.DragEvent<HTMLElement>) {
+    e.preventDefault();
+    setArrastrando(false);
+    const archivo = Array.from(e.dataTransfer.files).find((f) => f.type.startsWith("image/"));
+    if (archivo) elegirImagen(archivo);
+    else setError("Soltá una imagen (captura de pantalla o foto).");
+  }
+
+  function alTeclear(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      e.currentTarget.form?.requestSubmit();
+    }
+  }
 
   function elegirImagen(archivo: File | undefined) {
     setError(null);
@@ -101,24 +151,63 @@ export default function Analizador() {
     setTexto("");
     setContexto({});
     quitarImagen();
+    // Volvemos arriba con el cursor listo para el próximo mensaje.
+    requestAnimationFrame(() => {
+      campoTexto.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      campoTexto.current?.focus({ preventScroll: true });
+    });
   }
 
   return (
     <div className="flex flex-col gap-6">
       <form onSubmit={analizar} className="flex flex-col gap-4" aria-busy={cargando}>
         <div className="flex flex-col gap-2">
-          <label htmlFor="mensaje" className="text-lg font-bold text-ink">
-            Pegá el mensaje que te llegó
-          </label>
+          <div className="flex items-end justify-between gap-2">
+            <label htmlFor="mensaje" className="text-lg font-bold text-ink">
+              Pegá el mensaje que te llegó
+            </label>
+            <div className="flex gap-1">
+              {texto && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setTexto("");
+                    campoTexto.current?.focus();
+                  }}
+                  className="btn btn-ghost min-h-10 px-3 py-1.5 text-sm"
+                >
+                  Borrar
+                </button>
+              )}
+              {puedePegar && (
+                <button type="button" onClick={pegarDelPortapapeles} className="btn btn-secondary min-h-10 px-3 py-1.5 text-sm">
+                  <Icono nombre="pegar" className="h-4 w-4" />
+                  Pegar
+                </button>
+              )}
+            </div>
+          </div>
+          {avisoPegar && (
+            <p role="status" className="text-sm text-warn-800">
+              {avisoPegar}
+            </p>
+          )}
           <textarea
             id="mensaje"
+            ref={campoTexto}
             value={texto}
             onChange={(e) => setTexto(e.target.value)}
+            onPaste={alPegar}
+            onKeyDown={alTeclear}
+            aria-describedby="ayuda-mensaje"
             maxLength={5000}
             rows={5}
             placeholder={'Ej: "Hola mamá, cambié de número, agendame este. ¿Me podés transferir?"'}
             className="field"
           />
+          <p id="ayuda-mensaje" className="hidden text-sm text-ink-mute sm:block">
+            También podés pegar una captura acá con Ctrl+V. Para analizar rápido: Ctrl+Enter.
+          </p>
           <EjemplosRapidos
             onElegir={(t) => {
               setTexto(t);
@@ -139,13 +228,25 @@ export default function Analizador() {
               </button>
             </div>
           ) : (
-            <label className="flex cursor-pointer items-center gap-4 rounded-xl border-2 border-dashed border-brand-200 bg-brand-50/60 p-4 transition-colors hover:border-brand-600 hover:bg-brand-50 has-[:focus-visible]:outline has-[:focus-visible]:outline-[3px] has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-brand-600">
+            <label
+              onDragOver={(e) => {
+                e.preventDefault();
+                setArrastrando(true);
+              }}
+              onDragLeave={() => setArrastrando(false)}
+              onDrop={alSoltar}
+              className={`flex cursor-pointer items-center gap-4 rounded-xl border-2 border-dashed p-4 transition-colors ${
+                arrastrando ? "border-brand-600 bg-brand-100" : "border-brand-200 bg-brand-50/60"
+              } hover:border-brand-600 hover:bg-brand-50 has-[:focus-visible]:outline has-[:focus-visible]:outline-[3px] has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-brand-600`}
+            >
               <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-brand-700">
                 <Icono nombre="camara" className="h-6 w-6" />
               </span>
               <span className="flex flex-col">
                 <span className="font-bold text-brand-800">Elegir una captura</span>
-                <span className="text-sm text-ink-soft">Hasta 4 MB. La leemos por vos.</span>
+                <span className="text-sm text-ink-soft">
+                  Hasta 4 MB. La leemos por vos.<span className="hidden sm:inline"> También podés arrastrarla acá.</span>
+                </span>
               </span>
               <input
                 ref={inputArchivo}
@@ -235,15 +336,26 @@ function Veredicto({
 }) {
   const info = infoSemaforo(resultado.veredicto);
   const tono = TONOS[info.luz];
+  const titulo = useRef<HTMLHeadingElement>(null);
+  const seccion = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    // En el celular el resultado queda abajo del formulario: lo traemos a la vista y le damos el foco
+    // para que los lectores de pantalla lo anuncien.
+    seccion.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    titulo.current?.focus({ preventScroll: true });
+  }, [resultado]);
 
   return (
-    <section aria-live="polite" className="flex flex-col gap-4 border-t border-line pt-6">
+    <section ref={seccion} aria-live="polite" className="aparecer flex scroll-mt-3 flex-col gap-4 border-t border-line pt-6">
       <div className={`flex items-center gap-4 rounded-2xl border-2 p-4 sm:gap-5 sm:p-5 ${tono.caja}`}>
         <span className={`hidden h-12 w-12 shrink-0 items-center justify-center rounded-full text-white sm:flex ${tono.chapa}`}>
           <Icono nombre={tono.icono} className="h-6 w-6" />
         </span>
         <div className="min-w-0 flex-1">
-          <h2 className={`titulo ${modoAbuela ? "text-4xl" : "text-3xl"}`}>{info.titulo}</h2>
+          <h2 ref={titulo} tabIndex={-1} className={`titulo focus:outline-none ${modoAbuela ? "text-4xl" : "text-3xl"}`}>
+            {info.titulo}
+          </h2>
           <p className={`mt-1 ${modoAbuela ? "text-xl" : "text-base"}`}>{info.bajada}</p>
         </div>
         <Medidor valor={resultado.score} trazo={tono.trazo} grande={modoAbuela} />

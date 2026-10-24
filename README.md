@@ -37,6 +37,7 @@ Los mensajes son cada vez más creíbles (hoy también los escriben con IA) y lo
 - **"Así se ve el real".** Si el mensaje imita a una empresa, muestra cómo se comunica de verdad (por ejemplo, "nunca te pide claves por mensaje").
 - **Preguntas para afinar.** Tres preguntas opcionales (¿te pidieron plata?, ¿conocés a quien te lo mandó?, ¿te apuran?) que hacen el análisis más preciso.
 - **Ejemplos de un toque.** Mensajes de ejemplo para probar la app sin tener que pegar nada.
+- **Carga sin esfuerzo:** botón "Pegar", pegar una captura con Ctrl+V, arrastrar y soltar la imagen, Ctrl+Enter para analizar, y la pantalla baja sola hasta el resultado.
 - **Revisar un link** sin abrirlo: antigüedad, candado y marca imitada.
 - **Escanear un QR:** lee el código desde una foto; si es un link lo revisa, si es un QR de pago muestra comercio y monto.
 

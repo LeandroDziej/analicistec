@@ -62,11 +62,14 @@ Cuando ya está instalada, el botón desaparece.
 
 1. Entrá a la pestaña **Mensaje**.
 2. **Cargá el mensaje.** Tenés dos opciones:
-    - **Pegá el texto** en el cuadro grande. (En WhatsApp: mantené apretado el mensaje → **Copiar**.)
-    - O tocá **Elegir una captura** y subí una foto de pantalla del mensaje (hasta 4 MB).
+    - **Pegá el texto:** copiá el mensaje en WhatsApp (mantené apretado el mensaje → **Copiar**) y tocá el botón **📋 Pegar**, arriba a la derecha del cuadro. También podés pegarlo a mano.
+    - O tocá **Elegir una captura** y subí una foto de pantalla del mensaje (hasta 4 MB). En la compu, también podés **arrastrar la imagen** hasta ese recuadro o **pegarla con Ctrl+V** dentro del cuadro de texto.
 3. **(Opcional) Respondé las preguntas** de "Para afinar el análisis": ¿te pidieron plata o datos?, ¿conocés a quien te lo mandó?, ¿te apuran? Ayudan a que el resultado sea más preciso, sobre todo en mensajes cortos.
-4. Tocá **¿Es estafa? Analizar**.
+4. Tocá **¿Es estafa? Analizar** (en la compu también sirve **Ctrl+Enter**).
 5. Esperá unos segundos. Vas a ver en qué paso va: "Revisando links…", "Analizando el mensaje…", "Calculando el riesgo…". Si hay mucha demanda, puede tardar hasta un minuto.
+6. Cuando termina, **la pantalla baja sola hasta el resultado**. Para revisar otro, tocá **Analizar otro mensaje** al final: volvés arriba con el cuadro vacío y listo para escribir.
+
+> Si te equivocaste de mensaje, tocá **Borrar** para vaciar el cuadro.
 
 > **¿Querés probar sin un mensaje real?** Tocá uno de los **ejemplos** que aparecen debajo del cuadro de texto (Falso ARCA, Falso Mercado Pago, etc.).
 
@@ -221,5 +224,7 @@ Sí. Pegá el texto o subí una captura de cualquier mensaje.
 | "La imagen pesa demasiado…" | Recortá la captura o sacá una nueva (máximo 4 MB). |
 | "No encontramos un código QR en la imagen…" | Sacá una foto más cerca, bien iluminada y sin reflejos. |
 | No te deja copiar | Mantené apretado el texto y elegí **Copiar**. |
+| El botón **Pegar** dice que no pudo pegar | Mantené apretado el cuadro de texto y elegí **Pegar**. Algunos navegadores no permiten pegar con el botón. |
+| No aparece el botón **Pegar** | Tu navegador no lo permite. Pegá a mano: mantené apretado el cuadro y elegí **Pegar**. |
 | No aparece el botón Escuchar | Tu navegador no tiene lectura en voz alta. Probá con Chrome. |
 | No ves todas las pestañas en el celular | Deslizá la fila de pestañas hacia el costado. |

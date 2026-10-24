@@ -35,6 +35,8 @@ AntiEstafa AR ayuda a cualquier persona a saber, en segundos, si un mensaje que 
 - **Proceso:** en paralelo, (a) se extraen los links del mensaje y se verifican técnicamente (RF-02) y (b) la IA (Gemini con visión) analiza el contenido con contexto de estafas argentinas.
 - **Salida:** veredicto (seguro / sospechoso / estafa), puntaje 0-100, banderas rojas, pasos de "Qué hacer ahora" y un resumen en dos líneas.
 - **Reglas:** si no hay texto ni imagen, se pide cargar algo. Si la imagen supera 4 MB o el formato no es válido, se avisa antes de enviar.
+- **Facilidades de carga:** botón "Pegar" que trae el texto del portapapeles (solo si el navegador lo permite), botón "Borrar", pegado de una captura con Ctrl+V dentro del cuadro, arrastrar y soltar la imagen, y Ctrl+Enter para analizar.
+- **Al terminar:** la pantalla se desplaza hasta el resultado y le da el foco (lo anuncian los lectores de pantalla). "Analizar otro mensaje" vuelve al cuadro de texto vacío.
 
 ### RF-02 · Verificar links
 - Para cada link (máximo 3 por mensaje) se obtiene: antigüedad del dominio (RDAP), presencia de certificado SSL, destino final tras las redirecciones y similitud con marcas conocidas (Mercado Pago, Mercado Libre, ARCA/AFIP, Correo Argentino, bancos) por distancia de Levenshtein.
@@ -155,7 +157,8 @@ Pestaña "Comprobante" → subir captura → "Revisar comprobante"
 | **Seguridad** | Protección SSRF, rate limit por IP, límite de 4 MB por imagen, claves solo en variables de entorno. |
 | **Rendimiento** | Chequeos en paralelo, máximo 3 links, caché de 1 hora por dominio, timeouts de 4 s. |
 | **Disponibilidad** | Reintentos y modelos alternativos ante sobrecarga de la IA (errores 429/503/504), con mensaje amable al usuario. |
-| **Accesibilidad** | Mobile first, botones grandes, etiquetas para lectores de pantalla, modo abuela, lectura en voz alta. |
+| **Accesibilidad** | Mobile first, botones grandes, etiquetas para lectores de pantalla, navegación por teclado en las pestañas, foco en el resultado, modo abuela, lectura en voz alta. |
+| **Experiencia de uso** | Transiciones suaves en pestañas y resultados (se desactivan si el usuario pidió reducir el movimiento), respuesta visual al tocar botones, desplazamiento automático al resultado, la pestaña elegida siempre visible en el celular y sin desbordes horizontales. |
 | **Idioma** | Español rioplatense. |
 | **Calidad** | Más de 100 tests automáticos, lint y verificación de tipos. |
 

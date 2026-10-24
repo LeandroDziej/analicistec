@@ -38,6 +38,8 @@
 
 html {
   color-scheme: light;
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -65,7 +67,8 @@ body {
   }
 
   .btn {
-    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border px-5 py-3 text-base font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border px-5 py-3 text-base font-bold transition-[color,background-color,border-color,transform] duration-150 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100;
+    touch-action: manipulation;
   }
 
   .btn-primary {
@@ -88,7 +91,19 @@ body {
   }
 }
 
-/* Un único momento de movimiento: el medidor de riesgo se completa al mostrar el resultado */
+/* Aparición suave de paneles y resultados (se desactiva con "reducir movimiento") */
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+.aparecer {
+  animation: aparecer 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* El medidor de riesgo se completa al mostrar el resultado */
 @keyframes llenar-medidor {
   from {
     stroke-dashoffset: var(--circunferencia);

@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-export const COLOR_TEMA = "#0369a1";
+export const COLOR_TEMA = "#0b5a68";
 export const COLOR_FONDO = "#ffffff";
 
 /** Manifest para instalar la app en la pantalla de inicio. */
