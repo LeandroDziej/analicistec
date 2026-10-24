@@ -128,6 +128,20 @@ body {
   }
 }
 
+/* Pandi da un saltito mientras vuelve a su lugar */
+@keyframes panda-salto {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-14px) rotate(4deg);
+  }
+}
+
+.panda-salto {
+  animation: panda-salto 700ms ease-in-out;
+}
+
 /* Pandi se asoma desde abajo al aparecer, y saluda con el brazo */
 @keyframes panda-asoma {
   0% {

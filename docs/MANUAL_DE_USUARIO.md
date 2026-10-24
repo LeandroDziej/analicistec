@@ -42,7 +42,7 @@ Entrá a **https://antiestafa-ar-2.vercel.app** desde el celular o la compu. Es 
 | **Transferencia** | Un alias, CBU o CVU al que te piden mandar plata. |
 
 - **Más ayuda:** otro recuadro con dos pestañas: **Ya caí** (qué hacer si ya te estafaron) y **Mis análisis** (lo que revisaste).
-- **Pandi 🐼:** el osito panda que aparece abajo a la derecha es el asistente. Tocalo para hacerle preguntas, o arrastralo a donde te moleste menos.
+- **Pandi 🐼:** el osito panda que aparece abajo a la derecha es el asistente. Tocalo para hacerle preguntas. Si lo arrastrás, ¡le encanta!
 
 En el celular, si no ves todas las pestañas, deslizá la fila hacia el costado.
 
@@ -184,7 +184,7 @@ Pandi es el panda asistente de la app. Le podés preguntar con tus palabras, por
 3. Pandi te responde en pocas líneas. Podés seguir preguntando.
 4. Para cerrarlo, tocá **✕** (o la tecla Escape).
 
-**¿Te tapa algo?** Arrastrá a Pandi con el dedo o el mouse a cualquier lugar de la pantalla: se queda donde lo dejes, aunque vuelvas a entrar. Con el teclado, seleccionalo con Tab y movelo con las flechas.
+**Podés arrastrarlo:** movelo con el dedo o el mouse y vas a ver que dice **«¡Wiii! ¡Me estás arrastrando!»**. Cuando lo soltás y queda quieto, **vuelve solito a su lugar** abajo a la derecha. Con el teclado, seleccionalo con Tab y movelo con las flechas.
 
 > Pandi puede equivocarse: si te dice que algo es sospechoso, no actúes. Y **nunca le pases claves, códigos ni datos de tu tarjeta** (ni a Pandi ni a nadie).
 

@@ -2,10 +2,10 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   ALTO_PANDA,
+  ESPERA_VOLVER_MS,
   ANCHO_PANDA,
   MARGEN_PANDA,
   esArrastre,
-  leerPosicionGuardada,
   limitarPosicion,
   posicionInicial,
 } from "../src/lib/posicionPanda.ts";
@@ -20,11 +20,8 @@ test("no se puede sacar a Pandi de la pantalla", () => {
   assert.deepEqual(limitarPosicion({ x: 200.4, y: 300.6 }, 1280, 800), { x: 200, y: 301 });
 });
 
-test("lee la posición guardada y descarta datos rotos", () => {
-  assert.deepEqual(leerPosicionGuardada('{"x":10,"y":20}'), { x: 10, y: 20 });
-  assert.equal(leerPosicionGuardada(null), null);
-  assert.equal(leerPosicionGuardada("no es json"), null);
-  assert.equal(leerPosicionGuardada('{"x":"a","y":2}'), null);
+test("vuelve a su lugar al ratito de soltarlo", () => {
+  assert.ok(ESPERA_VOLVER_MS >= 500 && ESPERA_VOLVER_MS <= 2000);
 });
 
 test("un movimiento chiquito es un toque, uno largo es arrastre", () => {
