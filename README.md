@@ -155,6 +155,8 @@ En Windows (PowerShell), usá `Copy-Item .env.example .env.local` en lugar de `c
 | Integrante | GitHub | Aporte |
 |---|---|---|
 | _(nombre)_ | [@Ridioortv](https://github.com/Ridioortv) | Programa base: análisis con IA y visión, chequeo de links, score, UI, rate limit, deploy en Vercel. |
-| _(nombre)_ | [@sofiigentaa](https://github.com/sofiigentaa) | Mejoras: alias/CBU, comprobante falso, denuncia, WhatsApp, voz, ejemplos, dominio resaltado, "así se ve el real", preguntas para afinar, historial, app instalable y optimización de velocidad. |
+| María Sofía Genta | [@sofiigentaa](https://github.com/sofiigentaa) | Mejoras: alias/CBU, comprobante falso, denuncia, WhatsApp, voz, ejemplos, dominio resaltado, "así se ve el real", preguntas para afinar, historial, app instalable y optimización de velocidad. |
+
+**Hecho por Manuel A., María Sofía Genta y Leandro Dizej.**
 
 _Construido en una hackatón con ayuda de agentes de IA (Claude Code) trabajando en paralelo sobre el mismo repositorio._

@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { cacheLife } from "next/cache";
 import Link from "next/link";
 import { manualAHtml } from "@/lib/manual";
+import Creditos from "@/components/Creditos";
 
 export const metadata: Metadata = {
   title: "Cómo se usa — AntiEstafa AR",
@@ -58,6 +59,9 @@ export default async function Ayuda() {
       >
         🛡️ Ir a revisar un mensaje
       </Link>
+      <footer className="text-center">
+        <Creditos />
+      </footer>
     </main>
   );
 }

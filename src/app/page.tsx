@@ -3,6 +3,7 @@ import Analizador from "@/components/Analizador";
 import DetectorComprobante from "@/components/DetectorComprobante";
 import ChequeoTransferencia from "@/components/ChequeoTransferencia";
 import BotonInstalar from "@/components/BotonInstalar";
+import Creditos from "@/components/Creditos";
 
 export default function Home() {
   return (
@@ -40,6 +41,7 @@ export default function Home() {
             Documentación funcional (PDF)
           </a>
         </p>
+        <Creditos />
       </footer>
     </main>
   );
