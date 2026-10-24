@@ -27,3 +27,6 @@ Qué falta / notas: el proyecto no tiene rate limit propio ni reintento ante 429
 - Antes (medido local): RDAP ~1,4 s; seguir redirecciones hasta 5,2 s (timeout de 5 s); links completos ~0,8 s; Gemini ~2,6 s si responde el primer modelo (40 s cuando los flash dieron 503/504 en cadena).
 - Cambios: máx. 3 links, timeouts de RDAP y fetch de 4 s (si vencen se sigue sin ese dato), caché en memoria 1 h de RDAP y SSL por dominio (`src/lib/cacheTtl.ts`, solo guarda datos obtenidos), thinking bajo (`configThinking`: gemini-3.8-flash rechaza MINIMAL con 400, por eso LOW; presupuesto 0 en versiones <3), log de tiempos en /api/analyze. Gemini y links ya corrían en paralelo y sin links no se hace chequeo.
 - Después: links 2ª vez con caché ~0,3 s (antes ~0,8 s); Gemini ~3 s cuando responde (la variación la domina la sobrecarga del servicio, 504 en la 1ª llamada); redirecciones ~0,1 s en esa corrida. Tests 97 OK, lint y build OK.
+
+## Progreso visible
+- Mientras analiza se muestran pasos ("Revisando links..." solo si hay links, "Analizando el mensaje...", "Calculando el riesgo...") con aria-live. `src/lib/progreso.ts`, `src/components/ProgresoAnalisis.tsx`, `tests/progreso.test.ts`; una línea en `Analizador.tsx`. Tests 100 OK, lint y build OK.

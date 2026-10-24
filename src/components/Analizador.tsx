@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import type { AnalisisFinal } from "@/lib/score";
 import EjemplosRapidos from "./EjemplosRapidos";
 import DominioResaltado from "./DominioResaltado";
+import ProgresoAnalisis from "./ProgresoAnalisis";
 import LeerEnVozAlta from "./LeerEnVozAlta";
 import GenerarDenuncia from "./GenerarDenuncia";
 import { textoParaLeer } from "@/lib/voz";
@@ -134,6 +135,8 @@ export default function Analizador() {
             {error}
           </p>
         )}
+
+        {cargando && <ProgresoAnalisis texto={texto} />}
 
         <button
           type="submit"
