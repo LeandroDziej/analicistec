@@ -1,0 +1,7 @@
+loop.ps1
+STATUS.md
+.env*
+!.env.example
+node_modules
+.next
+.vercel
