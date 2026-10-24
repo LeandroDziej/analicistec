@@ -36,3 +36,6 @@ Qué falta / notas: el proyecto no tiene rate limit propio ni reintento ante 429
 
 ## Así se ve el real
 - Cuando un link imita una marca (`marcaImitada`), el resultado muestra un recuadro con 3 reglas generales de cómo se comunica la marca de verdad (Mercado Pago, Mercado Libre, ARCA/AFIP, Correo Argentino; el resto de bancos comparte reglas genéricas). Sin datos ni URLs específicos. `src/lib/marcaReal.ts`, `src/components/AsiSeVeElReal.tsx`, `tests/marcaReal.test.ts`; dos líneas en `Analizador.tsx`. Tests 108 OK, lint y build OK.
+
+## Historial local
+- Últimos 10 análisis guardados solo en localStorage (try/catch, no rompe sin almacenamiento), con botón "Ver mis últimos análisis" y "Borrar historial"; nada se envía al servidor. `src/lib/historial.ts`, `src/components/HistorialLocal.tsx`, `tests/historial.test.ts`; unas líneas en `Analizador.tsx`. Tests 112 OK, lint y build OK.

@@ -9,6 +9,8 @@ import LeerEnVozAlta from "./LeerEnVozAlta";
 import GenerarDenuncia from "./GenerarDenuncia";
 import PreguntasAfinar from "./PreguntasAfinar";
 import AsiSeVeElReal from "./AsiSeVeElReal";
+import HistorialLocal from "./HistorialLocal";
+import { guardarEnHistorial } from "@/lib/historial";
 import type { ContextoUsuario } from "@/lib/preguntas";
 import { textoParaLeer } from "@/lib/voz";
 import { generarAlerta, infoSemaforo, mensajeError, urlWhatsApp, validarImagenCliente } from "@/lib/ui";
@@ -31,6 +33,7 @@ export default function Analizador() {
   const [mensajeAnalizado, setMensajeAnalizado] = useState("");
   const [modoAbuela, setModoAbuela] = useState(false);
   const [contexto, setContexto] = useState<ContextoUsuario>({});
+  const [versionHistorial, setVersionHistorial] = useState(0);
   const inputArchivo = useRef<HTMLInputElement>(null);
 
   function elegirImagen(archivo: File | undefined) {
@@ -78,8 +81,11 @@ export default function Analizador() {
         setError(mensajeError(res.status, cuerpo));
         return;
       }
-      setResultado(cuerpo as Resultado);
+      const r = cuerpo as Resultado;
+      setResultado(r);
       setMensajeAnalizado(texto.trim());
+      guardarEnHistorial({ veredicto: r.veredicto, score: r.score, mensaje: texto.trim(), resumen: r.resumen_abuela });
+      setVersionHistorial((v) => v + 1);
     } catch {
       setError("No pudimos conectarnos. Revisá tu internet y probá de nuevo.");
     } finally {
@@ -154,6 +160,8 @@ export default function Analizador() {
           {cargando ? "Analizando…" : "¿Es estafa? Analizar"}
         </button>
       </form>
+
+      <HistorialLocal key={versionHistorial} />
 
       {resultado && <Veredicto resultado={resultado} mensaje={mensajeAnalizado} modoAbuela={modoAbuela} setModoAbuela={setModoAbuela} onNuevo={reiniciar} />}
     </div>
