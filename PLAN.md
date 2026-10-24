@@ -1,6 +1,6 @@
 - [x] Scaffold Next.js + TypeScript + Tailwind, .gitignore (incluye .env.local), .env.example con GEMINI_API_KEY
 - [x] Endpoint /api/analyze: texto -> JSON estructurado con Gemini (@google/genai, responseSchema)
-- [ ] Soporte de imagen (visión) en /api/analyze con Gemini
+- [x] Soporte de imagen (visión) en /api/analyze con Gemini
 - [ ] Módulo de chequeo de links (RDAP, SSL, redirects, similitud con marcas, anti-SSRF)
 - [ ] Combinar señales técnicas + veredicto del LLM en un score final
 - [ ] UI: input de texto/imagen, semáforo, banderas, qué hacer, modo abuela
