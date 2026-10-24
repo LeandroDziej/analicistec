@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import type { AnalisisFinal } from "@/lib/score";
 import EjemplosRapidos from "./EjemplosRapidos";
+import DominioResaltado from "./DominioResaltado";
 import { generarAlerta, infoSemaforo, mensajeError, validarImagenCliente } from "@/lib/ui";
 
 type Resultado = AnalisisFinal & { modelo?: string };
@@ -231,7 +232,7 @@ function Veredicto({
               <ul className="mt-3 flex flex-col gap-3 text-sm">
                 {resultado.links.map((l) => (
                   <li key={l.url} className="break-all rounded-lg bg-zinc-50 p-3">
-                    <div className="font-mono font-semibold text-zinc-900">{l.dominio}</div>
+                    <DominioResaltado link={l} />
                     <div className="mt-1 text-zinc-600">
                       {l.antiguedadDias !== null ? `Dominio de hace ${l.antiguedadDias} días` : "Antigüedad desconocida"}
                       {" · "}

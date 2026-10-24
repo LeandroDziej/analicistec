@@ -1,1 +1,2 @@
 - Ejemplos de un toque: src/lib/ejemplos.ts (5 mensajes, dominios .example), src/components/EjemplosRapidos.tsx, 2 líneas en src/components/Analizador.tsx, tests/ejemplos.test.ts. Build/lint/tests OK. Merge con upstream/main sin conflictos.
+- Dominio engañoso resaltado: src/lib/dominio.ts (diff de caracteres + textoAntiguedad), src/components/DominioResaltado.tsx, campo opcional dominioOficial en ResultadoLink (src/lib/links.ts), 2 líneas en Analizador.tsx, tests/dominio.test.ts. Build/lint/tests OK. Upstream sin cambios.

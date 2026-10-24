@@ -38,6 +38,8 @@ export interface ResultadoLink {
   redirecciones: string[];
   urlFinal: string | null;
   marcaImitada: { marca: string; distancia: number } | null;
+  /** Dominio oficial de la marca imitada (para resaltar la diferencia en la UI). */
+  dominioOficial?: string;
   senales: string[];
   error?: string;
 }
@@ -379,6 +381,7 @@ export async function verificarLink(url: string, deps: DepsLinks = depsReales): 
     urlFinal: seguimiento.urlFinal,
     bloqueado: seguimiento.bloqueado,
     marcaImitada,
+    ...(marcaImitada ? { dominioOficial: MARCAS.find((m) => m.nombre === marcaImitada.marca)?.dominios[0] } : {}),
     senales,
     ...(seguimiento.error ? { error: seguimiento.error } : {}),
   };
