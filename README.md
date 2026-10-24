@@ -184,6 +184,6 @@ En Windows (PowerShell), usá `Copy-Item .env.example .env.local` en lugar de `c
 | Manuel A. | [@Ridioortv](https://github.com/Ridioortv) | Programa base: análisis con IA y visión, chequeo de links, score, rate limit y deploy en Vercel; rediseño con pestañas, revisar link, "Ya caí" y "Mis análisis". |
 | María Sofía Genta | [@sofiigentaa](https://github.com/sofiigentaa) | Mejoras: alias/CBU, comprobante falso, denuncia, WhatsApp, voz, ejemplos, dominio resaltado, "así se ve el real", preguntas para afinar, historial, app instalable y optimización de velocidad. |
 
-**Hecho por Manuel A., María Sofía Genta y Leandro Dizej.**
+**Hecho por Manuel A. y María Sofía Genta.**
 
 _Construido en una hackatón con ayuda de agentes de IA (Claude Code) trabajando en paralelo sobre el mismo repositorio._
