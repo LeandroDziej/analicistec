@@ -3,7 +3,7 @@
 - [x] Soporte de imagen (visión) en /api/analyze con Gemini
 - [x] Módulo de chequeo de links (RDAP, SSL, redirects, similitud con marcas, anti-SSRF)
 - [x] Combinar señales técnicas + veredicto del LLM en un score final
-- [ ] UI: input de texto/imagen, semáforo, banderas, qué hacer, modo abuela
+- [x] UI: input de texto/imagen, semáforo, banderas, qué hacer, modo abuela
 - [ ] Botón "Generar alerta para compartir" (texto copiable)
 - [ ] Rate limit por IP, límite de 4 MB por imagen, reintento ante 429 de Gemini
 - [ ] Tests con 8 mensajes de ejemplo (4 estafas, 4 legítimos)
