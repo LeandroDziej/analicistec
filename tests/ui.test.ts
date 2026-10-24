@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { infoSemaforo, mensajeError, validarImagenCliente } from "../src/lib/ui.ts";
+import { generarAlerta, infoSemaforo, mensajeError, validarImagenCliente } from "../src/lib/ui.ts";
 
 test("semáforo mapea veredicto a luz", () => {
   assert.equal(infoSemaforo("estafa").luz, "rojo");
@@ -20,4 +20,38 @@ test("mensajeError usa el mensaje del servidor o uno amable", () => {
   assert.equal(mensajeError(400, { error: "Pegá un mensaje." }), "Pegá un mensaje.");
   assert.match(mensajeError(429, null), /Esperá un minuto/);
   assert.match(mensajeError(500, "x"), /Algo salió mal/);
+});
+
+const base = {
+  veredicto: "estafa" as const,
+  score: 92,
+  banderas: ["Dominio creado hace 3 días", "Imita a Mercado Pago", "Pide datos de tarjeta", "Urgencia", "Quinta"],
+  que_hacer: ["No toques el link", "Bloqueá el número", "Avisá a tu banco", "Cuarta"],
+  resumen_abuela: "Es una estafa que se hace pasar por Mercado Pago.\nNo toques nada.",
+  links: [{ dominio: "mercadopago-seguro.com" }, { dominio: "mercadopago-seguro.com" }],
+};
+
+test("generarAlerta arma texto copiable con encabezado, señales y acciones", () => {
+  const t = generarAlerta(base);
+  assert.match(t, /^🚨 ALERTA DE ESTAFA/);
+  assert.match(t, /Riesgo: 92\/100/);
+  assert.match(t, /• Imita a Mercado Pago/);
+  assert.ok(!t.includes("Quinta"), "máximo 4 banderas");
+  assert.ok(!t.includes("Cuarta"), "máximo 3 acciones");
+  assert.match(t, /1\. No toques el link/);
+  assert.match(t, /AntiEstafa AR/);
+});
+
+test("generarAlerta desactiva dominios y no los repite", () => {
+  const t = generarAlerta(base);
+  assert.equal(t.split("mercadopago-seguro[.]com").length - 1, 1);
+  assert.ok(!t.includes("mercadopago-seguro.com"));
+});
+
+test("generarAlerta para seguro no lista dominios ni advertencia", () => {
+  const t = generarAlerta({ ...base, veredicto: "seguro", score: 5, banderas: [], links: [{ dominio: "afip.gob.ar" }] });
+  assert.match(t, /^✅/);
+  assert.ok(!t.includes("No entres a"));
+  assert.ok(!t.includes("Señales:"));
+  assert.ok(!t.includes("no respondas"));
 });

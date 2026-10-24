@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import type { AnalisisFinal } from "@/lib/score";
-import { infoSemaforo, mensajeError, validarImagenCliente } from "@/lib/ui";
+import { generarAlerta, infoSemaforo, mensajeError, validarImagenCliente } from "@/lib/ui";
 
 type Resultado = AnalisisFinal & { modelo?: string };
 
@@ -245,9 +245,81 @@ function Veredicto({
         </>
       )}
 
+      <CompartirAlerta resultado={resultado} />
+
       <button type="button" onClick={onNuevo} className="h-12 rounded-xl border border-zinc-300 bg-white font-semibold text-zinc-800 hover:bg-zinc-50">
         Analizar otro mensaje
       </button>
     </section>
+  );
+}
+
+function CompartirAlerta({ resultado }: { resultado: Resultado }) {
+  const [alerta, setAlerta] = useState<string | null>(null);
+  const [estado, setEstado] = useState<"idle" | "copiado" | "error">("idle");
+  const area = useRef<HTMLTextAreaElement>(null);
+
+  async function copiar(texto: string) {
+    try {
+      await navigator.clipboard.writeText(texto);
+      setEstado("copiado");
+    } catch {
+      // Sin permiso de portapapeles (o http): dejamos el texto seleccionado para copiar a mano.
+      area.current?.select();
+      setEstado("error");
+    }
+  }
+
+  function generar() {
+    const texto = generarAlerta(resultado);
+    setAlerta(texto);
+    void copiar(texto);
+  }
+
+  if (!alerta) {
+    return (
+      <button
+        type="button"
+        onClick={generar}
+        className="h-14 rounded-xl bg-emerald-700 text-lg font-bold text-white shadow transition hover:bg-emerald-800"
+      >
+        📢 Generar alerta para compartir
+      </button>
+    );
+  }
+
+  return (
+    <div className="flex flex-col gap-2 rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+      <h3 className="text-lg font-bold text-emerald-900">📢 Alerta para compartir</h3>
+      <textarea
+        ref={area}
+        readOnly
+        value={alerta}
+        rows={10}
+        onFocus={(e) => e.currentTarget.select()}
+        className="w-full rounded-xl border border-emerald-200 bg-white p-3 text-sm text-zinc-900"
+      />
+      <div className="flex gap-2">
+        <button
+          type="button"
+          onClick={() => copiar(alerta)}
+          className="h-12 flex-1 rounded-xl bg-emerald-700 font-bold text-white hover:bg-emerald-800"
+        >
+          {estado === "copiado" ? "¡Copiado! ✔" : "Copiar texto"}
+        </button>
+        <a
+          href={`https://wa.me/?text=${encodeURIComponent(alerta)}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex h-12 flex-1 items-center justify-center rounded-xl border border-emerald-700 bg-white font-bold text-emerald-800 hover:bg-emerald-100"
+        >
+          Mandar por WhatsApp
+        </a>
+      </div>
+      <p aria-live="polite" className="text-sm text-emerald-900">
+        {estado === "copiado" && "Listo, pegalo en el grupo de la familia."}
+        {estado === "error" && "No pudimos copiar solo: mantené apretado el texto y elegí Copiar."}
+      </p>
+    </div>
   );
 }

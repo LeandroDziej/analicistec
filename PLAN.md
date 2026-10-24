@@ -4,7 +4,7 @@
 - [x] Módulo de chequeo de links (RDAP, SSL, redirects, similitud con marcas, anti-SSRF)
 - [x] Combinar señales técnicas + veredicto del LLM en un score final
 - [x] UI: input de texto/imagen, semáforo, banderas, qué hacer, modo abuela
-- [ ] Botón "Generar alerta para compartir" (texto copiable)
+- [x] Botón "Generar alerta para compartir" (texto copiable)
 - [ ] Rate limit por IP, límite de 4 MB por imagen, reintento ante 429 de Gemini
 - [ ] Tests con 8 mensajes de ejemplo (4 estafas, 4 legítimos)
 - [ ] Deploy a Vercel (cargar GEMINI_API_KEY en producción, vercel --prod --yes --token) y smoke test de la URL
