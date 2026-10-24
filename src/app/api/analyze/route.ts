@@ -1,4 +1,5 @@
-import { analizarConGemini, GeminiError } from "@/lib/gemini";
+import { GeminiError } from "@/lib/gemini";
+import { analizarConRespaldo } from "@/lib/analisisRespaldo";
 import { EntradaError, leerEntrada } from "@/lib/entrada";
 import { verificarLinks, type ResultadoLink } from "@/lib/links";
 import { combinarScore } from "@/lib/score";
@@ -27,12 +28,12 @@ export async function POST(request: Request) {
           return [];
         })
       : Promise.resolve([]);
-    const [{ analisis, modelo }, links] = await Promise.all([
-      medido("gemini", analizarConGemini(entrada)),
+    const [{ analisis, modelo, sinIA }, links] = await Promise.all([
+      medido("gemini", analizarConRespaldo(entrada)),
       medido("links", chequeoLinks),
     ]);
     console.info(`[analyze] gemini ${tiempos.gemini}ms, links ${tiempos.links}ms, total ${Date.now() - inicio}ms`);
-    return Response.json({ ...combinarScore(analisis, links), modelo });
+    return Response.json({ ...combinarScore(analisis, links), modelo, sinIA });
   } catch (err) {
     if (err instanceof EntradaError) {
       return Response.json({ error: err.message }, { status: err.status });

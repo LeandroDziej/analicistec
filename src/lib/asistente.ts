@@ -123,3 +123,32 @@ export async function responderPanda(
     clearTimeout(timer);
   }
 }
+
+/**
+ * Respuesta de Pandi sin IA (si no hay clave o se agotó la cuota): orienta según palabras clave
+ * y manda a la parte de la app que corresponde. Nunca inventa datos.
+ */
+export function respuestaPandaSinIA(pregunta: string): string {
+  const p = pregunta
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "");
+  const aviso = "\n\n(Ahora estoy con poca energía 🐼, así que te contesto lo básico. Probá de nuevo en un rato para una respuesta más completa.)";
+  if (/\b(cai|transferi|pague|me robaron|me estafaron|di (la|mi) clave|pase (el|mi) codigo|me hackearon)\b/.test(p)) {
+    return (
+      "Lo primero: llamá a tu banco por el número que está atrás de tu tarjeta y pedí bloquear todo. " +
+      "Después entrá en «Más ayuda → Ya caí»: ahí tenés los pasos según lo que pasó y el botón para llamar al 911 con la denuncia lista." +
+      aviso
+    );
+  }
+  if (/\b(codigo|clave|token|contrasena|pin)\b/.test(p)) {
+    return "Nunca pases códigos, claves ni tokens, aunque digan que son del banco, de WhatsApp o de un organismo. Nadie de verdad te los pide por mensaje." + aviso;
+  }
+  if (/\b(link|enlace|pagina|sitio|web)\b/.test(p)) {
+    return "No lo abras. Copialo y pegalo en la pestaña «Link»: te digo cuántos días tiene el sitio, si tiene candado y si imita a una marca." + aviso;
+  }
+  if (/\b(alias|cbu|cvu|transferir|transferencia|sena)\b/.test(p)) {
+    return "Antes de transferir, revisá el alias o CBU en la pestaña «Transferencia» y confirmá por otro canal con quién estás hablando." + aviso;
+  }
+  return "Pegá el mensaje que te llegó en la pestaña «Mensaje» y tocá «¿Es estafa? Analizar»: te digo si es estafa y qué hacer. Si tenés dudas de cómo se usa, tocá «¿Cómo se usa?»." + aviso;
+}

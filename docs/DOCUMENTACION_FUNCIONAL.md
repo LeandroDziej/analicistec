@@ -122,6 +122,28 @@ AntiEstafa AR ayuda a cualquier persona a saber, en segundos, si un mensaje que 
 - En /ayuda hay un video de unos 2 minutos, con subtítulos en español y portada, que recorre todas las funciones. Se accede también desde el inicio ("▶ Mirá el video de cómo se usa").
 - El video se genera automáticamente con un script de Playwright (`npm run demo:video`) que navega la app con cursor visible y carteles explicativos. Usa respuestas de ejemplo fijas para que la grabación sea siempre igual (opción `--real` para usar la IA). Se carga solo cuando el usuario lo reproduce.
 
+### RF-22 · Motor propio sin IA (respaldo)
+- Si no hay clave de Gemini, se agotó la cuota o la IA no responde, el análisis de texto sigue funcionando con reglas propias de las estafas argentinas (código o clave, datos de tarjeta, familiar con número nuevo, pedido de plata, urgencia, amenazas, premios, inversiones, acceso remoto, links acortados, validar datos y suplantación de marcas), combinadas con el chequeo técnico de links.
+- El resultado avisa que se analizó "sin inteligencia artificial". Nunca da 0 ni 100 de riesgo. Las capturas solas no se pueden analizar sin IA.
+- Pandi también responde sin IA: orienta según palabras clave (ya caí, códigos, links, transferencias) y manda a la sección de la app que corresponde.
+
+### RF-23 · Marca blanca
+- Con variables de entorno, cada empresa cliente tiene su copia de la app con "Un servicio de {empresa}", su logo y su contacto (WhatsApp o web) en el pie. Sin variables, se ve como AntiEstafa AR.
+
+### RF-24 · API para bots (/api/v1/analizar)
+- Para el bot de WhatsApp de tecnoros u otros sistemas. Requiere clave por cliente (`Authorization: Bearer`). Recibe texto o imagen y devuelve veredicto, puntaje, resumen, pasos, links y `texto_whatsapp` listo para responder.
+- Límite de 60 consultas por minuto por cliente. Tope mensual opcional de análisis con IA: pasado el tope, sigue con el motor propio.
+
+### RF-25 · Medidor de uso
+- Cuenta los análisis de cada cliente por mes (Upstash Redis si está configurado; si no, en memoria). Sirve para cobrar la clave paga y aplicar el tope.
+
+### RF-26 · Botón para webs (widget)
+- Una línea `<script src=".../widget.js">` agrega en cualquier página un botón "¿Es estafa?" que abre el detector en un panel (/widget), sin salir del sitio ni leer la página.
+
+### RF-27 · Página "Para empresas" y "Privacidad y términos"
+- /empresas presenta canales, planes (Comunidad, Empresa, Empresa + IA), cómo se contrata y el código del botón web, con enlace a tecnoros.ar.
+- /privacidad explica qué se hace con lo que se pega, las condiciones de uso y el responsable del servicio.
+
 ## 5. Flujos principales
 
 **Analizar un mensaje**
@@ -170,7 +192,7 @@ Pestaña "Comprobante" → subir captura → "Revisar comprobante"
 | **Privacidad** | No se guardan mensajes en el servidor. El historial vive solo en el dispositivo. Sin registro. |
 | **Seguridad** | Protección SSRF, rate limit por IP, límite de 4 MB por imagen, claves solo en variables de entorno. |
 | **Rendimiento** | Chequeos en paralelo, máximo 3 links, caché de 1 hora por dominio, timeouts de 4 s. |
-| **Disponibilidad** | Reintentos y modelos alternativos ante sobrecarga de la IA (errores 429/503/504), con mensaje amable al usuario. |
+| **Disponibilidad** | Reintentos y modelos alternativos ante sobrecarga de la IA (errores 429/503/504). Si la IA no está disponible, el motor propio sin IA analiza el texto: el servicio no se corta. |
 | **Accesibilidad** | Mobile first, botones grandes, etiquetas para lectores de pantalla, navegación por teclado en las pestañas, foco en el resultado, modo abuela, lectura en voz alta. |
 | **Experiencia de uso** | Transiciones suaves en pestañas y resultados (se desactivan si el usuario pidió reducir el movimiento), respuesta visual al tocar botones, desplazamiento automático al resultado, la pestaña elegida siempre visible en el celular y sin desbordes horizontales. |
 | **Idioma** | Español rioplatense. |
@@ -192,7 +214,8 @@ Pestaña "Comprobante" → subir captura → "Revisar comprobante"
 - La verificación de comprobantes es visual; no consulta al banco.
 - La antigüedad de algunos dominios puede no estar disponible (RDAP); en ese caso se informa "Antigüedad desconocida".
 - La instalación como app depende del navegador (Firefox en la compu no la permite).
-- El servicio de IA puede estar sobrecargado en momentos puntuales.
+- El servicio de IA puede estar sobrecargado en momentos puntuales; en ese caso el motor propio da un análisis más simple y no puede leer capturas.
+- El medidor de uso sin Upstash se reinicia con cada despliegue.
 
 ## 9. Glosario
 

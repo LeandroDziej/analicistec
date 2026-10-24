@@ -91,6 +91,8 @@ Además del color vas a ver:
 - **Links revisados:** tocá para desplegar. Ahí ves la **parte trucha del link resaltada**, cuántos días tiene el sitio y si tiene candado (SSL). Un sitio de pocos días que imita a una empresa es una muy mala señal.
 - **🔍 Así se ve el real:** si el mensaje imita a una empresa, te mostramos cómo se comunica esa empresa de verdad.
 
+> **Si dice "lo revisamos con nuestras reglas, sin inteligencia artificial":** en ese momento la IA tiene mucha demanda y la app usó su motor propio, que reconoce las estafas más comunes de Argentina y revisa los links. Es un análisis más simple: si tenés dudas, probá de nuevo en un rato. Las capturas de pantalla sí necesitan la IA; en ese caso, pegá el texto del mensaje.
+
 ## 5. Revisar un link
 
 ¿Te mandaron solo una dirección web? Revisala **sin abrirla**.
@@ -201,6 +203,9 @@ Con un solo toque:
 > La llamada no puede llevar la denuncia escrita: por eso te dejamos el guion para leerlo cuando te atienden. Si perdiste plata, llamá **también a tu banco** al número que figura atrás de tu tarjeta.
 
 ## 15. Preguntas frecuentes
+
+**¿Qué pasa con lo que pego? ¿Es privado?**
+En la sección **Privacidad y términos** (abajo de todo) está explicado en detalle. En corto: no guardamos tus mensajes, pero para analizarlos se envían a la IA de Google. Tapá tus datos personales antes de subir una captura.
 
 **¿Guardan mis mensajes?**
 No. Lo que pegás se analiza con una IA de Google (Gemini) en el momento y no queda registrado en nuestro sitio. El historial queda solo en tu celular o compu, y lo podés apagar.
