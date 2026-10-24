@@ -6,7 +6,7 @@ import PandiFlotante from "./PandiFlotante";
 import { Icono } from "./Iconos";
 import { MAX_PREGUNTA, NOMBRE_PANDA, SALUDO_PANDA, SUGERENCIAS_PANDA, type MensajePanda } from "@/lib/asistente";
 
-/** Pandi: el asistente que responde preguntas sobre estafas. Flota sobre la página y se puede arrastrar. */
+/** Pandi: el asistente que responde preguntas sobre estafas. Flota sobre la página; se puede arrastrar y vuelve solo a su lugar. */
 export default function AsistentePanda() {
   const [abierto, setAbierto] = useState(false);
   const [mensajes, setMensajes] = useState<MensajePanda[]>([]);

@@ -48,7 +48,7 @@ Los mensajes son cada vez más creíbles (hoy también los escriben con IA) y lo
 - **Ya caí:** guía paso a paso según lo que pasó (transferiste plata, diste una clave, pasaste datos de la tarjeta o el DNI, instalaste una app, te extorsionan), con los pasos urgentes primero.
 
 ### 🐼 Pandi, el asistente
-- Un **osito panda** que se asoma, saluda y responde preguntas sobre estafas y sobre cómo usar la app, en lenguaje simple. **Se puede arrastrar** por la pantalla y recuerda dónde lo dejaste. Nunca pide datos y no inventa teléfonos.
+- Un **osito panda** que se asoma, saluda y responde preguntas sobre estafas y sobre cómo usar la app, en lenguaje simple. **Se puede arrastrar**: dice «¡Wiii!» y, cuando lo soltás, vuelve solito a su lugar. Nunca pide datos y no inventa teléfonos.
 
 ### 📣 Después de detectar una estafa
 - **Qué hacer ahora.** Pasos concretos según el caso.

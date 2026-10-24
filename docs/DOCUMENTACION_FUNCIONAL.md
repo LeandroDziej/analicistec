@@ -108,7 +108,7 @@ AntiEstafa AR ayuda a cualquier persona a saber, en segundos, si un mensaje que 
 
 ### RF-19 · Pandi, el asistente
 - Un osito panda de cuerpo entero (mascota original de la app) flota sobre la página: se asoma desde abajo, saluda y muestra un globito de ayuda la primera vez de cada visita. Tocarlo abre un chat para hacer preguntas sobre estafas, qué hacer si ya se cayó y cómo usar la app.
-- **Se puede mover:** se arrastra con el mouse o el dedo (también con las flechas del teclado), nunca sale de la pantalla y recuerda su posición en el dispositivo. Un toque sin arrastre abre el chat; un arrastre no lo abre.
+- **Se puede arrastrar:** con el mouse o el dedo (también con las flechas del teclado), sin salir nunca de la pantalla. Mientras se mueve muestra el globito «¡Wiii! ¡Me estás arrastrando!» y, cuando queda quieto menos de un segundo después de soltarlo, vuelve solo a su lugar (abajo a la derecha) con un saltito. Un toque sin arrastre abre el chat; un arrastre no lo abre.
 - Respuestas generadas por la IA (Gemini) con instrucciones fijas: español rioplatense, respuestas cortas, temas limitados a estafas y a la app.
 - **Reglas:** nunca pide ni acepta claves, códigos o datos personales; no asegura que algo sea 100 % seguro; no inventa teléfonos ni direcciones (solo menciona el 911); deriva a "Ya caí" y al 911 en emergencias.
 - Conversación acotada (últimos 8 mensajes, preguntas de hasta 600 letras), con límite de uso por IP y mensajes amables ante sobrecarga. La conversación no se guarda.

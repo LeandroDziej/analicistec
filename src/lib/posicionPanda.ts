@@ -6,7 +6,8 @@ export interface Punto {
 export const ANCHO_PANDA = 96;
 export const ALTO_PANDA = 112;
 export const MARGEN_PANDA = 12;
-export const CLAVE_POSICION_PANDA = "antiestafa:pandi:posicion";
+/** Cuánto espera quieto después de que lo soltás antes de volver a su lugar. */
+export const ESPERA_VOLVER_MS = 900;
 /** Cuánto hay que mover el dedo o el mouse para que cuente como arrastre y no como toque. */
 export const UMBRAL_ARRASTRE = 6;
 
@@ -23,19 +24,6 @@ export function limitarPosicion(p: Punto, anchoVentana: number, altoVentana: num
 /** Lugar inicial: abajo a la derecha. */
 export function posicionInicial(anchoVentana: number, altoVentana: number): Punto {
   return limitarPosicion({ x: anchoVentana, y: altoVentana }, anchoVentana, altoVentana);
-}
-
-/** Lee la posición guardada; si falta o está rota, devuelve null. */
-export function leerPosicionGuardada(crudo: string | null | undefined): Punto | null {
-  if (!crudo) return null;
-  try {
-    const p = JSON.parse(crudo) as Partial<Punto>;
-    return typeof p.x === "number" && typeof p.y === "number" && Number.isFinite(p.x) && Number.isFinite(p.y)
-      ? { x: p.x, y: p.y }
-      : null;
-  } catch {
-    return null;
-  }
 }
 
 export function esArrastre(desde: Punto, hasta: Punto): boolean {

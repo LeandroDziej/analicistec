@@ -328,8 +328,9 @@ async function main() {
   const caja = await apuntar(pandi);
   await page.mouse.down();
   await moverA(caja.x - 380, caja.y - 220, 30);
+  await cartel("Si lo arrastrás dice «¡Wiii!»…", 1600);
   await page.mouse.up();
-  await cartel("¿Te tapa algo? Arrastralo a donde quieras", 2400);
+  await cartel("…y cuando lo soltás, vuelve solito a su lugar", 2600);
 
   // 7. Cierre
   await page.evaluate(() => window.scrollTo({ top: 0, behavior: "smooth" }));
