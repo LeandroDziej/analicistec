@@ -115,7 +115,7 @@ AntiEstafa AR ayuda a cualquier persona a saber, en segundos, si un mensaje que 
 
 ### RF-20 · Llamar al 911 con la denuncia lista
 - Botón rojo "Llamar al 911 · Policía" en el resultado (cuando es estafa o sospechoso) y en "Ya caí".
-- Con un toque: abre el marcador del teléfono con el 911, muestra un guion para leer en la llamada (fecha y hora, mensaje recibido, dominios de los links y señales detectadas) y copia la denuncia completa al portapapeles.
+- Con un toque: en celulares y tablets abre el marcador del teléfono con el 911 (`tel:911`); en computadoras no usa `tel:` (lo tomaría Zoom, Teams u otro programa) y muestra el 911 en grande para marcarlo desde un teléfono. Además muestra un guion para leer en la llamada (fecha y hora, mensaje recibido, dominios de los links y señales detectadas) y copia la denuncia completa al portapapeles.
 - **Limitación:** una llamada telefónica no transmite texto; la denuncia escrita se entrega aparte (WhatsApp, mail o en la comisaría). En "Ya caí" el guion es genérico para completar.
 
 ### RF-21 · Video "Cómo se usa"

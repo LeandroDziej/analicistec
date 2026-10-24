@@ -40,3 +40,14 @@ export function guionLlamada(datos?: DatosDenuncia, fecha?: Date): string[] {
   lineas.push("Tengo la denuncia completa por escrito, con capturas, para enviarla o llevarla a la comisaría.");
   return lineas;
 }
+
+/**
+ * ¿Este dispositivo puede hacer una llamada telefónica de verdad?
+ * En celulares y tablets `tel:` abre el marcador. En la compu lo agarra cualquier programa
+ * (Zoom, Teams, Skype…) o no pasa nada, así que ahí mostramos el número para marcarlo desde el celu.
+ */
+export function puedeLlamarPorTelefono(userAgent: string, puntosTactiles = 0): boolean {
+  if (/Android|iPhone|iPad|iPod|Mobile|Windows Phone|KaiOS/i.test(userAgent)) return true;
+  // El iPad nuevo se presenta como Mac: lo reconocemos porque tiene pantalla táctil.
+  return /Macintosh/i.test(userAgent) && puntosTactiles > 1;
+}

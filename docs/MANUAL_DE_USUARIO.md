@@ -194,11 +194,11 @@ Si querés denunciar, el botón rojo **📞 Llamar al 911 · Policía** te ahorr
 
 Con un solo toque:
 
-1. Se abre el teléfono con el **911 ya marcado**: solo tenés que confirmar la llamada.
+1. **En el celular** se abre el teléfono con el **911 ya marcado**: solo tenés que confirmar la llamada. **En la compu** no se abre ningún programa (ni Zoom ni Teams): te aparece el **911 bien grande** para que lo marques desde tu celular o un teléfono fijo.
 2. En la pantalla queda un **guion** con lo que tenés que decir: qué te llegó, cuándo, el link y qué te hizo sospechar.
 3. Si venís de un análisis, la **denuncia completa queda copiada**: si te la piden por WhatsApp o mail, la pegás.
 
-> La llamada no puede llevar la denuncia escrita: por eso te dejamos el guion para leerlo cuando te atienden. Si perdiste plata, llamá **también a tu banco** al número que figura atrás de tu tarjeta. En la compu, marcá el 911 desde tu celular.
+> La llamada no puede llevar la denuncia escrita: por eso te dejamos el guion para leerlo cuando te atienden. Si perdiste plata, llamá **también a tu banco** al número que figura atrás de tu tarjeta.
 
 ## 15. Preguntas frecuentes
 
