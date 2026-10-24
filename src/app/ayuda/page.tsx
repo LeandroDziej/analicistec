@@ -7,6 +7,7 @@ import { manualAHtml } from "@/lib/manual";
 import Creditos from "@/components/Creditos";
 import { Icono } from "@/components/Iconos";
 import AsistentePanda from "@/components/AsistentePanda";
+import VideoDemo from "@/components/VideoDemo";
 
 export const metadata: Metadata = {
   title: "Cómo se usa — AntiEstafa AR",
@@ -56,6 +57,8 @@ export default async function Ayuda() {
             </a>
           </div>
         </section>
+
+        <VideoDemo />
 
         <article className="manual-ayuda" dangerouslySetInnerHTML={{ __html: html }} />
 
