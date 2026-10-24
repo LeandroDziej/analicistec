@@ -6,8 +6,8 @@ import { MAX_HISTORIAL, formatoFecha, parsearHistorial, type TipoHistorial } fro
 import { activarHistorial, borrarHistorial, leerActivo, leerCrudo, suscribir } from "./historialStore";
 import { Icono, type NombreIcono } from "./Iconos";
 
-const ICONO: Record<TipoHistorial, NombreIcono> = { mensaje: "mensaje", link: "link", qr: "qr" };
-const ETIQUETA: Record<TipoHistorial, string> = { mensaje: "Mensaje", link: "Link", qr: "QR" };
+const ICONO: Record<TipoHistorial, NombreIcono> = { mensaje: "mensaje", link: "link" };
+const ETIQUETA: Record<TipoHistorial, string> = { mensaje: "Mensaje", link: "Link" };
 const CHIP: Record<Veredicto, { texto: string; clases: string }> = {
   seguro: { texto: "Sin señales", clases: "border-safe-200 bg-safe-50 text-safe-800" },
   sospechoso: { texto: "Sospechoso", clases: "border-warn-200 bg-warn-50 text-warn-800" },
@@ -42,7 +42,7 @@ export default function Historial() {
 
       {lista.length === 0 ? (
         <p className="rounded-2xl border border-dashed border-line p-5 text-center text-ink-soft">
-          {activo ? "Todavía no revisaste nada. Cuando analices un mensaje, un link o un QR, aparece acá." : "El guardado está apagado, así que no se muestra nada."}
+          {activo ? "Todavía no revisaste nada. Cuando analices un mensaje o un link, aparece acá." : "El guardado está apagado, así que no se muestra nada."}
         </p>
       ) : (
         <ul className="card divide-y divide-line">

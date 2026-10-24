@@ -24,7 +24,7 @@ AntiEstafa AR ayuda a cualquier persona a saber, en segundos, si un mensaje que 
 
 ## 3. Alcance
 
-**Incluye:** análisis de texto e imágenes, revisión directa de links, lectura de códigos QR, verificación técnica de links, puntaje de riesgo, recomendaciones, chequeo de alias/CBU/CVU, análisis de comprobantes, denuncia, alertas, guía para víctimas ("Ya caí"), juego de práctica, accesibilidad, historial local, manual dentro de la app y app instalable.
+**Incluye:** análisis de texto e imágenes, revisión directa de links, verificación técnica de links, puntaje de riesgo, recomendaciones, chequeo de alias/CBU/CVU, análisis de comprobantes, denuncia, alertas, guía para víctimas ("Ya caí"), accesibilidad, historial local, manual dentro de la app y app instalable.
 
 **No incluye:** registro de usuarios, almacenamiento de mensajes en servidores, consulta a bases bancarias o de denuncias, bloqueo automático de números ni presentación automática de denuncias.
 
@@ -86,7 +86,7 @@ AntiEstafa AR ayuda a cualquier persona a saber, en segundos, si un mensaje que 
 - Botón "Escuchar" que lee el resumen con voz en español (es-AR si está disponible) y "Detener". Se oculta si el navegador no lo soporta.
 
 ### RF-14 · Mis análisis (historial local)
-- Guarda los últimos 10 análisis de mensajes, links y QR **solo en el dispositivo** (almacenamiento del navegador), con tipo, veredicto, puntaje y un extracto corto.
+- Guarda los últimos 10 análisis de mensajes y links **solo en el dispositivo** (almacenamiento del navegador), con tipo, veredicto, puntaje y un extracto corto.
 - El usuario puede **apagar el guardado** (al apagarlo se borra lo guardado) y **borrar el historial** con doble confirmación.
 - Nunca se envían al servidor.
 
@@ -98,36 +98,29 @@ AntiEstafa AR ayuda a cualquier persona a saber, en segundos, si un mensaje que 
 - **Proceso:** la misma verificación técnica de RF-02 (antigüedad, SSL, redirecciones, marca imitada), sin que el usuario abra el sitio.
 - **Salida:** veredicto, qué llamó la atención, qué hacer ahora, datos del link y alerta para compartir. Se guarda en Mis análisis.
 
-### RF-17 · Escanear un código QR
-- **Entrada:** foto o captura con un código QR.
-- **Proceso:** el código se lee en el navegador. Según su contenido:
-    - **Link:** se revisa como en RF-16.
-    - **QR de pago:** se muestran comercio, ciudad y monto, con recomendaciones antes de pagar.
-    - **Otra acción** (llamada, mensaje, red Wi-Fi): se advierte que no se ejecute si no se esperaba.
-- **Reglas:** si no se encuentra un QR o la imagen no se puede abrir, se explica cómo sacar una mejor foto.
-
-### RF-18 · Ya caí: guía para víctimas
+### RF-17 · Ya caí: guía para víctimas
 - El usuario elige qué le pasó: transfirió plata, dio una clave o código, pasó datos de la tarjeta, pasó su DNI o datos personales, instaló una app o dio acceso remoto, o lo amenazan/extorsionan.
 - Se muestra una guía paso a paso para ese caso más los pasos que aplican siempre (por ejemplo, guardar las pruebas), con opción de copiarla.
 - **Regla:** se advierte que nunca hay que pagar para "recuperar" la plata.
 
-### RF-19 · Practicá: ¿podés detectar la estafa?
-- Juego de preguntas con mensajes de ejemplo: el usuario elige "estafa" o "real", recibe la respuesta y qué mirar para darse cuenta, y al final ve su resultado, que puede copiar y compartir.
-
-### RF-20 · Manual dentro de la app
+### RF-18 · Manual dentro de la app
 - Botón "¿Cómo se usa?" que abre la página /ayuda con este manual, con índice navegable y descarga del manual y de esta documentación en PDF.
 
-### RF-21 · Pandi, el asistente
+### RF-19 · Pandi, el asistente
 - Un osito panda de cuerpo entero (mascota original de la app) flota sobre la página: se asoma desde abajo, saluda y muestra un globito de ayuda la primera vez de cada visita. Tocarlo abre un chat para hacer preguntas sobre estafas, qué hacer si ya se cayó y cómo usar la app.
 - **Se puede mover:** se arrastra con el mouse o el dedo (también con las flechas del teclado), nunca sale de la pantalla y recuerda su posición en el dispositivo. Un toque sin arrastre abre el chat; un arrastre no lo abre.
 - Respuestas generadas por la IA (Gemini) con instrucciones fijas: español rioplatense, respuestas cortas, temas limitados a estafas y a la app.
 - **Reglas:** nunca pide ni acepta claves, códigos o datos personales; no asegura que algo sea 100 % seguro; no inventa teléfonos ni direcciones (solo menciona el 911); deriva a "Ya caí" y al 911 en emergencias.
 - Conversación acotada (últimos 8 mensajes, preguntas de hasta 600 letras), con límite de uso por IP y mensajes amables ante sobrecarga. La conversación no se guarda.
 
-### RF-22 · Llamar al 911 con la denuncia lista
+### RF-20 · Llamar al 911 con la denuncia lista
 - Botón rojo "Llamar al 911 · Policía" en el resultado (cuando es estafa o sospechoso) y en "Ya caí".
 - Con un toque: abre el marcador del teléfono con el 911, muestra un guion para leer en la llamada (fecha y hora, mensaje recibido, dominios de los links y señales detectadas) y copia la denuncia completa al portapapeles.
 - **Limitación:** una llamada telefónica no transmite texto; la denuncia escrita se entrega aparte (WhatsApp, mail o en la comisaría). En "Ya caí" el guion es genérico para completar.
+
+### RF-21 · Video "Cómo se usa"
+- En /ayuda hay un video de unos 2 minutos, con subtítulos en español y portada, que recorre todas las funciones. Se accede también desde el inicio ("▶ Mirá el video de cómo se usa").
+- El video se genera automáticamente con un script de Playwright (`npm run demo:video`) que navega la app con cursor visible y carteles explicativos. Usa respuestas de ejemplo fijas para que la grabación sea siempre igual (opción `--real` para usar la IA). Se carga solo cuando el usuario lo reproduce.
 
 ## 5. Flujos principales
 
@@ -144,10 +137,9 @@ Pestaña "Transferencia" → alias/CBU/CVU + mensaje → "Revisar antes de trans
 → riesgo bajo/medio/alto + señales + recomendación
 ```
 
-**Link o QR**
+**Revisar un link**
 ```
 Pestaña "Link" → pegar dirección → "Revisar link" → veredicto + datos del link
-Pestaña "QR" → subir foto → lectura del código → link revisado / datos del pago / aviso de acción
 ```
 
 **Si ya caí**
@@ -192,7 +184,6 @@ Pestaña "Comprobante" → subir captura → "Revisar comprobante"
 | Sin conexión | "No pudimos conectarnos. Revisá tu internet y probá de nuevo." |
 | IA sobrecargada o límite de uso | Mensaje amable pidiendo reintentar en unos minutos. |
 | Imagen muy grande o formato inválido | Aviso antes de enviar. |
-| No se encuentra un QR en la imagen | Sugerencia para sacar una foto más cerca, iluminada y sin reflejos. |
 | Copiado automático no disponible | "No pudimos copiar solo: mantené apretado el texto y elegí Copiar." |
 
 ## 8. Limitaciones conocidas

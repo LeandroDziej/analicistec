@@ -1,6 +1,6 @@
 import type { Veredicto } from "./gemini.ts";
 
-export type TipoHistorial = "mensaje" | "link" | "qr";
+export type TipoHistorial = "mensaje" | "link";
 
 export interface EntradaHistorial {
   id: string;
@@ -22,7 +22,7 @@ export const CLAVE_HISTORIAL = "antiestafa:historial:v1";
 export const CLAVE_ACTIVO = "antiestafa:historial:activo";
 export const MAX_HISTORIAL = 10;
 
-const TIPOS: TipoHistorial[] = ["mensaje", "link", "qr"];
+const TIPOS: TipoHistorial[] = ["mensaje", "link"];
 const VEREDICTOS: Veredicto[] = ["seguro", "sospechoso", "estafa"];
 
 /** Junta espacios y recorta: lo único que se guarda del mensaje original. */

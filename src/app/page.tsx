@@ -50,6 +50,9 @@ export default function Home() {
             </Link>
             <BotonInstalar />
           </div>
+          <Link href="/ayuda#video" className="w-fit font-semibold text-brand-800 underline underline-offset-2 hover:text-brand-900">
+            ▶ Mirá el video de cómo se usa (2 min)
+          </Link>
         </section>
 
         <div className="lg:row-span-2 lg:row-start-1 lg:col-start-2">

@@ -39,7 +39,6 @@ Los mensajes son cada vez más creíbles (hoy también los escriben con IA) y lo
 - **Ejemplos de un toque.** Mensajes de ejemplo para probar la app sin tener que pegar nada.
 - **Carga sin esfuerzo:** botón "Pegar", pegar una captura con Ctrl+V, arrastrar y soltar la imagen, Ctrl+Enter para analizar, y la pantalla baja sola hasta el resultado.
 - **Revisar un link** sin abrirlo: antigüedad, candado y marca imitada.
-- **Escanear un QR:** lee el código desde una foto; si es un link lo revisa, si es un QR de pago muestra comercio y monto.
 
 ### 💸 Antes de transferir
 - **Chequeo de alias/CBU/CVU.** Valida el formato (incluidos los dígitos verificadores del CBU/CVU) y evalúa con IA si el pedido es sospechoso. Nunca afirma que una cuenta es segura: siempre recomienda verificar por otro canal.
@@ -61,12 +60,11 @@ Los mensajes son cada vez más creíbles (hoy también los escriben con IA) y lo
 - **Modo abuela.** El resultado en dos líneas, con letra grande y una sola acción.
 - **Leer en voz alta.** Botón que lee el resumen con la voz del navegador (es-AR).
 - **App instalable (PWA).** Botón "Instalar app" visible en cualquier navegador: instala con un clic donde se puede y, si no, explica cómo hacerlo (Chrome, Edge, Android, iPhone, Mac, Firefox).
-- **Practicá:** juego "¿Podés detectar la estafa?" para aprender a reconocerlas.
 - **Manual dentro de la app:** botón "¿Cómo se usa?" con la guía completa y descarga en PDF.
 - **Mobile first**, español rioplatense, sin registro.
 
 ### 🔒 Privacidad y seguridad
-- **No guardamos tus mensajes.** **Mis análisis** (los últimos 10 mensajes, links y QR) queda solo en tu dispositivo; se puede apagar y borrar.
+- **No guardamos tus mensajes.** **Mis análisis** (los últimos 10 mensajes y links) queda solo en tu dispositivo; se puede apagar y borrar.
 - **Anti-SSRF:** el chequeo de links bloquea IPs privadas y localhost, con timeouts.
 - **Rate limit por IP**, límite de 4 MB por imagen y reintentos ante sobrecarga de Gemini, con mensajes amables al usuario.
 
@@ -76,6 +74,21 @@ Los mensajes son cada vez más creíbles (hoy también los escriben con IA) y lo
 - Medido: el chequeo de links bajó de ~0,8 s a ~0,3 s con caché, y las redirecciones lentas ya no frenan el análisis (antes hasta 5 s).
 
 ---
+
+## Video de demostración
+
+▶ **[Mirá cómo se usa en 2 minutos](https://antiestafa-ar-2.vercel.app/ayuda#video)** (con subtítulos).
+
+El video se graba solo con Playwright, recorriendo todas las funciones:
+
+```bash
+npm install
+npx playwright install chromium   # la primera vez
+npm run dev                       # en otra terminal
+npm run demo:video                # genera public/demo/demo.mp4, portada.jpg y demo.vtt
+```
+
+Usa respuestas de ejemplo fijas para que el video salga siempre igual. Opciones: `--url=https://antiestafa-ar-2.vercel.app` para grabar la versión publicada y `--real` para usar la IA de verdad. Para sumar una función nueva al video, agregá un paso en `scripts/demo/grabar-demo.mjs`. Necesita `ffmpeg` instalado.
 
 ## Documentación
 
@@ -130,7 +143,6 @@ texto / imagen ──► /api/analyze ──┬─► links ─► RDAP · SSL �
                                 score combinado + veredicto ─► UI
 
 link ──► /api/link ──► RDAP · SSL · redirecciones · marcas
-foto de QR ──► lectura en el navegador (jsQR) ──► link / pago / acción
 alias/CBU + mensaje ──► /api/transferencia ──► validación de formato + Gemini
 captura de comprobante ──► /api/comprobante ──► Gemini con visión
 pregunta a Pandi ──► /api/asistente ──► Gemini (respuestas cortas, reglas fijas)
@@ -169,7 +181,7 @@ En Windows (PowerShell), usá `Copy-Item .env.example .env.local` en lugar de `c
 
 | Integrante | GitHub | Aporte |
 |---|---|---|
-| _(nombre)_ | [@Ridioortv](https://github.com/Ridioortv) | Programa base: análisis con IA y visión, chequeo de links, score, rate limit y deploy en Vercel; rediseño con pestañas, revisar link, escanear QR, "Ya caí", "Practicá" y "Mis análisis". |
+| Manuel A. | [@Ridioortv](https://github.com/Ridioortv) | Programa base: análisis con IA y visión, chequeo de links, score, rate limit y deploy en Vercel; rediseño con pestañas, revisar link, "Ya caí" y "Mis análisis". |
 | María Sofía Genta | [@sofiigentaa](https://github.com/sofiigentaa) | Mejoras: alias/CBU, comprobante falso, denuncia, WhatsApp, voz, ejemplos, dominio resaltado, "así se ve el real", preguntas para afinar, historial, app instalable y optimización de velocidad. |
 
 **Hecho por Manuel A., María Sofía Genta y Leandro Dizej.**
