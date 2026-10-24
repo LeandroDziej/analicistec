@@ -13,11 +13,13 @@ export default function Home() {
         <p className="text-zinc-600">
           ¿Te llegó un mensaje raro por WhatsApp, SMS o mail? Pegalo o subí la captura y te decimos si huele a estafa.
         </p>
+        <div className="mt-2">
+          <BotonInstalar />
+        </div>
       </header>
       <Analizador />
       <DetectorComprobante />
       <ChequeoTransferencia />
-      <BotonInstalar />
       <footer className="mt-auto pt-6 text-center text-xs text-zinc-500">
         Gratis y sin registro. No guardamos tus mensajes. Ante la duda, llamá a tu banco por el número que figura en tu tarjeta.
       </footer>

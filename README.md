@@ -1,112 +1,152 @@
 # AntiEstafa AR 🛡️
 
-**¿Te llegó un mensaje raro? Pegalo acá y en segundos te decimos si es una estafa.**
+**¿Te llegó un mensaje raro? Pegalo o subí la captura y en segundos te decimos si es una estafa, por qué, y qué hacer.**
 
-👉 Probalo: **https://antiestafa-ar-2.vercel.app** (sin login, gratis, desde el celu)
+👉 **Probalo:** https://antiestafa-ar-2.vercel.app — gratis, sin registro, desde el celu o la compu. También se puede **instalar como app**.
 
-## El pitch
+> Proyecto de hackatón · Next.js + TypeScript + Tailwind + Gemini · Deploy en Vercel
 
-En Argentina las estafas por WhatsApp y SMS son moneda corriente: el falso
-ARCA/AFIP que te amenaza con un embargo, el "Mercado Pago" que te bloqueó la
-cuenta, el paquete retenido de Correo Argentino, el clásico "hola ma, cambié
-de número", el vendedor trucho de Marketplace, el "soporte del banco" que te
-pide la clave y las inversiones cripto que duplican la plata.
+---
 
-Los más expuestos son justamente quienes menos herramientas tienen para
-darse cuenta. **AntiEstafa AR** lo resuelve en un paso:
+## El problema
 
-1. **Pegás el texto o subís la captura** del mensaje.
-2. **Revisamos los links de verdad**: antigüedad del dominio (RDAP), si tiene
-   SSL, a dónde redirige y si imita a una marca conocida (Mercado Libre,
-   Mercado Pago, ARCA/AFIP, Correo Argentino, bancos) por distancia de
-   Levenshtein.
-3. **Una IA entrenada en estafas argentinas** (Gemini, con visión) lee el
-   mensaje y detecta las señales de manipulación.
-4. **Combinamos ambas cosas** en un puntaje 0-100 con semáforo
-   🟢 seguro / 🟡 sospechoso / 🔴 estafa. Si el link es un dominio de 3 días
-   que imita a Mercado Pago, lo marcamos aunque el texto parezca inocente.
-5. Te decimos **qué hacer ahora**, con un **modo abuela** (letra grande,
-   dos líneas, una acción) y un botón para **generar una alerta y compartirla**
-   por WhatsApp con la familia.
+En Argentina las estafas por WhatsApp y SMS son moneda corriente: el falso ARCA/AFIP que amenaza con un embargo, el "Mercado Pago" que te bloqueó la cuenta, el paquete retenido de Correo Argentino, el clásico "hola ma, cambié de número", el vendedor trucho de Marketplace, el "soporte del banco" que te pide la clave y las inversiones cripto que duplican la plata.
 
-## 5 ejemplos para la demo
+Los mensajes son cada vez más creíbles (hoy también los escriben con IA) y los más expuestos son justamente quienes menos herramientas tienen para darse cuenta: las personas mayores.
 
-Copiá y pegá cada uno en la app. Los dominios son inventados para la demo.
+## La solución
+
+**AntiEstafa AR te protege en tres momentos: antes, durante y después de una estafa.**
+
+| Momento | Qué hace |
+|---|---|
+| **Antes de pagar** | Revisa el alias/CBU que te pidieron y detecta comprobantes de transferencia falsos. |
+| **Durante el análisis** | Combina IA con verificación técnica real de los links y te muestra la parte trucha. |
+| **Después** | Arma la denuncia, avisa a tu familia por WhatsApp y te lo lee en voz alta. |
+
+---
+
+## Funcionalidades
+
+### 🔍 Análisis del mensaje
+- **Texto o captura de pantalla.** Pegás el mensaje o subís la imagen de WhatsApp; la IA la lee con visión.
+- **IA entrenada en estafas argentinas.** Gemini detecta las señales de manipulación: urgencia falsa, suplantación de organismos, pedidos de plata o datos.
+- **Verificación técnica de links.** Antigüedad del dominio (RDAP), certificado SSL, a dónde redirige y si imita a una marca conocida (distancia de Levenshtein).
+- **Puntaje y semáforo.** Combina las señales técnicas con el veredicto de la IA en un puntaje 0-100: 🟢 seguro · 🟡 sospechoso · 🔴 estafa.
+- **Dominio engañoso resaltado.** Marca la parte trucha del link (`mercadopag0` vs `mercadopago`) y cuántos días tiene el sitio.
+- **"Así se ve el real".** Si el mensaje imita a una empresa, muestra cómo se comunica de verdad (por ejemplo, "nunca te pide claves por mensaje").
+- **Preguntas para afinar.** Tres preguntas opcionales (¿te pidieron plata?, ¿conocés a quien te lo mandó?, ¿te apuran?) que hacen el análisis más preciso.
+- **Ejemplos de un toque.** Mensajes de ejemplo para probar la app sin tener que pegar nada.
+
+### 💸 Antes de transferir
+- **Chequeo de alias/CBU/CVU.** Valida el formato (incluidos los dígitos verificadores del CBU/CVU) y evalúa con IA si el pedido es sospechoso. Nunca afirma que una cuenta es segura: siempre recomienda verificar por otro canal.
+- **Detector de comprobante falso.** Subís la captura de una "transferencia" que te mandaron (típico en Marketplace) y la IA señala lo que no cierra.
+
+### 📣 Después de detectar una estafa
+- **Qué hacer ahora.** Pasos concretos según el caso.
+- **Generar denuncia.** Arma un texto formal con el mensaje, los links, las señales detectadas, el veredicto y la fecha; se copia, se descarga o se imprime/guarda como PDF.
+- **Alerta para compartir** y **envío directo por WhatsApp** al grupo de la familia.
+
+### 👵 Accesibilidad
+- **Modo abuela.** El resultado en dos líneas, con letra grande y una sola acción.
+- **Leer en voz alta.** Botón que lee el resumen con la voz del navegador (es-AR).
+- **App instalable (PWA).** Botón "Instalar app" visible en cualquier navegador: instala con un clic donde se puede y, si no, explica cómo hacerlo (Chrome, Edge, Android, iPhone, Mac, Firefox).
+- **Mobile first**, español rioplatense, sin registro.
+
+### 🔒 Privacidad y seguridad
+- **No guardamos tus mensajes.** El **historial** de tus últimos 10 análisis queda solo en tu dispositivo y se borra con un botón.
+- **Anti-SSRF:** el chequeo de links bloquea IPs privadas y localhost, con timeouts.
+- **Rate limit por IP**, límite de 4 MB por imagen y reintentos ante sobrecarga de Gemini, con mensajes amables al usuario.
+
+### ⚡ Rendimiento
+- Chequeos de links e IA **en paralelo**, máximo 3 links por mensaje, **caché de 1 hora** por dominio, timeouts de 4 s y "thinking" bajo del modelo.
+- **Progreso visible por pasos** ("Revisando links…", "Analizando el mensaje…", "Calculando el riesgo…").
+- Medido: el chequeo de links bajó de ~0,8 s a ~0,3 s con caché, y las redirecciones lentas ya no frenan el análisis (antes hasta 5 s).
+
+---
+
+## Demo en 5 mensajes
+
+Copiá y pegá cada uno en la app (o usá los **ejemplos de un toque**). Los dominios son inventados.
 
 **1. Falso ARCA con embargo → 🔴 estafa**
-
 ```
 ARCA INFORMA: Registrás una deuda de $187.430 en Ganancias. Para evitar el embargo de tus cuentas regularizá HOY en https://arca-regularizacion.com/pago antes de las 24 hs.
 ```
+Suplantación de ARCA, urgencia y amenaza, link que no es `arca.gob.ar`.
 
-Qué muestra: suplantación de ARCA, urgencia y amenaza, link que no es
-`arca.gob.ar` y marca imitada en el dominio.
-
-**2. Falso Mercado Pago, cuenta bloqueada → 🔴 estafa**
-
+**2. Falso Mercado Pago → 🔴 estafa**
 ```
 Mercado Pago: tu cuenta fue BLOQUEADA por actividad inusual. Validá tu identidad en http://mercadopag0-seguridad.xyz/validar o perdés tu saldo.
 ```
-
-Qué muestra: `mercadopag0` (con cero) detectado por Levenshtein, sin SSL,
-pedido de validar identidad por link.
+`mercadopag0` (con cero) resaltado, sin SSL, y el recuadro "Así se ve el real".
 
 **3. "Hola ma, cambié de número" → 🔴 estafa**
-
 ```
 Hola ma, cambié de número, agendá este. Estoy en un apuro, ¿me podés transferir $85.000 al alias pago.rapido.mp? Después te explico, no me llames que no puedo hablar.
 ```
-
-Qué muestra: estafa sin links, detectada solo por el patrón de ingeniería
-social. Probá el **modo abuela** y el botón **Generar alerta para compartir**.
+Estafa sin links, detectada por ingeniería social. Probá el **modo abuela**, **Escuchar** y **Compartir por WhatsApp**; y pegá el alias en **"¿Te pidieron que transfieras?"**.
 
 **4. Falso Correo Argentino → 🔴 estafa**
-
 ```
 Correo Argentino: tu paquete está retenido por falta de pago de $1.250 de aduana. Abonalo en https://correoargentlno-envios.com/pago para recibirlo mañana.
 ```
-
-Qué muestra: `correoargentlno` (una "l" en vez de "i"), cobro chico para
-robar la tarjeta.
+`correoargentlno` (una "l" en vez de "i"). Probá **Generar denuncia**.
 
 **5. Mensaje legítimo → 🟢 seguro**
-
 ```
 Hola! Te confirmo el turno con la Dra. Gómez el martes 28 a las 10:30 en el consultorio de siempre. Si no podés venir, avisanos por este medio. Gracias!
 ```
+No todo es alarma.
 
-Qué muestra: que no todo es alarma; también probá subir la **captura de
-pantalla** de cualquiera de los anteriores para ver la lectura por visión.
+---
 
 ## Cómo funciona
 
 ```
-texto / imagen ──► /api/analyze ──┬─► extracción de links ─► RDAP · SSL · redirects · marcas
+texto / imagen ──► /api/analyze ──┬─► links ─► RDAP · SSL · redirecciones · marcas  (en paralelo, con caché)
                                   └─► Gemini (JSON con responseSchema)
                                            │
-                                 score combinado + veredicto ─► UI
+                                score combinado + veredicto ─► UI
+
+alias/CBU + mensaje ──► /api/transferencia ──► validación de formato + Gemini
+captura de comprobante ──► /api/comprobante ──► Gemini con visión
 ```
 
-- `src/lib/links.ts`: extracción y chequeo de links, Levenshtein contra marcas,
-  anti-SSRF (bloquea IPs privadas/localhost) y timeouts.
-- `src/lib/gemini.ts`: system prompt con contexto de estafas argentinas,
-  salida JSON validada, fallback entre modelos flash y reintento ante 429.
-- `src/lib/score.ts`: combina señales técnicas con el veredicto del LLM.
-- `src/lib/rateLimit.ts`: rate limit básico por IP. Imágenes hasta 4 MB.
-- `src/components/Analizador.tsx`: UI mobile first.
+| Archivo | Qué hace |
+|---|---|
+| `src/lib/links.ts` | Extracción y chequeo de links, Levenshtein contra marcas, anti-SSRF, timeouts. |
+| `src/lib/gemini.ts` | Prompt con contexto de estafas argentinas, salida JSON validada, fallback de modelos y reintentos. |
+| `src/lib/score.ts` | Combina señales técnicas con el veredicto de la IA. |
+| `src/lib/transferencia.ts` | Validación de alias, CBU y CVU (dígitos verificadores). |
+| `src/lib/comprobante.ts` | Análisis de comprobantes de transferencia. |
+| `src/lib/denuncia.ts` | Texto formal de la denuncia. |
+| `src/lib/pwa.ts` | Manifest y detección de navegador para instalar la app. |
+| `src/components/` | UI: analizador, semáforo, modo abuela y cada funcionalidad. |
+
+**Stack:** Next.js (App Router) · TypeScript · Tailwind · `@google/genai` (Gemini con visión) · RDAP · Vercel.
+**Calidad:** más de 100 tests automáticos (con Gemini y red simulados, no gastan cuota), lint y build en cada cambio.
+
+---
 
 ## Correrlo local
 
-```powershell
+```bash
 npm install
-Copy-Item .env.example .env.local   # y completá GEMINI_API_KEY
-npm run dev
-```
-
-Tests (con Gemini y red simulados, no gastan cuota):
-
-```powershell
+cp .env.example .env.local   # y completá GEMINI_API_KEY
+npm run dev                  # http://localhost:3000
 npm test
 ```
 
-Stack: Next.js (App Router) + TypeScript + Tailwind, `@google/genai`, deploy en Vercel.
+En Windows (PowerShell), usá `Copy-Item .env.example .env.local` en lugar de `cp`.
+
+---
+
+## Equipo
+
+| Integrante | GitHub | Aporte |
+|---|---|---|
+| _(nombre)_ | [@Ridioortv](https://github.com/Ridioortv) | Programa base: análisis con IA y visión, chequeo de links, score, UI, rate limit, deploy en Vercel. |
+| _(nombre)_ | [@sofiigentaa](https://github.com/sofiigentaa) | Mejoras: alias/CBU, comprobante falso, denuncia, WhatsApp, voz, ejemplos, dominio resaltado, "así se ve el real", preguntas para afinar, historial, app instalable y optimización de velocidad. |
+
+_Construido en una hackatón con ayuda de agentes de IA (Claude Code) trabajando en paralelo sobre el mismo repositorio._
