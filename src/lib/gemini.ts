@@ -16,8 +16,10 @@ export interface EntradaAnalisis {
 }
 
 export const MODELO_PREFERIDO = "gemini-3.8-flash";
-const TIMEOUT_MS = 20_000;
+const TIMEOUT_MS = 12_000;
 const MAX_MODELOS = 3;
+const MAX_LITE = 2;
+const PASADAS = 2;
 const REINTENTOS_429 = 2;
 const ESPERA_429_MS = 1_500;
 const ESPERA_429_MAX_MS = 5_000;
@@ -137,16 +139,26 @@ export interface ClienteGemini {
   };
 }
 
-/** Elige los flash más recientes a partir del listado de modelos. */
-export function elegirFlashRecientes(nombres: string[], max = MAX_MODELOS): string[] {
+/** Filtra los nombres por patrón y los ordena del más reciente al más viejo (estables antes que preview). */
+function masRecientes(nombres: string[], patron: RegExp, max: number): string[] {
   const version = (n: string) => {
     const m = /gemini-(\d+(?:\.\d+)?)/.exec(n);
     return m ? Number(m[1]) : 0;
   };
   return [...new Set(nombres.map((n) => n.replace(/^models\//, "")))]
-    .filter((n) => /^gemini-[\d.]+-flash(-latest|-preview[\w-]*)?$/.test(n) && !/lite|image|tts|live|audio/.test(n))
+    .filter((n) => patron.test(n) && !/image|tts|live|audio/.test(n))
     .sort((a, b) => version(b) - version(a) || Number(a.includes("preview")) - Number(b.includes("preview")))
     .slice(0, max);
+}
+
+/** Elige los flash más recientes a partir del listado de modelos. */
+export function elegirFlashRecientes(nombres: string[], max = MAX_MODELOS): string[] {
+  return masRecientes(nombres, /^gemini-[\d.]+-flash(-latest|-preview[\w-]*)?$/, max);
+}
+
+/** Elige los flash-lite más recientes (último recurso, después de los flash). */
+export function elegirFlashLiteRecientes(nombres: string[], max = MAX_LITE): string[] {
+  return masRecientes(nombres, /^gemini-[\d.]+-flash-lite(-latest|-preview[\w-]*)?$/, max);
 }
 
 let modeloRecordado: string | null = null;
@@ -155,7 +167,7 @@ export const _resetModeloRecordado = () => {
 };
 export const getModeloRecordado = () => modeloRecordado;
 
-async function listarFlash(cliente: ClienteGemini): Promise<string[]> {
+async function listarModelos(cliente: ClienteGemini): Promise<{ flash: string[]; lite: string[] }> {
   try {
     const pager = await cliente.models.list();
     const nombres: string[] = [];
@@ -163,9 +175,9 @@ async function listarFlash(cliente: ClienteGemini): Promise<string[]> {
       if (m.name && (!m.supportedActions || m.supportedActions.includes("generateContent"))) nombres.push(m.name);
       if (nombres.length > 300) break;
     }
-    return elegirFlashRecientes(nombres);
+    return { flash: elegirFlashRecientes(nombres), lite: elegirFlashLiteRecientes(nombres) };
   } catch {
-    return [];
+    return { flash: [], lite: [] };
   }
 }
 
@@ -204,8 +216,9 @@ export function crearCliente(): ClienteGemini {
 }
 
 /**
- * Analiza el contenido con Gemini. Prueba hasta 3 modelos flash ante 404/503/504/timeout
- * y recuerda el que respondió. Ante 429 reintenta con espera (hasta 2 veces) antes de rendirse.
+ * Analiza el contenido con Gemini. Ante 404/500/503/504/timeout prueba hasta 3 modelos flash y
+ * después hasta 2 flash-lite, y recuerda el que respondió. Si todos los que fallaron dieron 503/504
+ * (sobrecarga), reintenta la cadena completa una vez. Ante 429 reintenta con espera (hasta 2 veces).
  */
 export async function analizarConGemini(
   entrada: EntradaAnalisis,
@@ -217,57 +230,73 @@ export async function analizarConGemini(
   let reintentos429 = 0;
   const contents = construirContenido(entrada);
 
-  const candidatos: string[] = [modeloRecordado ?? MODELO_PREFERIDO];
+  let cadena: string[] = [modeloRecordado ?? MODELO_PREFERIDO];
   let listado = false;
   let ultimoError: unknown;
 
-  modelos: for (let i = 0; i < candidatos.length && i < MAX_MODELOS; i++) {
-    const model = candidatos[i];
-    // Reintenta el mismo modelo solo ante 429; cualquier otro error pasa al siguiente o corta.
-    while (true) {
-      try {
-        const resp = await conTimeout(
-          (abortSignal) =>
-            cliente.models.generateContent({
-              model,
-              contents,
-              config: {
-                systemInstruction: SYSTEM_PROMPT,
-                responseMimeType: "application/json",
-                responseSchema: RESPONSE_SCHEMA,
-                temperature: 0.2,
-                abortSignal,
-              },
-            }),
-          timeoutMs,
-        );
-        const analisis = parsearRespuesta(resp.text);
-        modeloRecordado = model;
-        return { analisis, modelo: model };
-      } catch (err) {
-        if (err instanceof GeminiError) throw err;
-        ultimoError = err;
-        const status = statusDe(err);
-        if (status === 429) {
-          if (reintentos429 < REINTENTOS_429) {
-            const ms = esperaPara429(err, reintentos429++);
-            console.warn(`Gemini ${model} 429, reintento en ${ms} ms`);
-            await esperar(ms);
-            continue;
+  for (let pasada = 0; pasada < PASADAS; pasada++) {
+    // Modelos que dieron 503/504; los 404 no cuentan (no existen) y cualquier otro error evita la segunda pasada.
+    const sobrecargados: string[] = [];
+    let soloSobrecarga = true;
+
+    for (let i = 0; i < cadena.length; i++) {
+      const model = cadena[i];
+      // Reintenta el mismo modelo solo ante 429; cualquier otro error pasa al siguiente o corta.
+      while (true) {
+        try {
+          const resp = await conTimeout(
+            (abortSignal) =>
+              cliente.models.generateContent({
+                model,
+                contents,
+                config: {
+                  systemInstruction: SYSTEM_PROMPT,
+                  responseMimeType: "application/json",
+                  responseSchema: RESPONSE_SCHEMA,
+                  temperature: 0.2,
+                  abortSignal,
+                },
+              }),
+            timeoutMs,
+          );
+          const analisis = parsearRespuesta(resp.text);
+          modeloRecordado = model;
+          return { analisis, modelo: model };
+        } catch (err) {
+          if (err instanceof GeminiError) throw err;
+          ultimoError = err;
+          const status = statusDe(err);
+          if (status === 429) {
+            if (reintentos429 < REINTENTOS_429) {
+              const ms = esperaPara429(err, reintentos429++);
+              console.warn(`Gemini ${model} 429, reintento en ${ms} ms`);
+              await esperar(ms);
+              continue;
+            }
+            throw new GeminiError("Cuota de Gemini agotada (429)", 429, "Hay mucha gente usando el detector ahora. Esperá un minuto y probá de nuevo.");
           }
-          throw new GeminiError("Cuota de Gemini agotada (429)", 429, "Hay mucha gente usando el detector ahora. Esperá un minuto y probá de nuevo.");
+          console.warn(`Gemini ${model} falló (status ${status ?? "?"}, pasada ${pasada + 1})`);
+          if (!esReintentableConOtroModelo(status)) return fallar(ultimoError);
+          if (status === 503 || status === 504) sobrecargados.push(model);
+          else if (status !== 404) soloSobrecarga = false;
+          if (modeloRecordado === model) modeloRecordado = null;
+          if (!listado) {
+            listado = true;
+            const { flash, lite } = await listarModelos(cliente);
+            const flashes = [...new Set([...cadena, ...flash])].slice(0, MAX_MODELOS);
+            cadena = [...flashes, ...lite.filter((m) => !flashes.includes(m))];
+          }
+          break;
         }
-        console.warn(`Gemini ${model} falló (status ${status ?? "?"})`);
-        if (!esReintentableConOtroModelo(status)) break modelos;
-        if (modeloRecordado === model) modeloRecordado = null;
-        if (!listado) {
-          listado = true;
-          for (const m of await listarFlash(cliente)) if (!candidatos.includes(m)) candidatos.push(m);
-        }
-        break;
       }
     }
+    if (!soloSobrecarga || sobrecargados.length === 0) break;
+    cadena = sobrecargados;
   }
-  console.error("Gemini falló:", ultimoError);
+  return fallar(ultimoError);
+}
+
+function fallar(err: unknown): never {
+  console.error("Gemini falló:", err);
   throw new GeminiError("Gemini no respondió", 503, "El análisis no está disponible en este momento. Probá de nuevo en unos minutos.");
 }
