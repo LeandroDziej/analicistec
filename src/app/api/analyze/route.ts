@@ -4,6 +4,8 @@ import { verificarLinks, type ResultadoLink } from "@/lib/links";
 import { combinarScore } from "@/lib/score";
 import { crearLimitador, ipDe } from "@/lib/rateLimit";
 
+export const maxDuration = 60;
+
 const limitador = crearLimitador();
 
 export async function POST(request: Request) {

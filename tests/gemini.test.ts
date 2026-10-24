@@ -219,3 +219,33 @@ test("error no reintentable (400) no prueba otros modelos", async () => {
   await assert.rejects(analizarConGemini({ texto: "x" }, { cliente }), (e: GeminiError) => e.status === 503);
   assert.deepEqual(llamados, ["gemini-3.8-flash"]);
 });
+
+test("límite total: corta la cadena al pasarse y devuelve el mensaje amable", async () => {
+  const colgado = () => new Promise<{ text?: string }>(() => {});
+  const { cliente, llamados } = mock(
+    { "gemini-3.8-flash": colgado, "gemini-3.5-flash": colgado, "gemini-3-flash": colgado },
+    ["gemini-3.5-flash", "gemini-3-flash"],
+  );
+  const inicio = Date.now();
+  await assert.rejects(
+    analizarConGemini({ texto: "x" }, { cliente, timeoutMs: 30, totalMs: 50 }),
+    (e: GeminiError) => e.status === 503 && /no está disponible/.test(e.mensajeUsuario),
+  );
+  assert.ok(Date.now() - inicio < 200);
+  assert.ok(llamados.length < 6);
+});
+
+test("límite total: no espera un 429 si la espera se pasa del límite", async () => {
+  const esperas: number[] = [];
+  const { cliente, llamados } = mock({
+    "gemini-3.8-flash": async () => {
+      throw Object.assign(new Error("quota"), { status: 429 });
+    },
+  });
+  await assert.rejects(
+    analizarConGemini({ texto: "x" }, { cliente, totalMs: 1_000, esperar: async (ms) => void esperas.push(ms) }),
+    GeminiError,
+  );
+  assert.deepEqual(esperas, []);
+  assert.equal(llamados.length, 1);
+});

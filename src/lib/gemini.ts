@@ -17,6 +17,8 @@ export interface EntradaAnalisis {
 
 export const MODELO_PREFERIDO = "gemini-3.8-flash";
 const TIMEOUT_MS = 12_000;
+/** Tope para toda la cadena de modelos, pasadas y reintentos (la ruta tiene maxDuration = 60). */
+const LIMITE_TOTAL_MS = 45_000;
 const MAX_MODELOS = 3;
 const MAX_LITE = 2;
 const PASADAS = 2;
@@ -219,13 +221,16 @@ export function crearCliente(): ClienteGemini {
  * Analiza el contenido con Gemini. Ante 404/500/503/504/timeout prueba hasta 3 modelos flash y
  * después hasta 2 flash-lite, y recuerda el que respondió. Si todos los que fallaron dieron 503/504
  * (sobrecarga), reintenta la cadena completa una vez. Ante 429 reintenta con espera (hasta 2 veces).
+ * Todo eso está acotado a LIMITE_TOTAL_MS: si se pasa, corta con el mensaje amable de error.
  */
 export async function analizarConGemini(
   entrada: EntradaAnalisis,
-  opts: { cliente?: ClienteGemini; timeoutMs?: number; esperar?: (ms: number) => Promise<void> } = {},
+  opts: { cliente?: ClienteGemini; timeoutMs?: number; totalMs?: number; esperar?: (ms: number) => Promise<void> } = {},
 ): Promise<{ analisis: AnalisisLLM; modelo: string }> {
   const cliente = opts.cliente ?? crearCliente();
   const timeoutMs = opts.timeoutMs ?? TIMEOUT_MS;
+  const limite = Date.now() + (opts.totalMs ?? LIMITE_TOTAL_MS);
+  const restante = () => limite - Date.now();
   const esperar = opts.esperar ?? dormir;
   let reintentos429 = 0;
   const contents = construirContenido(entrada);
@@ -243,6 +248,7 @@ export async function analizarConGemini(
       const model = cadena[i];
       // Reintenta el mismo modelo solo ante 429; cualquier otro error pasa al siguiente o corta.
       while (true) {
+        if (restante() <= 0) return fallarPorLimite(ultimoError);
         try {
           const resp = await conTimeout(
             (abortSignal) =>
@@ -257,7 +263,7 @@ export async function analizarConGemini(
                   abortSignal,
                 },
               }),
-            timeoutMs,
+            Math.min(timeoutMs, restante()),
           );
           const analisis = parsearRespuesta(resp.text);
           modeloRecordado = model;
@@ -269,6 +275,7 @@ export async function analizarConGemini(
           if (status === 429) {
             if (reintentos429 < REINTENTOS_429) {
               const ms = esperaPara429(err, reintentos429++);
+              if (ms >= restante()) return fallarPorLimite(err);
               console.warn(`Gemini ${model} 429, reintento en ${ms} ms`);
               await esperar(ms);
               continue;
@@ -282,7 +289,10 @@ export async function analizarConGemini(
           if (modeloRecordado === model) modeloRecordado = null;
           if (!listado) {
             listado = true;
-            const { flash, lite } = await listarModelos(cliente);
+            const { flash, lite } = await conTimeout(() => listarModelos(cliente), Math.max(0, restante())).catch(() => ({
+              flash: [] as string[],
+              lite: [] as string[],
+            }));
             const flashes = [...new Set([...cadena, ...flash])].slice(0, MAX_MODELOS);
             cadena = [...flashes, ...lite.filter((m) => !flashes.includes(m))];
           }
@@ -294,6 +304,11 @@ export async function analizarConGemini(
     cadena = sobrecargados;
   }
   return fallar(ultimoError);
+}
+
+function fallarPorLimite(err: unknown): never {
+  console.warn(`Gemini superó el límite total de ${LIMITE_TOTAL_MS} ms`);
+  return fallar(err);
 }
 
 function fallar(err: unknown): never {
