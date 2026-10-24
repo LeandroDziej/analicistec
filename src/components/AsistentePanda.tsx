@@ -2,10 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import PandaAvatar from "./PandaAvatar";
+import PandiFlotante from "./PandiFlotante";
 import { Icono } from "./Iconos";
 import { MAX_PREGUNTA, NOMBRE_PANDA, SALUDO_PANDA, SUGERENCIAS_PANDA, type MensajePanda } from "@/lib/asistente";
 
-/** Pandi: el asistente que responde preguntas sobre estafas, flotando abajo a la derecha. */
+/** Pandi: el asistente que responde preguntas sobre estafas. Flota sobre la página y se puede arrastrar. */
 export default function AsistentePanda() {
   const [abierto, setAbierto] = useState(false);
   const [mensajes, setMensajes] = useState<MensajePanda[]>([]);
@@ -32,7 +33,7 @@ export default function AsistentePanda() {
 
   function cerrar() {
     setAbierto(false);
-    lanzador.current?.focus();
+    requestAnimationFrame(() => lanzador.current?.focus());
   }
 
   async function enviar(texto: string) {
@@ -65,24 +66,7 @@ export default function AsistentePanda() {
 
   return (
     <>
-      {!abierto && (
-        <button
-          ref={lanzador}
-          type="button"
-          onClick={() => setAbierto(true)}
-          aria-label={`Preguntale a ${NOMBRE_PANDA}, el asistente`}
-          className="aparecer fixed right-4 bottom-4 z-40 flex items-center gap-2 rounded-full border border-line bg-white p-1.5 font-bold sm:pr-4 text-brand-800 shadow-lg transition-transform hover:-translate-y-0.5 active:scale-95 sm:right-6 sm:bottom-6"
-          style={{ boxShadow: "0 10px 30px -10px rgb(18 48 58 / 0.45)" }}
-        >
-          <span className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-50">
-            <PandaAvatar className="h-11 w-11" parpadeo />
-          </span>
-          <span className="hidden text-left leading-tight sm:block">
-            <span className="block text-base">¿Dudas?</span>
-            <span className="block text-sm font-semibold text-ink-soft">Preguntale a {NOMBRE_PANDA}</span>
-          </span>
-        </button>
-      )}
+      <PandiFlotante ref={lanzador} oculto={abierto} onAbrir={() => setAbierto(true)} />
 
       {abierto && (
         <div
