@@ -1,0 +1,1 @@
+- Ejemplos de un toque: src/lib/ejemplos.ts (5 mensajes, dominios .example), src/components/EjemplosRapidos.tsx, 2 líneas en src/components/Analizador.tsx, tests/ejemplos.test.ts. Build/lint/tests OK. Merge con upstream/main sin conflictos.

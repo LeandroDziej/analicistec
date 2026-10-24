@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import type { AnalisisFinal } from "@/lib/score";
+import EjemplosRapidos from "./EjemplosRapidos";
 import { generarAlerta, infoSemaforo, mensajeError, validarImagenCliente } from "@/lib/ui";
 
 type Resultado = AnalisisFinal & { modelo?: string };
@@ -83,6 +84,7 @@ export default function Analizador() {
   return (
     <div className="flex flex-col gap-5">
       <form onSubmit={analizar} className="flex flex-col gap-3">
+        <EjemplosRapidos onElegir={(t) => { setTexto(t); setError(null); }} />
         <label htmlFor="mensaje" className="text-sm font-semibold text-zinc-700">
           Pegá el mensaje que te llegó
         </label>
