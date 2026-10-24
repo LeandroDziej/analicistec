@@ -18,6 +18,14 @@ const fuenteTitulo = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: "AntiEstafa AR — ¿Es estafa este mensaje?",
+  icons: {
+    icon: [
+      { url: "/icono.svg", type: "image/svg+xml" },
+      { url: "/icono-192.png", sizes: "192x192", type: "image/png" },
+    ],
+    apple: { url: "/apple-touch-icon.png", sizes: "180x180" },
+  },
+  appleWebApp: { capable: true, title: "AntiEstafa", statusBarStyle: "default" },
   description: "Detector de estafas para Argentina: pegá un mensaje o subí una captura de WhatsApp y te decimos si es estafa.",
 };
 

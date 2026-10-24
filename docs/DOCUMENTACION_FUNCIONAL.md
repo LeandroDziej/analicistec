@@ -35,6 +35,8 @@ AntiEstafa AR ayuda a cualquier persona a saber, en segundos, si un mensaje que 
 - **Proceso:** en paralelo, (a) se extraen los links del mensaje y se verifican técnicamente (RF-02) y (b) la IA (Gemini con visión) analiza el contenido con contexto de estafas argentinas.
 - **Salida:** veredicto (seguro / sospechoso / estafa), puntaje 0-100, banderas rojas, pasos de "Qué hacer ahora" y un resumen en dos líneas.
 - **Reglas:** si no hay texto ni imagen, se pide cargar algo. Si la imagen supera 4 MB o el formato no es válido, se avisa antes de enviar.
+- **Facilidades de carga:** botón "Pegar" que trae el texto del portapapeles (solo si el navegador lo permite), botón "Borrar", pegado de una captura con Ctrl+V dentro del cuadro, arrastrar y soltar la imagen, y Ctrl+Enter para analizar.
+- **Al terminar:** la pantalla se desplaza hasta el resultado y le da el foco (lo anuncian los lectores de pantalla). "Analizar otro mensaje" vuelve al cuadro de texto vacío.
 
 ### RF-02 · Verificar links
 - Para cada link (máximo 3 por mensaje) se obtiene: antigüedad del dominio (RDAP), presencia de certificado SSL, destino final tras las redirecciones y similitud con marcas conocidas (Mercado Pago, Mercado Libre, ARCA/AFIP, Correo Argentino, bancos) por distancia de Levenshtein.
@@ -115,6 +117,17 @@ AntiEstafa AR ayuda a cualquier persona a saber, en segundos, si un mensaje que 
 ### RF-20 · Manual dentro de la app
 - Botón "¿Cómo se usa?" que abre la página /ayuda con este manual, con índice navegable y descarga del manual y de esta documentación en PDF.
 
+### RF-21 · Pandi, el asistente
+- Botón flotante con un panda (mascota original de la app) que abre un chat para hacer preguntas sobre estafas, qué hacer si ya se cayó y cómo usar la app.
+- Respuestas generadas por la IA (Gemini) con instrucciones fijas: español rioplatense, respuestas cortas, temas limitados a estafas y a la app.
+- **Reglas:** nunca pide ni acepta claves, códigos o datos personales; no asegura que algo sea 100 % seguro; no inventa teléfonos ni direcciones (solo menciona el 911); deriva a "Ya caí" y al 911 en emergencias.
+- Conversación acotada (últimos 8 mensajes, preguntas de hasta 600 letras), con límite de uso por IP y mensajes amables ante sobrecarga. La conversación no se guarda.
+
+### RF-22 · Llamar al 911 con la denuncia lista
+- Botón rojo "Llamar al 911 · Policía" en el resultado (cuando es estafa o sospechoso) y en "Ya caí".
+- Con un toque: abre el marcador del teléfono con el 911, muestra un guion para leer en la llamada (fecha y hora, mensaje recibido, dominios de los links y señales detectadas) y copia la denuncia completa al portapapeles.
+- **Limitación:** una llamada telefónica no transmite texto; la denuncia escrita se entrega aparte (WhatsApp, mail o en la comisaría). En "Ya caí" el guion es genérico para completar.
+
 ## 5. Flujos principales
 
 **Analizar un mensaje**
@@ -141,6 +154,16 @@ Pestaña "QR" → subir foto → lectura del código → link revisado / datos d
 "Más ayuda" → "Ya caí" → elegir qué pasó → guía paso a paso → "Copiar guía"
 ```
 
+**Pregunta a Pandi**
+```
+Panda (abajo a la derecha) → pregunta sugerida o propia → respuesta → seguir preguntando o cerrar (✕ / Escape)
+```
+
+**Denuncia rápida**
+```
+Resultado "estafa" o "Ya caí" → "Llamar al 911 · Policía" → marcador con 911 + guion en pantalla + denuncia copiada
+```
+
 **Comprobante recibido**
 ```
 Pestaña "Comprobante" → subir captura → "Revisar comprobante"
@@ -155,7 +178,8 @@ Pestaña "Comprobante" → subir captura → "Revisar comprobante"
 | **Seguridad** | Protección SSRF, rate limit por IP, límite de 4 MB por imagen, claves solo en variables de entorno. |
 | **Rendimiento** | Chequeos en paralelo, máximo 3 links, caché de 1 hora por dominio, timeouts de 4 s. |
 | **Disponibilidad** | Reintentos y modelos alternativos ante sobrecarga de la IA (errores 429/503/504), con mensaje amable al usuario. |
-| **Accesibilidad** | Mobile first, botones grandes, etiquetas para lectores de pantalla, modo abuela, lectura en voz alta. |
+| **Accesibilidad** | Mobile first, botones grandes, etiquetas para lectores de pantalla, navegación por teclado en las pestañas, foco en el resultado, modo abuela, lectura en voz alta. |
+| **Experiencia de uso** | Transiciones suaves en pestañas y resultados (se desactivan si el usuario pidió reducir el movimiento), respuesta visual al tocar botones, desplazamiento automático al resultado, la pestaña elegida siempre visible en el celular y sin desbordes horizontales. |
 | **Idioma** | Español rioplatense. |
 | **Calidad** | Más de 100 tests automáticos, lint y verificación de tipos. |
 

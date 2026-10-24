@@ -37,6 +37,7 @@ Los mensajes son cada vez más creíbles (hoy también los escriben con IA) y lo
 - **"Así se ve el real".** Si el mensaje imita a una empresa, muestra cómo se comunica de verdad (por ejemplo, "nunca te pide claves por mensaje").
 - **Preguntas para afinar.** Tres preguntas opcionales (¿te pidieron plata?, ¿conocés a quien te lo mandó?, ¿te apuran?) que hacen el análisis más preciso.
 - **Ejemplos de un toque.** Mensajes de ejemplo para probar la app sin tener que pegar nada.
+- **Carga sin esfuerzo:** botón "Pegar", pegar una captura con Ctrl+V, arrastrar y soltar la imagen, Ctrl+Enter para analizar, y la pantalla baja sola hasta el resultado.
 - **Revisar un link** sin abrirlo: antigüedad, candado y marca imitada.
 - **Escanear un QR:** lee el código desde una foto; si es un link lo revisa, si es un QR de pago muestra comercio y monto.
 
@@ -47,10 +48,14 @@ Los mensajes son cada vez más creíbles (hoy también los escriben con IA) y lo
 ### 🆘 Si ya caíste
 - **Ya caí:** guía paso a paso según lo que pasó (transferiste plata, diste una clave, pasaste datos de la tarjeta o el DNI, instalaste una app, te extorsionan), con los pasos urgentes primero.
 
+### 🐼 Pandi, el asistente
+- Un **panda** que responde preguntas sobre estafas y sobre cómo usar la app, en lenguaje simple. Nunca pide datos y no inventa teléfonos.
+
 ### 📣 Después de detectar una estafa
 - **Qué hacer ahora.** Pasos concretos según el caso.
 - **Generar denuncia.** Arma un texto formal con el mensaje, los links, las señales detectadas, el veredicto y la fecha; se copia, se descarga o se imprime/guarda como PDF.
 - **Alerta para compartir** y **envío directo por WhatsApp** al grupo de la familia.
+- **Llamar al 911 con la denuncia lista:** un toque abre el marcador con el 911, muestra el guion de lo que hay que decir y copia la denuncia completa.
 
 ### 👵 Accesibilidad
 - **Modo abuela.** El resultado en dos líneas, con letra grande y una sola acción.
@@ -128,6 +133,7 @@ link ──► /api/link ──► RDAP · SSL · redirecciones · marcas
 foto de QR ──► lectura en el navegador (jsQR) ──► link / pago / acción
 alias/CBU + mensaje ──► /api/transferencia ──► validación de formato + Gemini
 captura de comprobante ──► /api/comprobante ──► Gemini con visión
+pregunta a Pandi ──► /api/asistente ──► Gemini (respuestas cortas, reglas fijas)
 ```
 
 | Archivo | Qué hace |

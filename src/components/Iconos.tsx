@@ -141,6 +141,14 @@ const TRAZOS: Record<string, ReactNode> = {
       <path d="M14 11v6" />
     </>
   ),
+  pegar: (
+    <>
+      <path d="M9 4h6v3H9z" />
+      <path d="M9 5H6a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1h-3" />
+      <path d="M9 12h6" />
+      <path d="M9 16h4" />
+    </>
+  ),
   cargando: <path d="M21 12a9 9 0 1 1-6.2-8.55" />,
 };
 

@@ -22,8 +22,10 @@ Entrá a **https://antiestafa-ar-2.vercel.app** desde el celular o la compu. Es 
 12. [Practicá: ¿podés detectar la estafa?](#12-practica)
 13. [Mis análisis](#13-mis-analisis)
 14. [Modo abuela y lectura en voz alta](#14-modo-abuela-y-voz)
-15. [Preguntas frecuentes](#15-preguntas-frecuentes)
-16. [Si algo no funciona](#16-si-algo-no-funciona)
+15. [Preguntale a Pandi, el asistente](#15-preguntale-a-pandi)
+16. [Llamar al 911 con la denuncia lista](#16-llamar-al-911)
+17. [Preguntas frecuentes](#17-preguntas-frecuentes)
+18. [Si algo no funciona](#18-si-algo-no-funciona)
 
 ---
 
@@ -41,6 +43,7 @@ Entrá a **https://antiestafa-ar-2.vercel.app** desde el celular o la compu. Es 
 | **Transferencia** | Un alias, CBU o CVU al que te piden mandar plata. |
 
 - **Más ayuda:** otro recuadro con tres pestañas: **Ya caí** (qué hacer si ya te estafaron), **Practicá** (un juego para aprender a detectar estafas) y **Mis análisis** (lo que revisaste).
+- **Pandi 🐼:** abajo a la derecha está el panda asistente. Tocalo para hacerle preguntas.
 
 En el celular, si no ves todas las pestañas, deslizá la fila hacia el costado.
 
@@ -62,11 +65,14 @@ Cuando ya está instalada, el botón desaparece.
 
 1. Entrá a la pestaña **Mensaje**.
 2. **Cargá el mensaje.** Tenés dos opciones:
-    - **Pegá el texto** en el cuadro grande. (En WhatsApp: mantené apretado el mensaje → **Copiar**.)
-    - O tocá **Elegir una captura** y subí una foto de pantalla del mensaje (hasta 4 MB).
+    - **Pegá el texto:** copiá el mensaje en WhatsApp (mantené apretado el mensaje → **Copiar**) y tocá el botón **📋 Pegar**, arriba a la derecha del cuadro. También podés pegarlo a mano.
+    - O tocá **Elegir una captura** y subí una foto de pantalla del mensaje (hasta 4 MB). En la compu, también podés **arrastrar la imagen** hasta ese recuadro o **pegarla con Ctrl+V** dentro del cuadro de texto.
 3. **(Opcional) Respondé las preguntas** de "Para afinar el análisis": ¿te pidieron plata o datos?, ¿conocés a quien te lo mandó?, ¿te apuran? Ayudan a que el resultado sea más preciso, sobre todo en mensajes cortos.
-4. Tocá **¿Es estafa? Analizar**.
+4. Tocá **¿Es estafa? Analizar** (en la compu también sirve **Ctrl+Enter**).
 5. Esperá unos segundos. Vas a ver en qué paso va: "Revisando links…", "Analizando el mensaje…", "Calculando el riesgo…". Si hay mucha demanda, puede tardar hasta un minuto.
+6. Cuando termina, **la pantalla baja sola hasta el resultado**. Para revisar otro, tocá **Analizar otro mensaje** al final: volvés arriba con el cuadro vacío y listo para escribir.
+
+> Si te equivocaste de mensaje, tocá **Borrar** para vaciar el cuadro.
 
 > **¿Querés probar sin un mensaje real?** Tocá uno de los **ejemplos** que aparecen debajo del cuadro de texto (Falso ARCA, Falso Mercado Pago, etc.).
 
@@ -194,7 +200,30 @@ En **Más ayuda → Mis análisis** ves lo último que revisaste (mensajes, link
 
 Si tu navegador no puede leer en voz alta, el botón no aparece.
 
-## 15. Preguntas frecuentes
+## 15. Preguntale a Pandi
+
+Pandi es el panda asistente de la app. Le podés preguntar con tus palabras, por ejemplo: "¿esto es estafa?", "me pidieron el código de WhatsApp, ¿qué hago?" o "¿cómo uso la app?".
+
+1. Tocá el **panda** abajo a la derecha (en la compu dice **¿Dudas? Preguntale a Pandi**).
+2. Elegí una de las preguntas sugeridas o escribí la tuya y tocá **enviar** (o Enter).
+3. Pandi te responde en pocas líneas. Podés seguir preguntando.
+4. Para cerrarlo, tocá **✕** (o la tecla Escape).
+
+> Pandi puede equivocarse: si te dice que algo es sospechoso, no actúes. Y **nunca le pases claves, códigos ni datos de tu tarjeta** (ni a Pandi ni a nadie).
+
+## 16. Llamar al 911
+
+Si querés denunciar, el botón rojo **📞 Llamar al 911 · Policía** te ahorra tiempo. Está en el resultado de un mensaje (cuando da estafa o sospechoso) y en **Más ayuda → Ya caí**.
+
+Con un solo toque:
+
+1. Se abre el teléfono con el **911 ya marcado**: solo tenés que confirmar la llamada.
+2. En la pantalla queda un **guion** con lo que tenés que decir: qué te llegó, cuándo, el link y qué te hizo sospechar.
+3. Si venís de un análisis, la **denuncia completa queda copiada**: si te la piden por WhatsApp o mail, la pegás.
+
+> La llamada no puede llevar la denuncia escrita: por eso te dejamos el guion para leerlo cuando te atienden. Si perdiste plata, llamá **también a tu banco** al número que figura atrás de tu tarjeta. En la compu, marcá el 911 desde tu celular.
+
+## 17. Preguntas frecuentes
 
 **¿Guardan mis mensajes?**
 No. Lo que pegás se analiza con una IA de Google (Gemini) en el momento y no queda registrado en nuestro sitio. El historial queda solo en tu celular o compu, y lo podés apagar.
@@ -211,7 +240,7 @@ Entrá a **Más ayuda → Ya caí** y elegí lo que te pasó. Lo más urgente ca
 **¿Sirve para mensajes de mail o SMS?**
 Sí. Pegá el texto o subí una captura de cualquier mensaje.
 
-## 16. Si algo no funciona
+## 18. Si algo no funciona
 
 | Ves esto | Qué hacer |
 |---|---|
@@ -221,5 +250,9 @@ Sí. Pegá el texto o subí una captura de cualquier mensaje.
 | "La imagen pesa demasiado…" | Recortá la captura o sacá una nueva (máximo 4 MB). |
 | "No encontramos un código QR en la imagen…" | Sacá una foto más cerca, bien iluminada y sin reflejos. |
 | No te deja copiar | Mantené apretado el texto y elegí **Copiar**. |
+| El botón **Pegar** dice que no pudo pegar | Mantené apretado el cuadro de texto y elegí **Pegar**. Algunos navegadores no permiten pegar con el botón. |
+| No aparece el botón **Pegar** | Tu navegador no lo permite. Pegá a mano: mantené apretado el cuadro y elegí **Pegar**. |
 | No aparece el botón Escuchar | Tu navegador no tiene lectura en voz alta. Probá con Chrome. |
 | No ves todas las pestañas en el celular | Deslizá la fila de pestañas hacia el costado. |
+| Pandi dice que no puede responder | Hay mucha demanda. Esperá un minuto y volvé a preguntar. |
+| El botón del 911 no llama (en la compu) | La compu no hace llamadas: marcá 911 desde tu celular y leé el guion de la pantalla. |

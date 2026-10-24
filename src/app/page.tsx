@@ -2,6 +2,7 @@ import Link from "next/link";
 import Herramientas from "@/components/Herramientas";
 import BotonInstalar from "@/components/BotonInstalar";
 import Creditos from "@/components/Creditos";
+import AsistentePanda from "@/components/AsistentePanda";
 import MasAyuda from "@/components/MasAyuda";
 import { Icono, type NombreIcono } from "@/components/Iconos";
 
@@ -72,7 +73,7 @@ export default function Home() {
       </main>
 
       <footer className="border-t border-line bg-white">
-        <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-4 py-5 text-sm text-ink-mute sm:px-6">
+        <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-4 pt-5 pb-24 text-sm text-ink-mute sm:px-6">
           <p>
             Ante la duda, llamá a tu banco por el número que figura en tu tarjeta. Esta herramienta orienta, pero no reemplaza una denuncia ni el consejo de tu banco.
           </p>
@@ -88,6 +89,8 @@ export default function Home() {
           <Creditos />
         </div>
       </footer>
+
+      <AsistentePanda />
     </>
   );
 }
