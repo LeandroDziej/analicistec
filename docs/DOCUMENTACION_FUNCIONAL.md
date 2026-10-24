@@ -117,6 +117,17 @@ AntiEstafa AR ayuda a cualquier persona a saber, en segundos, si un mensaje que 
 ### RF-20 · Manual dentro de la app
 - Botón "¿Cómo se usa?" que abre la página /ayuda con este manual, con índice navegable y descarga del manual y de esta documentación en PDF.
 
+### RF-21 · Pandi, el asistente
+- Botón flotante con un panda (mascota original de la app) que abre un chat para hacer preguntas sobre estafas, qué hacer si ya se cayó y cómo usar la app.
+- Respuestas generadas por la IA (Gemini) con instrucciones fijas: español rioplatense, respuestas cortas, temas limitados a estafas y a la app.
+- **Reglas:** nunca pide ni acepta claves, códigos o datos personales; no asegura que algo sea 100 % seguro; no inventa teléfonos ni direcciones (solo menciona el 911); deriva a "Ya caí" y al 911 en emergencias.
+- Conversación acotada (últimos 8 mensajes, preguntas de hasta 600 letras), con límite de uso por IP y mensajes amables ante sobrecarga. La conversación no se guarda.
+
+### RF-22 · Llamar al 911 con la denuncia lista
+- Botón rojo "Llamar al 911 · Policía" en el resultado (cuando es estafa o sospechoso) y en "Ya caí".
+- Con un toque: abre el marcador del teléfono con el 911, muestra un guion para leer en la llamada (fecha y hora, mensaje recibido, dominios de los links y señales detectadas) y copia la denuncia completa al portapapeles.
+- **Limitación:** una llamada telefónica no transmite texto; la denuncia escrita se entrega aparte (WhatsApp, mail o en la comisaría). En "Ya caí" el guion es genérico para completar.
+
 ## 5. Flujos principales
 
 **Analizar un mensaje**
@@ -141,6 +152,16 @@ Pestaña "QR" → subir foto → lectura del código → link revisado / datos d
 **Si ya caí**
 ```
 "Más ayuda" → "Ya caí" → elegir qué pasó → guía paso a paso → "Copiar guía"
+```
+
+**Pregunta a Pandi**
+```
+Panda (abajo a la derecha) → pregunta sugerida o propia → respuesta → seguir preguntando o cerrar (✕ / Escape)
+```
+
+**Denuncia rápida**
+```
+Resultado "estafa" o "Ya caí" → "Llamar al 911 · Policía" → marcador con 911 + guion en pantalla + denuncia copiada
 ```
 
 **Comprobante recibido**

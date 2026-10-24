@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { CASOS_YA_CAI, PASOS_COMUNES, textoGuia } from "@/lib/yaCai";
 import { urlWhatsApp } from "@/lib/ui";
 import { Icono } from "./Iconos";
+import LlamarPolicia from "./LlamarPolicia";
 
 export default function YaCai() {
   const [elegido, setElegido] = useState<string | null>(null);
@@ -53,6 +54,10 @@ export default function YaCai() {
             </li>
           ))}
         </ul>
+        <div className="flex flex-col gap-2 border-t border-line pt-4">
+          <p className="font-bold text-ink">¿Querés denunciarlo ya?</p>
+          <LlamarPolicia />
+        </div>
       </section>
     );
   }

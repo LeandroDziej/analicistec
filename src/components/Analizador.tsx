@@ -6,6 +6,7 @@ import EjemplosRapidos from "./EjemplosRapidos";
 import DominioResaltado from "./DominioResaltado";
 import LeerEnVozAlta from "./LeerEnVozAlta";
 import GenerarDenuncia from "./GenerarDenuncia";
+import LlamarPolicia from "./LlamarPolicia";
 import ProgresoAnalisis from "./ProgresoAnalisis";
 import PreguntasAfinar from "./PreguntasAfinar";
 import AsiSeVeElReal from "./AsiSeVeElReal";
@@ -459,6 +460,8 @@ function Veredicto({
       <CompartirAlerta resultado={resultado} />
 
       <GenerarDenuncia datos={{ ...resultado, mensaje }} />
+
+      {resultado.veredicto !== "seguro" && <LlamarPolicia datos={{ ...resultado, mensaje }} />}
 
       <button type="button" onClick={onNuevo} className="btn btn-ghost">
         Analizar otro mensaje
