@@ -5,6 +5,7 @@ import type { AnalisisFinal } from "@/lib/score";
 import EjemplosRapidos from "./EjemplosRapidos";
 import DominioResaltado from "./DominioResaltado";
 import LeerEnVozAlta from "./LeerEnVozAlta";
+import GenerarDenuncia from "./GenerarDenuncia";
 import { textoParaLeer } from "@/lib/voz";
 import { generarAlerta, infoSemaforo, mensajeError, urlWhatsApp, validarImagenCliente } from "@/lib/ui";
 
@@ -23,6 +24,7 @@ export default function Analizador() {
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [resultado, setResultado] = useState<Resultado | null>(null);
+  const [mensajeAnalizado, setMensajeAnalizado] = useState("");
   const [modoAbuela, setModoAbuela] = useState(false);
   const inputArchivo = useRef<HTMLInputElement>(null);
 
@@ -71,6 +73,7 @@ export default function Analizador() {
         return;
       }
       setResultado(cuerpo as Resultado);
+      setMensajeAnalizado(texto.trim());
     } catch {
       setError("No pudimos conectarnos. Revisá tu internet y probá de nuevo.");
     } finally {
@@ -141,18 +144,20 @@ export default function Analizador() {
         </button>
       </form>
 
-      {resultado && <Veredicto resultado={resultado} modoAbuela={modoAbuela} setModoAbuela={setModoAbuela} onNuevo={reiniciar} />}
+      {resultado && <Veredicto resultado={resultado} mensaje={mensajeAnalizado} modoAbuela={modoAbuela} setModoAbuela={setModoAbuela} onNuevo={reiniciar} />}
     </div>
   );
 }
 
 function Veredicto({
   resultado,
+  mensaje,
   modoAbuela,
   setModoAbuela,
   onNuevo,
 }: {
   resultado: Resultado;
+  mensaje: string;
   modoAbuela: boolean;
   setModoAbuela: (v: boolean) => void;
   onNuevo: () => void;
@@ -252,6 +257,8 @@ function Veredicto({
       )}
 
       <CompartirAlerta resultado={resultado} />
+
+      <GenerarDenuncia datos={{ ...resultado, mensaje }} />
 
       <button type="button" onClick={onNuevo} className="h-12 rounded-xl border border-zinc-300 bg-white font-semibold text-zinc-800 hover:bg-zinc-50">
         Analizar otro mensaje
