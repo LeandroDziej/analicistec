@@ -12,4 +12,4 @@
 - [x] "Así se ve el real": cuando se detecta que se imita a una marca (ARCA/AFIP, Mercado Pago, Mercado Libre, Correo Argentino, bancos), mostrar un recuadro con 2 o 3 reglas generales de cómo se comunica de verdad (por ejemplo "nunca te pide claves por mensaje"), sin inventar datos específicos ni URLs. Requiere: UI de resultado
 - [x] Historial local: guardar los últimos 10 análisis solo en localStorage (con try/catch y sin romper si no está disponible), con botón para verlos y botón "Borrar historial"; nunca enviarlos al servidor. Requiere: UI de resultado
 - [x] Instalable como app (PWA): manifest con nombre "AntiEstafa AR", ícono y colores, y botón "Agregar a la pantalla de inicio" cuando el navegador lo permita. Requiere: proyecto Next.js
-- [ ] Verificación final 2: merge con upstream al día, build, lint y todos los tests pasan; en LOG-sofi.md, tiempos de análisis antes y después y un resumen de las mejoras nuevas para el Pull Request
+- [x] Verificación final 2: merge con upstream al día, build, lint y todos los tests pasan; en LOG-sofi.md, tiempos de análisis antes y después y un resumen de las mejoras nuevas para el Pull Request

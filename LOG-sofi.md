@@ -42,3 +42,8 @@ Qué falta / notas: el proyecto no tiene rate limit propio ni reintento ante 429
 
 ## PWA instalable
 - Manifest "AntiEstafa AR" (`src/app/manifest.ts` + `src/lib/pwa.ts`), ícono SVG `public/icono.svg`, theme color en `layout.tsx` y botón "Agregar a la pantalla de inicio" (`src/components/BotonInstalar.tsx`, solo aparece si el navegador dispara `beforeinstallprompt`). Tests 113 OK, lint y build OK.
+
+## Verificación final 2
+- Merge con upstream/main al día (sin cambios nuevos). Build, lint y 113 tests OK.
+- Tiempos de análisis (ver "Análisis más rápido"): antes, links completos ~0,8 s, redirecciones hasta 5,2 s, Gemini ~2,6 s (hasta 40 s con 503/504 en cadena); después, links con caché ~0,3 s, timeouts de 4 s, máx. 3 links, Gemini ~3 s con thinking bajo.
+- Resumen para el Pull Request: análisis más rápido (caché 1 h de RDAP/SSL, máx. 3 links, timeouts de 4 s, thinking bajo); progreso visible por pasos; preguntas opcionales sí/no para afinar; recuadro "Así se ve el real" con reglas generales de la marca imitada; historial local de los últimos 10 análisis (solo en el dispositivo); app instalable (PWA) con botón de agregar a la pantalla de inicio; más ejemplos de un toque, dominio engañoso resaltado, compartir por WhatsApp, leer en voz alta, generar denuncia, detector de comprobante falso y chequeo de alias/CBU/CVU.
