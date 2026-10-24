@@ -18,11 +18,11 @@ export default function PreguntasAfinar({
   }
 
   return (
-    <fieldset className="flex flex-col gap-2 rounded-xl border border-zinc-200 bg-white p-3">
-      <legend className="px-1 text-sm font-semibold text-zinc-700">Para afinar el análisis (opcional)</legend>
+    <fieldset className="flex flex-col gap-2 rounded-xl border border-line bg-white p-3">
+      <legend className="px-1 text-sm font-semibold text-ink-soft">Para afinar el análisis (opcional)</legend>
       {PREGUNTAS.map(({ clave, texto }) => (
         <div key={clave} role="group" aria-label={texto} className="flex items-center justify-between gap-3">
-          <span className="flex-1 text-sm text-zinc-800">{texto}</span>
+          <span className="flex-1 text-sm text-ink">{texto}</span>
           {([true, false] as const).map((r) => (
             <button
               key={String(r)}
@@ -32,8 +32,8 @@ export default function PreguntasAfinar({
               onClick={() => elegir(clave, r)}
               className={`h-11 min-w-14 rounded-lg border px-3 text-sm font-semibold ${
                 valor[clave] === r
-                  ? "border-sky-700 bg-sky-700 text-white"
-                  : "border-zinc-300 bg-white text-zinc-800 hover:bg-zinc-50"
+                  ? "border-brand-700 bg-brand-700 text-white"
+                  : "border-line bg-white text-ink hover:bg-brand-50"
               }`}
             >
               {r ? "Sí" : "No"}

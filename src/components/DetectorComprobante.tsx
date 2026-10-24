@@ -3,11 +3,12 @@
 import { useState } from "react";
 import { AVISO_VERIFICAR, etiquetaComprobante, type AnalisisComprobante } from "@/lib/comprobanteUi";
 import { mensajeError, validarImagenCliente } from "@/lib/ui";
+import { Icono } from "./Iconos";
 
-const COLORES = {
-  rojo: "bg-red-50 border-red-300 text-red-800",
-  amarillo: "bg-amber-50 border-amber-300 text-amber-900",
-  verde: "bg-emerald-50 border-emerald-300 text-emerald-800",
+const TONOS = {
+  rojo: "border-danger-200 bg-danger-50 text-danger-800",
+  amarillo: "border-warn-200 bg-warn-50 text-warn-800",
+  verde: "border-safe-200 bg-safe-50 text-safe-800",
 } as const;
 
 export default function DetectorComprobante() {
@@ -51,35 +52,50 @@ export default function DetectorComprobante() {
   const etiqueta = resultado ? etiquetaComprobante(resultado.veredicto) : null;
 
   return (
-    <section aria-labelledby="comprobante-titulo" className="flex flex-col gap-3 rounded-2xl border border-zinc-200 bg-white p-4">
-      <h2 id="comprobante-titulo" className="text-xl font-bold text-zinc-900">
-        ¿Te mandaron un comprobante?
-      </h2>
-      <p className="text-sm text-zinc-600">Subí la captura (PNG, JPG o WebP, hasta 4 MB) y te marcamos qué huele raro.</p>
-      <form onSubmit={revisar} className="flex flex-col gap-3">
-        <input
-          type="file"
-          accept="image/png,image/jpeg,image/webp"
-          aria-label="Subir captura del comprobante"
-          onChange={(e) => elegir(e.target.files?.[0])}
-          className="block w-full text-sm text-zinc-700 file:mr-3 file:min-h-11 file:rounded-xl file:border-0 file:bg-sky-100 file:px-4 file:font-semibold file:text-sky-900"
-        />
-        <button
-          type="submit"
-          disabled={cargando || !archivo}
-          className="min-h-12 rounded-xl bg-sky-700 px-4 py-3 text-lg font-bold text-white hover:bg-sky-800 focus:outline-none focus:ring-2 focus:ring-sky-300 disabled:opacity-50"
-        >
-          {cargando ? "Revisando…" : "Revisar comprobante"}
+    <section aria-labelledby="comprobante-titulo" className="flex flex-col gap-4">
+      <div>
+        <h2 id="comprobante-titulo" className="titulo text-3xl text-ink">
+          ¿Te mandaron un comprobante?
+        </h2>
+        <p className="mt-1 text-ink-soft">Subí la captura (PNG, JPG o WebP, hasta 4 MB) y te marcamos qué huele raro.</p>
+      </div>
+      <form onSubmit={revisar} className="flex flex-col gap-4" aria-busy={cargando}>
+        <label className="flex cursor-pointer items-center gap-4 rounded-xl border-2 border-dashed border-brand-200 bg-brand-50/60 p-4 transition-colors hover:border-brand-600 hover:bg-brand-50 has-[:focus-visible]:outline has-[:focus-visible]:outline-[3px] has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-brand-600">
+          <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-brand-700">
+            <Icono nombre="camara" className="h-6 w-6" />
+          </span>
+          <span className="flex min-w-0 flex-col">
+            <span className="truncate font-bold text-brand-800">{archivo ? archivo.name : "Elegir la captura del comprobante"}</span>
+            <span className="text-sm text-ink-soft">{archivo ? "Tocá para cambiarla." : "Hasta 4 MB."}</span>
+          </span>
+          <input
+            type="file"
+            accept="image/png,image/jpeg,image/webp"
+            aria-label="Subir captura del comprobante"
+            onChange={(e) => elegir(e.target.files?.[0])}
+            className="sr-only"
+          />
+        </label>
+        <button type="submit" disabled={cargando || !archivo} className="btn btn-primary min-h-14 text-lg">
+          {cargando ? (
+            <>
+              <Icono nombre="cargando" className="h-5 w-5" />
+              Revisando…
+            </>
+          ) : (
+            "Revisar comprobante"
+          )}
         </button>
       </form>
       {error && (
-        <p role="alert" className="rounded-xl border border-red-300 bg-red-50 p-3 text-red-800">
-          {error}
+        <p role="alert" className="flex gap-3 rounded-xl border border-danger-200 bg-danger-50 p-4 text-danger-800">
+          <Icono nombre="alerta" className="mt-0.5 h-5 w-5" />
+          <span>{error}</span>
         </p>
       )}
       {resultado && etiqueta && (
-        <div role="status" className={`flex flex-col gap-2 rounded-xl border p-4 ${COLORES[etiqueta.luz]}`}>
-          <strong className="text-lg">{etiqueta.titulo}</strong>
+        <div role="status" className={`flex flex-col gap-3 rounded-2xl border-2 p-5 ${TONOS[etiqueta.luz]}`}>
+          <strong className="titulo text-2xl">{etiqueta.titulo}</strong>
           {resultado.senales.length > 0 && (
             <ul className="list-disc pl-5">
               {resultado.senales.map((s, i) => (
@@ -88,7 +104,7 @@ export default function DetectorComprobante() {
             </ul>
           )}
           <p>{resultado.recomendacion}</p>
-          <p className="text-sm font-semibold">{AVISO_VERIFICAR}</p>
+          <p className="text-sm font-bold">{AVISO_VERIFICAR}</p>
         </div>
       )}
     </section>

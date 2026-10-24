@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { elegirVoz } from "@/lib/voz";
+import { Icono } from "./Iconos";
 
 export default function LeerEnVozAlta({ texto }: { texto: string }) {
   const soportado = useSyncExternalStore(
@@ -42,9 +43,10 @@ export default function LeerEnVozAlta({ texto }: { texto: string }) {
       type="button"
       onClick={alternar}
       aria-label={leyendo ? "Detener la lectura en voz alta" : "Escuchar el resumen en voz alta"}
-      className="min-h-14 rounded-xl bg-sky-700 px-5 py-3 text-xl font-bold text-white hover:bg-sky-800"
+      className="btn btn-primary min-h-14 px-6 text-xl"
     >
-      {leyendo ? "⏹ Detener" : "🔊 Escuchar"}
+      <Icono nombre={leyendo ? "detener" : "parlante"} className="h-6 w-6" />
+      {leyendo ? "Detener" : "Escuchar"}
     </button>
   );
 }

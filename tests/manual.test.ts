@@ -13,8 +13,8 @@ test("el manual se convierte a HTML sin el título y con anclas para el índice"
   const md = readFileSync(new URL("../docs/MANUAL_DE_USUARIO.md", import.meta.url), "utf8");
   const html = manualAHtml(md);
   assert.doesNotMatch(html, /<h1/);
-  assert.match(html, /<h2 id="1-instalar-la-app">/);
-  assert.match(html, /<h2 id="9-tus-ultimos-analisis">/);
+  assert.match(html, /<h2 id="2-instalar-la-app">/);
+  assert.match(html, /<h2 id="13-mis-analisis">/);
   assert.match(html, /<table>/);
   // cada link del índice apunta a un título que existe
   const anclas = [...html.matchAll(/href="#([^"]+)"/g)].map((m) => m[1]);

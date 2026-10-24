@@ -24,7 +24,7 @@ AntiEstafa AR ayuda a cualquier persona a saber, en segundos, si un mensaje que 
 
 ## 3. Alcance
 
-**Incluye:** análisis de texto e imágenes, verificación técnica de links, puntaje de riesgo, recomendaciones, chequeo de alias/CBU/CVU, análisis de comprobantes, denuncia, alertas, accesibilidad, historial local y app instalable.
+**Incluye:** análisis de texto e imágenes, revisión directa de links, lectura de códigos QR, verificación técnica de links, puntaje de riesgo, recomendaciones, chequeo de alias/CBU/CVU, análisis de comprobantes, denuncia, alertas, guía para víctimas ("Ya caí"), juego de práctica, accesibilidad, historial local, manual dentro de la app y app instalable.
 
 **No incluye:** registro de usuarios, almacenamiento de mensajes en servidores, consulta a bases bancarias o de denuncias, bloqueo automático de números ni presentación automática de denuncias.
 
@@ -42,7 +42,7 @@ AntiEstafa AR ayuda a cualquier persona a saber, en segundos, si un mensaje que 
 
 ### RF-03 · Calcular el puntaje final
 - Combina el puntaje de la IA con las señales técnicas (dominio nuevo, marca imitada, sin SSL). Una señal técnica fuerte puede elevar el riesgo aunque el texto parezca inocente.
-- **Semáforo:** 🟢 seguro · 🟡 sospechoso · 🔴 estafa.
+- **Semáforo:** 🟢 parece seguro · 🟡 sospechoso · 🔴 estafa.
 
 ### RF-04 · Mostrar el dominio engañoso
 - En cada link revisado se resalta la parte que difiere de la marca oficial (por ejemplo `mercadopag0` frente a `mercadopago`) y se informa la antigüedad del dominio y si tiene SSL.
@@ -83,11 +83,37 @@ AntiEstafa AR ayuda a cualquier persona a saber, en segundos, si un mensaje que 
 - Modo abuela: letra grande y el resultado resumido en dos líneas.
 - Botón "Escuchar" que lee el resumen con voz en español (es-AR si está disponible) y "Detener". Se oculta si el navegador no lo soporta.
 
-### RF-14 · Historial local
-- Guarda los últimos 10 análisis **solo en el dispositivo** (almacenamiento del navegador). Se pueden ver y borrar. Nunca se envían al servidor.
+### RF-14 · Mis análisis (historial local)
+- Guarda los últimos 10 análisis de mensajes, links y QR **solo en el dispositivo** (almacenamiento del navegador), con tipo, veredicto, puntaje y un extracto corto.
+- El usuario puede **apagar el guardado** (al apagarlo se borra lo guardado) y **borrar el historial** con doble confirmación.
+- Nunca se envían al servidor.
 
 ### RF-15 · Instalar como app
 - Botón "Instalar app" visible arriba de todo, en la compu y el celular. Instala con un clic cuando el navegador lo permite; si no, muestra instrucciones según el navegador (Chrome/Edge, Android, Samsung, iPhone/iPad, Safari en Mac, Firefox). Se oculta si la app ya está instalada.
+
+### RF-16 · Revisar un link
+- **Entrada:** una dirección web.
+- **Proceso:** la misma verificación técnica de RF-02 (antigüedad, SSL, redirecciones, marca imitada), sin que el usuario abra el sitio.
+- **Salida:** veredicto, qué llamó la atención, qué hacer ahora, datos del link y alerta para compartir. Se guarda en Mis análisis.
+
+### RF-17 · Escanear un código QR
+- **Entrada:** foto o captura con un código QR.
+- **Proceso:** el código se lee en el navegador. Según su contenido:
+    - **Link:** se revisa como en RF-16.
+    - **QR de pago:** se muestran comercio, ciudad y monto, con recomendaciones antes de pagar.
+    - **Otra acción** (llamada, mensaje, red Wi-Fi): se advierte que no se ejecute si no se esperaba.
+- **Reglas:** si no se encuentra un QR o la imagen no se puede abrir, se explica cómo sacar una mejor foto.
+
+### RF-18 · Ya caí: guía para víctimas
+- El usuario elige qué le pasó: transfirió plata, dio una clave o código, pasó datos de la tarjeta, pasó su DNI o datos personales, instaló una app o dio acceso remoto, o lo amenazan/extorsionan.
+- Se muestra una guía paso a paso para ese caso más los pasos que aplican siempre (por ejemplo, guardar las pruebas), con opción de copiarla.
+- **Regla:** se advierte que nunca hay que pagar para "recuperar" la plata.
+
+### RF-19 · Practicá: ¿podés detectar la estafa?
+- Juego de preguntas con mensajes de ejemplo: el usuario elige "estafa" o "real", recibe la respuesta y qué mirar para darse cuenta, y al final ve su resultado, que puede copiar y compartir.
+
+### RF-20 · Manual dentro de la app
+- Botón "¿Cómo se usa?" que abre la página /ayuda con este manual, con índice navegable y descarga del manual y de esta documentación en PDF.
 
 ## 5. Flujos principales
 
@@ -100,13 +126,24 @@ Pegar texto o subir captura → (opcional) responder preguntas → "¿Es estafa?
 
 **Antes de transferir**
 ```
-"¿Te pidieron que transfieras?" → alias/CBU/CVU + mensaje → "Revisar antes de transferir"
+Pestaña "Transferencia" → alias/CBU/CVU + mensaje → "Revisar antes de transferir"
 → riesgo bajo/medio/alto + señales + recomendación
+```
+
+**Link o QR**
+```
+Pestaña "Link" → pegar dirección → "Revisar link" → veredicto + datos del link
+Pestaña "QR" → subir foto → lectura del código → link revisado / datos del pago / aviso de acción
+```
+
+**Si ya caí**
+```
+"Más ayuda" → "Ya caí" → elegir qué pasó → guía paso a paso → "Copiar guía"
 ```
 
 **Comprobante recibido**
 ```
-"¿Te mandaron un comprobante?" → subir captura → "Revisar comprobante"
+Pestaña "Comprobante" → subir captura → "Revisar comprobante"
 → parece real / sospechoso / probablemente falso + recomendación
 ```
 
@@ -130,6 +167,7 @@ Pegar texto o subir captura → (opcional) responder preguntas → "¿Es estafa?
 | Sin conexión | "No pudimos conectarnos. Revisá tu internet y probá de nuevo." |
 | IA sobrecargada o límite de uso | Mensaje amable pidiendo reintentar en unos minutos. |
 | Imagen muy grande o formato inválido | Aviso antes de enviar. |
+| No se encuentra un QR en la imagen | Sugerencia para sacar una foto más cerca, iluminada y sin reflejos. |
 | Copiado automático no disponible | "No pudimos copiar solo: mantené apretado el texto y elegí Copiar." |
 
 ## 8. Limitaciones conocidas

@@ -60,7 +60,7 @@ export function generarAlerta(r: DatosAlerta): string {
   }[r.veredicto];
   const lineas: string[] = [encabezado, "", r.resumen_abuela.trim(), "", `Riesgo: ${r.score}/100`];
 
-  const banderas = r.banderas.slice(0, 4);
+  const banderas = r.banderas.slice(0, 4).map((b) => r.links.reduce((acc, l) => acc.split(l.dominio).join(desactivarDominio(l.dominio)), b));
   if (banderas.length) lineas.push("", "Señales:", ...banderas.map((b) => `• ${b}`));
 
   const dominios = [...new Set(r.links.map((l) => l.dominio))].slice(0, 3);

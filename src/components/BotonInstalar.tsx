@@ -85,7 +85,7 @@ export default function BotonInstalar() {
         aria-expanded={abierto}
         aria-controls="instrucciones-instalar"
         aria-label="Instalar AntiEstafa AR como app"
-        className="h-12 rounded-xl border border-sky-700 bg-white font-semibold text-sky-800 hover:bg-sky-50"
+        className="btn btn-secondary w-full"
       >
         📲 Instalar app
       </button>
@@ -95,17 +95,17 @@ export default function BotonInstalar() {
           id="instrucciones-instalar"
           role="region"
           aria-live="polite"
-          className="relative rounded-xl border border-sky-200 bg-sky-50 p-4 pr-10 text-sm text-zinc-800"
+          className="relative rounded-xl border border-brand-200 bg-brand-50 p-4 pr-10 text-sm text-ink"
         >
           <button
             type="button"
             onClick={() => setAbierto(false)}
             aria-label="Cerrar instrucciones"
-            className="absolute right-2 top-2 h-8 w-8 rounded-full text-lg leading-none text-zinc-500 hover:bg-sky-100"
+            className="absolute right-2 top-2 h-8 w-8 rounded-full text-lg leading-none text-ink-mute hover:bg-brand-100"
           >
             ×
           </button>
-          <p className="mb-2 font-semibold text-sky-900">{info.titulo}</p>
+          <p className="mb-2 font-semibold text-brand-900">{info.titulo}</p>
           <ol className="list-decimal space-y-1 pl-5">
             {info.pasos.map((paso) => (
               <li key={paso}>{paso}</li>
@@ -115,7 +115,7 @@ export default function BotonInstalar() {
             <button
               type="button"
               onClick={copiarLink}
-              className="mt-3 h-10 rounded-lg bg-sky-700 px-4 font-semibold text-white hover:bg-sky-800"
+              className="btn btn-primary mt-3 min-h-10 py-2"
             >
               {copiado ? "¡Link copiado!" : "Copiar link de la app"}
             </button>

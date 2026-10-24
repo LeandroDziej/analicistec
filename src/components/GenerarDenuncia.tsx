@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { generarDenuncia, htmlImprimible, type DatosDenuncia } from "@/lib/denuncia";
+import { Icono } from "./Iconos";
 
 export default function GenerarDenuncia({ datos }: { datos: DatosDenuncia }) {
   const [texto, setTexto] = useState<string | null>(null);
@@ -41,20 +42,16 @@ export default function GenerarDenuncia({ datos }: { datos: DatosDenuncia }) {
 
   if (!texto) {
     return (
-      <button
-        type="button"
-        onClick={() => setTexto(generarDenuncia(datos))}
-        className="h-14 rounded-xl bg-zinc-800 text-lg font-bold text-white shadow transition hover:bg-zinc-900"
-      >
-        📄 Generar denuncia
+      <button type="button" onClick={() => setTexto(generarDenuncia(datos))} className="btn btn-secondary min-h-14 text-lg">
+        <Icono nombre="documento" className="h-5 w-5" />
+        Generar denuncia
       </button>
     );
   }
 
-  const boton = "h-12 flex-1 rounded-xl border border-zinc-700 bg-white px-3 font-bold text-zinc-800 hover:bg-zinc-100";
   return (
-    <div className="flex flex-col gap-2 rounded-2xl border border-zinc-300 bg-zinc-50 p-4">
-      <h3 className="text-lg font-bold text-zinc-900">📄 Denuncia</h3>
+    <div className="card flex flex-col gap-3 p-5">
+      <h3 className="titulo text-2xl text-ink">Denuncia</h3>
       <textarea
         ref={area}
         readOnly
@@ -62,20 +59,20 @@ export default function GenerarDenuncia({ datos }: { datos: DatosDenuncia }) {
         rows={14}
         aria-label="Texto de la denuncia"
         onFocus={(e) => e.currentTarget.select()}
-        className="w-full rounded-xl border border-zinc-300 bg-white p-3 text-sm text-zinc-900"
+        className="field text-sm"
       />
-      <div className="flex flex-wrap gap-2">
-        <button type="button" onClick={copiar} className={boton}>
-          {estado === "copiado" ? "¡Copiado! ✔" : "Copiar"}
+      <div className="flex flex-col gap-2 sm:flex-row">
+        <button type="button" onClick={copiar} className="btn btn-primary flex-1">
+          {estado === "copiado" ? "¡Copiado!" : "Copiar"}
         </button>
-        <button type="button" onClick={descargar} className={boton}>
+        <button type="button" onClick={descargar} className="btn btn-secondary flex-1">
           Descargar .txt
         </button>
-        <button type="button" onClick={imprimir} className={boton}>
+        <button type="button" onClick={imprimir} className="btn btn-secondary flex-1">
           Imprimir / PDF
         </button>
       </div>
-      <p aria-live="polite" className="text-sm text-zinc-700">
+      <p aria-live="polite" className="text-sm text-ink-soft">
         {estado === "error" && "No pudimos copiar solo: mantené apretado el texto y elegí Copiar."}
       </p>
     </div>
