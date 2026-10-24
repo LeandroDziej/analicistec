@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { generarAlerta, infoSemaforo, mensajeError, validarImagenCliente } from "../src/lib/ui.ts";
+import { generarAlerta, infoSemaforo, mensajeError, urlWhatsApp, validarImagenCliente } from "../src/lib/ui.ts";
 
 test("semáforo mapea veredicto a luz", () => {
   assert.equal(infoSemaforo("estafa").luz, "rojo");
@@ -54,4 +54,15 @@ test("generarAlerta para seguro no lista dominios ni advertencia", () => {
   assert.ok(!t.includes("No entres a"));
   assert.ok(!t.includes("Señales:"));
   assert.ok(!t.includes("no respondas"));
+});
+
+test("urlWhatsApp codifica acentos, ñ, emojis y saltos de línea y se puede decodificar", () => {
+  const texto = "🚨 ALERTA\nNo pagues: señal de estafa, ¡cuidado con el año!\r\nFin & más = 100%";
+  const url = urlWhatsApp(texto);
+  assert.ok(url.startsWith("https://wa.me/?text="));
+  const codificado = url.slice("https://wa.me/?text=".length);
+  assert.doesNotMatch(codificado, /[\s&=ñáé¡]/u);
+  assert.match(codificado, /%0A/);
+  assert.match(codificado, /%C3%B1/);
+  assert.equal(decodeURIComponent(codificado), texto);
 });

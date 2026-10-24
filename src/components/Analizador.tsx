@@ -2,7 +2,12 @@
 
 import { useRef, useState } from "react";
 import type { AnalisisFinal } from "@/lib/score";
-import { generarAlerta, infoSemaforo, mensajeError, validarImagenCliente } from "@/lib/ui";
+import EjemplosRapidos from "./EjemplosRapidos";
+import DominioResaltado from "./DominioResaltado";
+import LeerEnVozAlta from "./LeerEnVozAlta";
+import GenerarDenuncia from "./GenerarDenuncia";
+import { textoParaLeer } from "@/lib/voz";
+import { generarAlerta, infoSemaforo, mensajeError, urlWhatsApp, validarImagenCliente } from "@/lib/ui";
 
 type Resultado = AnalisisFinal & { modelo?: string };
 
@@ -19,6 +24,7 @@ export default function Analizador() {
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [resultado, setResultado] = useState<Resultado | null>(null);
+  const [mensajeAnalizado, setMensajeAnalizado] = useState("");
   const [modoAbuela, setModoAbuela] = useState(false);
   const inputArchivo = useRef<HTMLInputElement>(null);
 
@@ -67,6 +73,7 @@ export default function Analizador() {
         return;
       }
       setResultado(cuerpo as Resultado);
+      setMensajeAnalizado(texto.trim());
     } catch {
       setError("No pudimos conectarnos. Revisá tu internet y probá de nuevo.");
     } finally {
@@ -83,6 +90,7 @@ export default function Analizador() {
   return (
     <div className="flex flex-col gap-5">
       <form onSubmit={analizar} className="flex flex-col gap-3">
+        <EjemplosRapidos onElegir={(t) => { setTexto(t); setError(null); }} />
         <label htmlFor="mensaje" className="text-sm font-semibold text-zinc-700">
           Pegá el mensaje que te llegó
         </label>
@@ -136,18 +144,20 @@ export default function Analizador() {
         </button>
       </form>
 
-      {resultado && <Veredicto resultado={resultado} modoAbuela={modoAbuela} setModoAbuela={setModoAbuela} onNuevo={reiniciar} />}
+      {resultado && <Veredicto resultado={resultado} mensaje={mensajeAnalizado} modoAbuela={modoAbuela} setModoAbuela={setModoAbuela} onNuevo={reiniciar} />}
     </div>
   );
 }
 
 function Veredicto({
   resultado,
+  mensaje,
   modoAbuela,
   setModoAbuela,
   onNuevo,
 }: {
   resultado: Resultado;
+  mensaje: string;
   modoAbuela: boolean;
   setModoAbuela: (v: boolean) => void;
   onNuevo: () => void;
@@ -190,6 +200,7 @@ function Veredicto({
           {resultado.que_hacer[0] && (
             <p className="rounded-xl bg-sky-50 p-4 text-2xl font-bold leading-relaxed text-sky-900">👉 {resultado.que_hacer[0]}</p>
           )}
+          <LeerEnVozAlta texto={textoParaLeer([resultado.resumen_abuela, resultado.que_hacer[0]])} />
         </div>
       ) : (
         <>
@@ -229,7 +240,7 @@ function Veredicto({
               <ul className="mt-3 flex flex-col gap-3 text-sm">
                 {resultado.links.map((l) => (
                   <li key={l.url} className="break-all rounded-lg bg-zinc-50 p-3">
-                    <div className="font-mono font-semibold text-zinc-900">{l.dominio}</div>
+                    <DominioResaltado link={l} />
                     <div className="mt-1 text-zinc-600">
                       {l.antiguedadDias !== null ? `Dominio de hace ${l.antiguedadDias} días` : "Antigüedad desconocida"}
                       {" · "}
@@ -246,6 +257,8 @@ function Veredicto({
       )}
 
       <CompartirAlerta resultado={resultado} />
+
+      <GenerarDenuncia datos={{ ...resultado, mensaje }} />
 
       <button type="button" onClick={onNuevo} className="h-12 rounded-xl border border-zinc-300 bg-white font-semibold text-zinc-800 hover:bg-zinc-50">
         Analizar otro mensaje
@@ -308,7 +321,7 @@ function CompartirAlerta({ resultado }: { resultado: Resultado }) {
           {estado === "copiado" ? "¡Copiado! ✔" : "Copiar texto"}
         </button>
         <a
-          href={`https://wa.me/?text=${encodeURIComponent(alerta)}`}
+          href={urlWhatsApp(alerta)}
           target="_blank"
           rel="noopener noreferrer"
           className="flex h-12 flex-1 items-center justify-center rounded-xl border border-emerald-700 bg-white font-bold text-emerald-800 hover:bg-emerald-100"
