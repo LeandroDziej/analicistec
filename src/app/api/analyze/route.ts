@@ -2,8 +2,18 @@ import { analizarConGemini, GeminiError } from "@/lib/gemini";
 import { EntradaError, leerEntrada } from "@/lib/entrada";
 import { verificarLinks, type ResultadoLink } from "@/lib/links";
 import { combinarScore } from "@/lib/score";
+import { crearLimitador, ipDe } from "@/lib/rateLimit";
+
+const limitador = crearLimitador();
 
 export async function POST(request: Request) {
+  const limite = limitador(ipDe(request.headers));
+  if (!limite.permitido) {
+    return Response.json(
+      { error: `Hiciste muchas consultas seguidas. Esperá ${limite.reintentarEn} segundos y probá de nuevo.` },
+      { status: 429, headers: { "Retry-After": String(limite.reintentarEn) } },
+    );
+  }
   try {
     const entrada = await leerEntrada(request);
     const chequeoLinks: Promise<ResultadoLink[]> = entrada.texto

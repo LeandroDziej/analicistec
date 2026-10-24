@@ -5,7 +5,7 @@
 - [x] Combinar señales técnicas + veredicto del LLM en un score final
 - [x] UI: input de texto/imagen, semáforo, banderas, qué hacer, modo abuela
 - [x] Botón "Generar alerta para compartir" (texto copiable)
-- [ ] Rate limit por IP, límite de 4 MB por imagen, reintento ante 429 de Gemini
+- [x] Rate limit por IP, límite de 4 MB por imagen, reintento ante 429 de Gemini
 - [ ] Tests con 8 mensajes de ejemplo (4 estafas, 4 legítimos)
 - [ ] Deploy a Vercel (cargar GEMINI_API_KEY en producción, vercel --prod --yes --token) y smoke test de la URL
 - [ ] README con pitch y 5 ejemplos de demo

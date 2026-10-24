@@ -18,6 +18,9 @@ export interface EntradaAnalisis {
 export const MODELO_PREFERIDO = "gemini-3.8-flash";
 const TIMEOUT_MS = 20_000;
 const MAX_MODELOS = 3;
+const REINTENTOS_429 = 2;
+const ESPERA_429_MS = 1_500;
+const ESPERA_429_MAX_MS = 5_000;
 
 export const SYSTEM_PROMPT = `Sos "AntiEstafa AR", un experto en fraudes digitales en Argentina.
 Analizás mensajes (WhatsApp, SMS, mail, redes) y decidís si son una estafa.
@@ -106,6 +109,19 @@ function statusDe(err: unknown): number | undefined {
   return m ? Number(m[1]) : undefined;
 }
 
+/**
+ * Espera antes de reintentar un 429: usa el retryDelay que sugiere la API (ej. "retryDelay":"3s"
+ * o "retry in 2.5s") si viene, si no backoff exponencial. Siempre acotado a ESPERA_429_MAX_MS.
+ */
+export function esperaPara429(err: unknown, intento: number): number {
+  const msg = String((err as { message?: unknown })?.message ?? "");
+  const m = /retry(?:Delay"?\s*:\s*"?| in )(\d+(?:\.\d+)?)s/i.exec(msg);
+  const sugerida = m ? Math.ceil(Number(m[1]) * 1000) : ESPERA_429_MS * 2 ** intento;
+  return Math.min(ESPERA_429_MAX_MS, Math.max(250, sugerida));
+}
+
+const dormir = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
+
 /** Errores que justifican probar con otro modelo. */
 const esReintentableConOtroModelo = (s: number | undefined) => s === 404 || s === 503 || s === 504 || s === 500;
 
@@ -189,54 +205,66 @@ export function crearCliente(): ClienteGemini {
 
 /**
  * Analiza el contenido con Gemini. Prueba hasta 3 modelos flash ante 404/503/504/timeout
- * y recuerda el que respondió.
+ * y recuerda el que respondió. Ante 429 reintenta con espera (hasta 2 veces) antes de rendirse.
  */
 export async function analizarConGemini(
   entrada: EntradaAnalisis,
-  opts: { cliente?: ClienteGemini; timeoutMs?: number } = {},
+  opts: { cliente?: ClienteGemini; timeoutMs?: number; esperar?: (ms: number) => Promise<void> } = {},
 ): Promise<{ analisis: AnalisisLLM; modelo: string }> {
   const cliente = opts.cliente ?? crearCliente();
   const timeoutMs = opts.timeoutMs ?? TIMEOUT_MS;
+  const esperar = opts.esperar ?? dormir;
+  let reintentos429 = 0;
   const contents = construirContenido(entrada);
 
   const candidatos: string[] = [modeloRecordado ?? MODELO_PREFERIDO];
   let listado = false;
   let ultimoError: unknown;
 
-  for (let i = 0; i < candidatos.length && i < MAX_MODELOS; i++) {
+  modelos: for (let i = 0; i < candidatos.length && i < MAX_MODELOS; i++) {
     const model = candidatos[i];
-    try {
-      const resp = await conTimeout(
-        (abortSignal) =>
-          cliente.models.generateContent({
-            model,
-            contents,
-            config: {
-              systemInstruction: SYSTEM_PROMPT,
-              responseMimeType: "application/json",
-              responseSchema: RESPONSE_SCHEMA,
-              temperature: 0.2,
-              abortSignal,
-            },
-          }),
-        timeoutMs,
-      );
-      const analisis = parsearRespuesta(resp.text);
-      modeloRecordado = model;
-      return { analisis, modelo: model };
-    } catch (err) {
-      if (err instanceof GeminiError) throw err;
-      ultimoError = err;
-      const status = statusDe(err);
-      if (status === 429) {
-        throw new GeminiError("Cuota de Gemini agotada (429)", 429, "Hay mucha gente usando el detector ahora. Esperá un minuto y probá de nuevo.");
-      }
-      console.warn(`Gemini ${model} falló (status ${status ?? "?"})`);
-      if (!esReintentableConOtroModelo(status)) break;
-      if (modeloRecordado === model) modeloRecordado = null;
-      if (!listado) {
-        listado = true;
-        for (const m of await listarFlash(cliente)) if (!candidatos.includes(m)) candidatos.push(m);
+    // Reintenta el mismo modelo solo ante 429; cualquier otro error pasa al siguiente o corta.
+    while (true) {
+      try {
+        const resp = await conTimeout(
+          (abortSignal) =>
+            cliente.models.generateContent({
+              model,
+              contents,
+              config: {
+                systemInstruction: SYSTEM_PROMPT,
+                responseMimeType: "application/json",
+                responseSchema: RESPONSE_SCHEMA,
+                temperature: 0.2,
+                abortSignal,
+              },
+            }),
+          timeoutMs,
+        );
+        const analisis = parsearRespuesta(resp.text);
+        modeloRecordado = model;
+        return { analisis, modelo: model };
+      } catch (err) {
+        if (err instanceof GeminiError) throw err;
+        ultimoError = err;
+        const status = statusDe(err);
+        if (status === 429) {
+          if (reintentos429 < REINTENTOS_429) {
+            const ms = esperaPara429(err, reintentos429++);
+            console.warn(`Gemini ${model} 429, reintento en ${ms} ms`);
+            await esperar(ms);
+            continue;
+          }
+          throw new GeminiError("Cuota de Gemini agotada (429)", 429, "Hay mucha gente usando el detector ahora. Esperá un minuto y probá de nuevo.");
+        }
+        console.warn(`Gemini ${model} falló (status ${status ?? "?"})`);
+        if (!esReintentableConOtroModelo(status)) break modelos;
+        if (modeloRecordado === model) modeloRecordado = null;
+        if (!listado) {
+          listado = true;
+          for (const m of await listarFlash(cliente)) if (!candidatos.includes(m)) candidatos.push(m);
+        }
+        break;
       }
     }
   }

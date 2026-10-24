@@ -6,6 +6,7 @@ import {
   limpiarApiKey,
   parsearRespuesta,
   getModeloRecordado,
+  esperaPara429,
   _resetModeloRecordado,
   GeminiError,
   type ClienteGemini,
@@ -101,14 +102,54 @@ test("timeout cuenta como fallo y prueba otro modelo; máximo 3 intentos", async
   assert.equal(llamados.length, 3);
 });
 
-test("429 devuelve mensaje amable", async () => {
-  const { cliente } = mock({
+test("429 persistente: reintenta 2 veces con espera y devuelve mensaje amable", async () => {
+  const esperas: number[] = [];
+  const { cliente, llamados } = mock({
     "gemini-3.8-flash": async () => {
       throw Object.assign(new Error("quota"), { status: 429 });
     },
   });
   await assert.rejects(
-    analizarConGemini({ texto: "x" }, { cliente }),
+    analizarConGemini({ texto: "x" }, { cliente, esperar: async (ms) => void esperas.push(ms) }),
     (e: GeminiError) => e.status === 429 && /Esperá un minuto/.test(e.mensajeUsuario),
   );
+  assert.equal(llamados.length, 3);
+  assert.equal(esperas.length, 2);
+  assert.ok(esperas[1] > esperas[0]);
+});
+
+test("429 transitorio: reintenta el mismo modelo y responde", async () => {
+  let n = 0;
+  const esperas: number[] = [];
+  const { cliente, llamados } = mock({
+    "gemini-3.8-flash": async () => {
+      if (n++ === 0) throw new Error('{"error":{"code":429,"details":[{"retryDelay":"3s"}]}}');
+      return { text: OK };
+    },
+  });
+  const r = await analizarConGemini({ texto: "x" }, { cliente, esperar: async (ms) => void esperas.push(ms) });
+  assert.equal(r.modelo, "gemini-3.8-flash");
+  assert.deepEqual(llamados, ["gemini-3.8-flash", "gemini-3.8-flash"]);
+  assert.deepEqual(esperas, [3000]);
+});
+
+test("esperaPara429 respeta retryDelay sugerido y lo acota", () => {
+  assert.equal(esperaPara429(new Error("Please retry in 2.5s."), 0), 2500);
+  assert.equal(esperaPara429(new Error('"retryDelay": "40s"'), 0), 5000);
+  assert.equal(esperaPara429(new Error("quota"), 0), 1500);
+  assert.equal(esperaPara429(new Error("quota"), 1), 3000);
+});
+
+test("error no reintentable (400) no prueba otros modelos", async () => {
+  const { cliente, llamados } = mock(
+    {
+      "gemini-3.8-flash": async () => {
+        throw Object.assign(new Error("bad request"), { status: 400 });
+      },
+      "gemini-3.5-flash": async () => ({ text: OK }),
+    },
+    ["gemini-3.5-flash"],
+  );
+  await assert.rejects(analizarConGemini({ texto: "x" }, { cliente }), (e: GeminiError) => e.status === 503);
+  assert.deepEqual(llamados, ["gemini-3.8-flash"]);
 });
