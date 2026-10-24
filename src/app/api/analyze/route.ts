@@ -18,13 +18,20 @@ export async function POST(request: Request) {
   }
   try {
     const entrada = await leerEntrada(request);
+    const inicio = Date.now();
+    const tiempos: Record<string, number> = {};
+    const medido = <T,>(nombre: string, p: Promise<T>) => p.finally(() => (tiempos[nombre] = Date.now() - inicio));
     const chequeoLinks: Promise<ResultadoLink[]> = entrada.texto
       ? verificarLinks(entrada.texto).catch((err) => {
           console.warn("Chequeo de links falló:", err);
           return [];
         })
       : Promise.resolve([]);
-    const [{ analisis, modelo }, links] = await Promise.all([analizarConGemini(entrada), chequeoLinks]);
+    const [{ analisis, modelo }, links] = await Promise.all([
+      medido("gemini", analizarConGemini(entrada)),
+      medido("links", chequeoLinks),
+    ]);
+    console.info(`[analyze] gemini ${tiempos.gemini}ms, links ${tiempos.links}ms, total ${Date.now() - inicio}ms`);
     return Response.json({ ...combinarScore(analisis, links), modelo });
   } catch (err) {
     if (err instanceof EntradaError) {

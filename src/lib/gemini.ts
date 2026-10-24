@@ -63,6 +63,12 @@ export const RESPONSE_SCHEMA = {
   propertyOrdering: ["veredicto", "score", "banderas", "que_hacer", "resumen_abuela"],
 };
 
+/** Pensar lo mínimo que acepta el modelo: "thinkingLevel" LOW (MINIMAL da 400 en gemini-3.8-flash) en Gemini 3+, "thinkingBudget" 0 en versiones anteriores. */
+export function configThinking(model: string): Record<string, unknown> {
+  const version = Number(/gemini-(\d+(?:\.\d+)?)/.exec(model)?.[1] ?? 0);
+  return { thinkingConfig: version >= 3 ? { thinkingLevel: "LOW" } : { thinkingBudget: 0 } };
+}
+
 export class GeminiError extends Error {
   status: number;
   mensajeUsuario: string;
@@ -260,6 +266,7 @@ export async function analizarConGemini(
                   responseMimeType: "application/json",
                   responseSchema: RESPONSE_SCHEMA,
                   temperature: 0.2,
+                  ...configThinking(model),
                   abortSignal,
                 },
               }),
