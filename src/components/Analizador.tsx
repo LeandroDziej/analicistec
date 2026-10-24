@@ -7,6 +7,8 @@ import DominioResaltado from "./DominioResaltado";
 import ProgresoAnalisis from "./ProgresoAnalisis";
 import LeerEnVozAlta from "./LeerEnVozAlta";
 import GenerarDenuncia from "./GenerarDenuncia";
+import PreguntasAfinar from "./PreguntasAfinar";
+import type { ContextoUsuario } from "@/lib/preguntas";
 import { textoParaLeer } from "@/lib/voz";
 import { generarAlerta, infoSemaforo, mensajeError, urlWhatsApp, validarImagenCliente } from "@/lib/ui";
 
@@ -27,6 +29,7 @@ export default function Analizador() {
   const [resultado, setResultado] = useState<Resultado | null>(null);
   const [mensajeAnalizado, setMensajeAnalizado] = useState("");
   const [modoAbuela, setModoAbuela] = useState(false);
+  const [contexto, setContexto] = useState<ContextoUsuario>({});
   const inputArchivo = useRef<HTMLInputElement>(null);
 
   function elegirImagen(archivo: File | undefined) {
@@ -67,6 +70,7 @@ export default function Analizador() {
       const datos = new FormData();
       if (texto.trim()) datos.append("texto", texto.trim());
       if (imagen) datos.append("imagen", imagen);
+      if (Object.keys(contexto).length > 0) datos.append("contexto", JSON.stringify(contexto));
       const res = await fetch("/api/analyze", { method: "POST", body: datos });
       const cuerpo: unknown = await res.json().catch(() => null);
       if (!res.ok) {
@@ -85,6 +89,7 @@ export default function Analizador() {
   function reiniciar() {
     setResultado(null);
     setTexto("");
+    setContexto({});
     quitarImagen();
   }
 
@@ -129,6 +134,8 @@ export default function Analizador() {
             </label>
           )}
         </div>
+
+        <PreguntasAfinar valor={contexto} onCambio={setContexto} />
 
         {error && (
           <p role="alert" className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-800">

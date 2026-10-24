@@ -30,3 +30,6 @@ Qué falta / notas: el proyecto no tiene rate limit propio ni reintento ante 429
 
 ## Progreso visible
 - Mientras analiza se muestran pasos ("Revisando links..." solo si hay links, "Analizando el mensaje...", "Calculando el riesgo...") con aria-live. `src/lib/progreso.ts`, `src/components/ProgresoAnalisis.tsx`, `tests/progreso.test.ts`; una línea en `Analizador.tsx`. Tests 100 OK, lint y build OK.
+
+## Preguntas para afinar
+- 3 preguntas opcionales sí/no bajo el cuadro de texto (tocar de nuevo la opción la deja sin responder). `src/lib/preguntas.ts` (validación y texto para el prompt), `src/components/PreguntasAfinar.tsx`, campo opcional `contexto` en `EntradaAnalisis`/`leerEntrada` (multipart o JSON) y sumado al prompt en `construirContenido`; sin respuestas el contrato y el prompt no cambian. `tests/preguntas.test.ts`. Tests 105 OK, lint y build OK.
