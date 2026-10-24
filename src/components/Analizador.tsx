@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import type { AnalisisFinal } from "@/lib/score";
 import EjemplosRapidos from "./EjemplosRapidos";
 import DominioResaltado from "./DominioResaltado";
-import { generarAlerta, infoSemaforo, mensajeError, validarImagenCliente } from "@/lib/ui";
+import { generarAlerta, infoSemaforo, mensajeError, urlWhatsApp, validarImagenCliente } from "@/lib/ui";
 
 type Resultado = AnalisisFinal & { modelo?: string };
 
@@ -311,7 +311,7 @@ function CompartirAlerta({ resultado }: { resultado: Resultado }) {
           {estado === "copiado" ? "¡Copiado! ✔" : "Copiar texto"}
         </button>
         <a
-          href={`https://wa.me/?text=${encodeURIComponent(alerta)}`}
+          href={urlWhatsApp(alerta)}
           target="_blank"
           rel="noopener noreferrer"
           className="flex h-12 flex-1 items-center justify-center rounded-xl border border-emerald-700 bg-white font-bold text-emerald-800 hover:bg-emerald-100"

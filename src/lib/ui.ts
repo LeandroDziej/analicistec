@@ -77,3 +77,8 @@ export function generarAlerta(r: DatosAlerta): string {
   lineas.push("", "Chequeado con AntiEstafa AR");
   return lineas.join("\n");
 }
+
+/** Link de WhatsApp con el texto de la alerta codificado (acentos, ñ, emojis y saltos de línea). */
+export function urlWhatsApp(texto: string): string {
+  return `https://wa.me/?text=${encodeURIComponent(texto)}`;
+}
