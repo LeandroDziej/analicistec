@@ -4,6 +4,8 @@ import { useRef, useState } from "react";
 import type { AnalisisFinal } from "@/lib/score";
 import EjemplosRapidos from "./EjemplosRapidos";
 import DominioResaltado from "./DominioResaltado";
+import LeerEnVozAlta from "./LeerEnVozAlta";
+import { textoParaLeer } from "@/lib/voz";
 import { generarAlerta, infoSemaforo, mensajeError, urlWhatsApp, validarImagenCliente } from "@/lib/ui";
 
 type Resultado = AnalisisFinal & { modelo?: string };
@@ -193,6 +195,7 @@ function Veredicto({
           {resultado.que_hacer[0] && (
             <p className="rounded-xl bg-sky-50 p-4 text-2xl font-bold leading-relaxed text-sky-900">👉 {resultado.que_hacer[0]}</p>
           )}
+          <LeerEnVozAlta texto={textoParaLeer([resultado.resumen_abuela, resultado.que_hacer[0]])} />
         </div>
       ) : (
         <>
