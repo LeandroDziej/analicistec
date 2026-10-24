@@ -33,3 +33,6 @@ Qué falta / notas: el proyecto no tiene rate limit propio ni reintento ante 429
 
 ## Preguntas para afinar
 - 3 preguntas opcionales sí/no bajo el cuadro de texto (tocar de nuevo la opción la deja sin responder). `src/lib/preguntas.ts` (validación y texto para el prompt), `src/components/PreguntasAfinar.tsx`, campo opcional `contexto` en `EntradaAnalisis`/`leerEntrada` (multipart o JSON) y sumado al prompt en `construirContenido`; sin respuestas el contrato y el prompt no cambian. `tests/preguntas.test.ts`. Tests 105 OK, lint y build OK.
+
+## Así se ve el real
+- Cuando un link imita una marca (`marcaImitada`), el resultado muestra un recuadro con 3 reglas generales de cómo se comunica la marca de verdad (Mercado Pago, Mercado Libre, ARCA/AFIP, Correo Argentino; el resto de bancos comparte reglas genéricas). Sin datos ni URLs específicos. `src/lib/marcaReal.ts`, `src/components/AsiSeVeElReal.tsx`, `tests/marcaReal.test.ts`; dos líneas en `Analizador.tsx`. Tests 108 OK, lint y build OK.

@@ -8,6 +8,7 @@ import ProgresoAnalisis from "./ProgresoAnalisis";
 import LeerEnVozAlta from "./LeerEnVozAlta";
 import GenerarDenuncia from "./GenerarDenuncia";
 import PreguntasAfinar from "./PreguntasAfinar";
+import AsiSeVeElReal from "./AsiSeVeElReal";
 import type { ContextoUsuario } from "@/lib/preguntas";
 import { textoParaLeer } from "@/lib/voz";
 import { generarAlerta, infoSemaforo, mensajeError, urlWhatsApp, validarImagenCliente } from "@/lib/ui";
@@ -265,6 +266,8 @@ function Veredicto({
           )}
         </>
       )}
+
+      <AsiSeVeElReal links={resultado.links} />
 
       <CompartirAlerta resultado={resultado} />
 
