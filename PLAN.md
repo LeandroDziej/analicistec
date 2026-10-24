@@ -2,7 +2,7 @@
 - [x] Endpoint /api/analyze: texto -> JSON estructurado con Gemini (@google/genai, responseSchema)
 - [x] Soporte de imagen (visión) en /api/analyze con Gemini
 - [x] Módulo de chequeo de links (RDAP, SSL, redirects, similitud con marcas, anti-SSRF)
-- [ ] Combinar señales técnicas + veredicto del LLM en un score final
+- [x] Combinar señales técnicas + veredicto del LLM en un score final
 - [ ] UI: input de texto/imagen, semáforo, banderas, qué hacer, modo abuela
 - [ ] Botón "Generar alerta para compartir" (texto copiable)
 - [ ] Rate limit por IP, límite de 4 MB por imagen, reintento ante 429 de Gemini
