@@ -65,6 +65,13 @@ Los mensajes son cada vez más creíbles (hoy también los escriben con IA) y lo
 
 ---
 
+## Documentación
+
+- 📘 **[Manual de usuario](docs/MANUAL_DE_USUARIO.md):** cómo usar cada funcionalidad, paso a paso, y preguntas frecuentes.
+- 📗 **[Documentación funcional](docs/DOCUMENTACION_FUNCIONAL.md):** usuarios, alcance, requisitos funcionales y no funcionales, flujos, mensajes del sistema y limitaciones.
+
+---
+
 ## Demo en 5 mensajes
 
 Copiá y pegá cada uno en la app (o usá los **ejemplos de un toque**). Los dominios son inventados.
