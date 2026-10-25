@@ -115,11 +115,13 @@ Te mostramos **qué nos llamó la atención**, **qué hacer ahora** y los **dato
 
 1. Entrá a la pestaña **Audio**.
 2. Elegí una de las dos formas:
-    - **Subir el audio:** la nota de voz de WhatsApp (.opus), un MP3 o un M4A, hasta 4 MB (unos 3 o 4 minutos).
-    - **Grabar con el micrófono:** poné el audio en altavoz en el otro celular y grabalo (hasta 3 minutos). La primera vez el navegador te pide permiso para usar el micrófono.
+    - **Subir el audio:** la nota de voz de WhatsApp (.opus), un MP3 o un M4A. Revisamos hasta **2 minutos**: si es más largo, los primeros 2.
+    - **Grabar con el micrófono:** poné el audio en altavoz en el otro celular y grabalo (hasta 2 minutos). La primera vez el navegador te pide permiso para usar el micrófono.
 3. Podés escucharlo antes de mandarlo. Tocá **¿Es estafa? Analizar audio**.
 
 Te mostramos **lo que dice el audio** escrito y el mismo resultado que para un mensaje: semáforo, puntaje, qué hacer, alerta, denuncia y botón al 911.
+
+**Funciona aunque la IA no esté disponible.** Si la inteligencia artificial tiene mucha demanda, la app escucha el audio con su **propio reconocedor de voz**, que corre en nuestro servidor (no se manda a nadie más), y lo analiza con reglas pensadas para llamadas y audios: alguien que dice ser un familiar desde otro número, "le hablamos del banco", pedidos de códigos o de plata. En ese caso te avisamos que fue un análisis más simple.
 
 **¿Cómo saco el audio de WhatsApp?**
 - **Android:** mantené apretado el audio → **Compartir** → guardalo en Archivos o mandátelo a vos.
@@ -288,7 +290,8 @@ Sí. En la pestaña **Audio** subí la nota de voz o grabala con el micrófono m
 | "No pudimos conectarnos…" | Revisá tu conexión a internet y probá de nuevo. |
 | Un mensaje que dice que el servicio está ocupado | La IA está con mucha demanda. Esperá unos minutos y volvé a intentar. |
 | "La imagen pesa demasiado…" | Recortá la captura o sacá una nueva (máximo 4 MB). |
-| "El audio pesa más de 4 MB" | Usá un audio más corto o grabá solo la parte importante con el micrófono. |
+| "El audio es muy largo para revisarlo" | Grabá solo la parte importante con el micrófono (hasta 2 minutos). |
+| "No pudimos entender el audio" | Probá con un audio más claro, o grabalo con el micrófono acercando el celular al parlante. |
 | "No pudimos usar el micrófono" | Dale permiso al navegador (el candado al lado de la dirección → Micrófono → Permitir) o subí el archivo. |
 | "No encontramos un código QR" | Sacá la foto más cerca, con buena luz y sin reflejos. |
 | No te deja copiar | Mantené apretado el texto y elegí **Copiar**. |

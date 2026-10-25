@@ -81,7 +81,7 @@ curl -X POST https://antiestafa-seguridad-sur.vercel.app/api/v1/analizar \
   -d '{"texto": "Hola ma, cambié de número, transferime al alias pago.rapido.mp"}'
 ```
 
-También acepta `"imagen": "<base64>"` para capturas y `"audio": "<base64>"` para **notas de voz** (el bot puede reenviar el audio de WhatsApp tal cual). Capturas y audios necesitan IA; en ese caso la respuesta trae además `"transcripcion"` con lo que dice el audio.
+También acepta `"imagen": "<base64>"` para capturas y `"audio": "<base64>"` para **notas de voz** (el bot puede reenviar el audio de WhatsApp tal cual). En los audios la respuesta trae además `"transcripcion"` con lo que dice el audio. Las capturas necesitan IA. Los audios **también funcionan sin IA** (reconocedor de voz propio), pero en ese caso hay que mandarlos en **WAV** (ideal mono 16 kHz, hasta 2 minutos): el bot puede convertir la nota de voz con `ffmpeg -i nota.opus -ar 16000 -ac 1 audio.wav`.
 
 **Respuesta:**
 

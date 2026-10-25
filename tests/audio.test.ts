@@ -35,7 +35,8 @@ test("leerEntrada acepta un audio solo (multipart) y rechaza lo que no es audio"
 test("validación del audio en el navegador: tamaño y tipo (o extensión)", () => {
   assert.equal(validarAudioCliente({ size: 1000, type: "audio/ogg", name: "a.ogg" }), null);
   assert.equal(validarAudioCliente({ size: 1000, type: "", name: "PTT-20261024-WA0003.opus" }), null);
-  assert.match(validarAudioCliente({ size: 5 * 1024 * 1024, type: "audio/mpeg", name: "a.mp3" }) ?? "", /4 MB/);
+  assert.equal(validarAudioCliente({ size: 5 * 1024 * 1024, type: "audio/mpeg", name: "a.mp3" }), null);
+  assert.match(validarAudioCliente({ size: 30 * 1024 * 1024, type: "audio/mpeg", name: "a.mp3" }) ?? "", /25 MB/);
   assert.match(validarAudioCliente({ size: 1000, type: "image/png", name: "a.png" }) ?? "", /Elegí un audio/);
   assert.match(validarAudioCliente({ size: 0, type: "audio/ogg", name: "a.ogg" }) ?? "", /vacío/);
 });
@@ -45,7 +46,7 @@ test("grabación: elige el formato que soporta el navegador", () => {
   assert.equal(formatoGrabacion((t) => t === "audio/mp4"), "audio/mp4");
   assert.equal(formatoGrabacion(() => false), undefined);
   assert.equal(formatoDuracion(75), "1:15");
-  assert.equal(formatoDuracion(180), "3:00");
+  assert.equal(formatoDuracion(120), "2:00");
 });
 
 test("la transcripción del audio llega hasta el resultado final", () => {

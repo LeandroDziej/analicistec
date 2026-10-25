@@ -145,10 +145,12 @@ AntiEstafa AR ayuda a cualquier persona a saber, en segundos, si un mensaje que 
 - /privacidad explica qué se hace con lo que se pega, las condiciones de uso y el responsable del servicio.
 
 ### RF-28 · Revisar un audio
-- Pestaña "Audio": subir una nota de voz de WhatsApp (.opus/.ogg), MP3, M4A, WAV, WEBM o AMR de hasta 4 MB, o grabar con el micrófono hasta 3 minutos (MediaRecorder, formato según el navegador). Se puede escuchar antes de enviar.
+- Pestaña "Audio": subir una nota de voz de WhatsApp (.opus/.ogg), MP3, M4A, WAV, WEBM o AMR (hasta 25 MB; se revisan los primeros 2 minutos), o grabar con el micrófono hasta 2 minutos (MediaRecorder, formato según el navegador). Se puede escuchar antes de enviar.
 - El servidor reconoce el formato por sus primeros bytes. Gemini escucha el audio, devuelve la transcripción (hasta 800 caracteres) y el análisis con el mismo formato que un mensaje; el prompt advierte sobre voces clonadas con IA.
 - El resultado muestra "Lo que dice el audio" y el mismo panel de veredicto, alerta, denuncia (con la transcripción) y botón al 911. Se guarda en "Mis análisis".
-- **Limitación:** sin IA disponible no se pueden analizar audios (el motor propio solo lee texto).
+- El navegador convierte el audio a WAV mono de 16 kHz (hasta 2 minutos) antes de mandarlo; si no puede leer el formato, manda el original.
+- **Sin IA disponible también funciona:** el servidor transcribe el audio con un reconocedor de voz propio (Whisper tiny int8 con sherpa-onnx, en `modelos/voz`, sin servicios externos ni costo) y el motor propio lo analiza en "modo audio": corrige palabras clave mal transcriptas y suma reglas de voz (alguien conocido desde otro número, "le hablamos del banco / seguridad", "dictame el código que te llegó", montos en pesos) y la advertencia de voces clonadas con IA. El resultado lo aclara.
+- **Limitación:** sin IA, la transcripción es menos precisa y necesita que el navegador haya convertido el audio a WAV (los navegadores actuales lo hacen; si no, se pide probar más tarde).
 
 ### RF-29 · Escanear un QR
 - Pestaña "QR": sacar una foto o elegir una imagen. El QR se lee en el navegador (jsQR), sin subir la imagen.

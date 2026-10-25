@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { Veredicto, type Resultado } from "./Analizador";
 import { Icono } from "./Iconos";
 import { guardarEntrada } from "./historialStore";
-import { formatoDuracion, formatoGrabacion, MAX_GRABACION_SEG, validarAudioCliente } from "@/lib/audio";
+import { formatoDuracion, formatoGrabacion, MAX_ENVIO_BYTES, MAX_GRABACION_SEG, validarAudioCliente } from "@/lib/audio";
+import { convertirAWav } from "@/lib/audioNavegador";
 import { mensajeError } from "@/lib/ui";
 
 /**
@@ -20,6 +21,7 @@ export default function AnalizarAudio() {
   const [puedeGrabar, setPuedeGrabar] = useState(false);
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [aviso, setAviso] = useState<string | null>(null);
   const [resultado, setResultado] = useState<Resultado | null>(null);
   const [modoAbuela, setModoAbuela] = useState(false);
   const input = useRef<HTMLInputElement>(null);
@@ -103,10 +105,19 @@ export default function AnalizarAudio() {
     }
     setCargando(true);
     setError(null);
+    setAviso(null);
     setResultado(null);
     try {
+      // Lo pasamos a WAV de 16 kHz: pesa poco y el servidor lo puede transcribir aunque la IA no esté disponible.
+      const convertido = await convertirAWav(archivo);
+      const envio = convertido?.wav ?? archivo;
+      if (convertido?.recortado) setAviso(`El audio dura ${formatoDuracion(convertido.segundos)}: revisamos los primeros 2 minutos.`);
+      if (envio.size > MAX_ENVIO_BYTES) {
+        setError("El audio es muy largo para revisarlo. Grabá o recortá solo la parte importante (hasta 2 minutos).");
+        return;
+      }
       const datos = new FormData();
-      datos.append("audio", archivo);
+      datos.append("audio", envio, convertido ? "audio.wav" : archivo.name);
       const res = await fetch("/api/analyze", { method: "POST", body: datos });
       const cuerpo: unknown = await res.json().catch(() => null);
       if (!res.ok) {
@@ -153,7 +164,7 @@ export default function AnalizarAudio() {
               </span>
               <span className="flex flex-col">
                 <span className="font-bold text-brand-800">Subir el audio</span>
-                <span className="text-sm text-ink-soft">Nota de voz de WhatsApp, MP3 o M4A. Hasta 4 MB.</span>
+                <span className="text-sm text-ink-soft">Nota de voz de WhatsApp, MP3 o M4A. Revisamos hasta 2 minutos.</span>
               </span>
               <input
                 ref={input}
@@ -200,6 +211,12 @@ export default function AnalizarAudio() {
             <li>Después tocá “Subir el audio” y elegilo. Si no podés, usá “Grabar con el micrófono”.</li>
           </ol>
         </details>
+
+        {aviso && (
+          <p role="status" className="rounded-xl border border-warn-200 bg-warn-50 p-3 text-sm text-warn-800">
+            {aviso}
+          </p>
+        )}
 
         {error && (
           <p role="alert" className="flex gap-3 rounded-xl border border-danger-200 bg-danger-50 p-4 text-base text-danger-800">
