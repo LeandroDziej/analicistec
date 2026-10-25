@@ -51,6 +51,18 @@ const LINK_TRUCHO = {
   senales: ["El dominio se registró hace 3 días", "Imita a Mercado Pago", "No tiene candado (SSL)"],
 };
 
+const RESPUESTA_AUDIO = {
+  veredicto: "estafa",
+  score: 93,
+  transcripcion:
+    "Hola ma, soy yo, se me rompió el celu y te hablo desde este número. Necesito que me transfieras 120 mil ahora, es urgente, después te explico. No me llames que no puedo atender.",
+  banderas: ["Dice ser tu hijo desde un número nuevo", "Pide plata con apuro", "Te pide que no lo llames", "La voz puede estar imitada con IA"],
+  que_hacer: ["Llamá a tu hijo al número de siempre", "No transfieras nada hasta hablar con él", "Avisá a la familia"],
+  resumen_abuela: "Es una estafa. Llamá a tu hijo al número de siempre antes de mandar plata.",
+  detalle: { score_llm: 93, veredicto_llm: "estafa", score_tecnico: 0 },
+  links: [],
+};
+
 const RESPUESTAS = {
   "/api/analyze": {
     veredicto: "estafa",
@@ -214,12 +226,15 @@ async function main() {
     for (const [ruta, json] of Object.entries(RESPUESTAS)) {
       await contexto.route(`**${ruta}`, async (r) => {
         await espera(ruta === "/api/analyze" ? 2800 : 1400);
-        await r.fulfill({ json });
+        const esAudio = ruta === "/api/analyze" && (r.request().postDataBuffer()?.toString("latin1") ?? "").includes('name="audio"');
+        await r.fulfill({ json: esAudio ? RESPUESTA_AUDIO : json });
       });
     }
   }
 
   page = await contexto.newPage();
+  // Si un paso no encuentra lo que busca, que falle en 20 s en vez de quedarse esperando.
+  page.setDefaultTimeout(20_000);
   t0 = Date.now();
   await page.goto(URL_BASE, { waitUntil: "networkidle" });
   await page.evaluate(() => {
@@ -269,10 +284,13 @@ async function main() {
   await bajarHasta(resultado.getByRole("button", { name: /Generar denuncia/ }));
   await tocar(resultado.getByRole("button", { name: /Generar denuncia/ }), 800);
   await cartel("La denuncia se arma sola: copiala, descargala o imprimila", 2800);
-  const llamar = resultado.getByRole("link", { name: /Llamar al 911/ });
+  // En el celular es un link (tel:911); en la compu, un botón que muestra el número grande.
+  const llamar = resultado.getByText(/Llamar al 911 · Policía/).first();
   await bajarHasta(llamar);
   await tocar(llamar, 900);
   await cartel("¿Querés denunciar? Llamás al 911 con lo que tenés que decir en pantalla", 3200);
+  await bajarHasta(resultado.getByText("Cuando te atiendan, leé esto:"));
+  await cartel("En la compu te mostramos el 911 grande para marcarlo desde el celular", 2800);
 
   // 4. Otras pestañas
   await page.evaluate(() => window.scrollTo({ top: 0, behavior: "smooth" }));
@@ -286,8 +304,30 @@ async function main() {
 
   await page.evaluate(() => window.scrollTo({ top: 0, behavior: "smooth" }));
   await espera(700);
+  await tocar(pestana("Audio"), 500);
+  await cartel("5. ¿Te llegó un audio raro? Subilo o grabalo con el micrófono", 1800);
+  await panel("Audio").locator('input[type="file"]').first().setInputFiles(path.join(AQUI, "PTT-20261024-WA0007.opus"));
+  await espera(700);
+  await tocar(panel("Audio").getByRole("button", { name: /Analizar audio/ }), 200);
+  await panel("Audio").getByText("Lo que dice el audio").waitFor();
+  await espera(600);
+  await bajarHasta(panel("Audio").getByText("Lo que dice el audio"));
+  await cartel("Lo escuchamos, lo pasamos a texto y te decimos si es estafa", 2800);
+  await cartel("Ojo: hoy las voces se pueden imitar con inteligencia artificial", 2600);
+
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: "smooth" }));
+  await espera(700);
+  await tocar(pestana("QR"), 500);
+  await cartel("6. ¿Vas a pagar con un QR? Sacale una foto antes", 1800);
+  await panel("QR").locator('input[type="file"]').last().setInputFiles(path.join(AQUI, "qr-ejemplo.png"));
+  await espera(2600);
+  await bajarHasta(panel("QR").getByRole("heading").last());
+  await cartel("Leemos el QR y revisamos a dónde te lleva", 2600);
+
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: "smooth" }));
+  await espera(700);
   await tocar(pestana("Comprobante"), 500);
-  await cartel("5. ¿Te mandaron un comprobante? Revisá si es falso", 1800);
+  await cartel("7. ¿Te mandaron un comprobante? Revisá si es falso", 1800);
   await panel("Comprobante").locator('input[type="file"]').first().setInputFiles(path.join(AQUI, "comprobante-ejemplo.png"));
   await espera(600);
   await tocar(panel("Comprobante").getByRole("button", { name: "Revisar comprobante" }), 200);
@@ -297,7 +337,7 @@ async function main() {
   await page.evaluate(() => window.scrollTo({ top: 0, behavior: "smooth" }));
   await espera(700);
   await tocar(pestana("Transferencia"), 500);
-  await cartel("6. Antes de transferir, revisá el alias o CBU que te pasaron", 1800);
+  await cartel("8. Antes de transferir, revisá el alias o CBU que te pasaron", 1800);
   await escribir(panel("Transferencia").getByLabel("Alias, CBU o CVU de destino"), "pago.rapido.mp");
   await escribir(
     panel("Transferencia").getByLabel("Mensaje que acompaña el pedido de transferencia"),
@@ -310,15 +350,27 @@ async function main() {
   // 5. Más ayuda
   await bajarHasta(pestana("Ya caí"));
   await tocar(pestana("Ya caí"), 500);
-  await cartel("7. ¿Ya caíste? Elegí qué pasó y seguí los pasos", 1600);
+  await cartel("9. ¿Ya caíste? Elegí qué pasó y seguí los pasos", 1600);
   await tocar(page.getByRole("button", { name: /Transferí plata/ }), 900);
   await cartel("Lo urgente primero: llamar al banco ya", 2600);
+  await bajarHasta(pestana("Del momento"));
+  await tocar(pestana("Del momento"), 700);
+  await cartel("10. Del momento: las estafas que circulan ahora, con su fuente", 2800);
+  await bajarHasta(panel("Del momento").getByRole("link", { name: /Avisar a mi familia/ }).first());
+  await cartel("Avisale a tu familia por WhatsApp con un toque", 2400);
+  await bajarHasta(pestana("Practicá"));
+  await tocar(pestana("Practicá"), 700);
+  await cartel("11. Practicá: ¿es estafa o es real? Aprendé a darte cuenta", 2000);
+  await tocar(panel("Practicá").getByRole("button", { name: /Es una estafa/ }), 1200);
+  await bajarHasta(panel("Practicá").getByText("Qué mirar:"));
+  await cartel("Te explicamos las pistas de cada mensaje", 2600);
+  await bajarHasta(pestana("Mis análisis"));
   await tocar(pestana("Mis análisis"), 700);
-  await cartel("8. Mis análisis: lo que revisaste, guardado solo en tu dispositivo", 2600);
+  await cartel("12. Mis análisis: lo que revisaste, guardado solo en tu dispositivo", 2600);
 
   // 6. Pandi
   const pandi = page.getByRole("button", { name: /Pandi, el asistente/ });
-  await cartel("9. Pandi responde tus dudas", 1200);
+  await cartel("13. Pandi responde tus dudas", 1200);
   await tocar(pandi, 800);
   await tocar(page.getByRole("button", { name: /código de WhatsApp/ }), 400);
   await page.getByText(/No se lo pases a nadie/).waitFor();
@@ -337,6 +389,11 @@ async function main() {
   await espera(900);
   await tocar(page.getByRole("link", { name: /Cómo se usa/ }).first(), 1500);
   await cartel("¿Dudas? Todo el manual está en «¿Cómo se usa?», también en PDF", 3000);
+  await page.goto(`${URL_BASE}/empresas`, { waitUntil: "networkidle" });
+  await espera(600);
+  await cartel("¿Tenés una empresa? Ofrecelo a tus clientes con tu marca", 3000);
+  await bajarHasta(page.getByRole("heading", { name: "Planes" }));
+  await cartel("App con tu marca, bot de WhatsApp y botón para tu web", 3000);
   await cartel("AntiEstafa AR · antiestafa-ar-2.vercel.app", 3000);
   await sinCartel();
   // =================================================
@@ -370,5 +427,6 @@ try {
   console.log(`Listo: ${path.relative(RAIZ, mp4)}, portada.jpg y demo.vtt (${subtitulos.length} subtítulos)`);
 } catch (err) {
   console.error("No se pudo grabar la demo:", err);
-  process.exitCode = 1;
+  // Cortamos acá: si no, el navegador queda abierto grabando.
+  process.exit(1);
 }

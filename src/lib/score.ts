@@ -85,6 +85,7 @@ export function combinarScore(llm: AnalisisLLM, links: ResultadoLink[]): Analisi
     banderas,
     que_hacer: queHacer,
     resumen_abuela: llm.resumen_abuela,
+    ...(llm.transcripcion ? { transcripcion: llm.transcripcion } : {}),
     detalle: { score_llm: llm.score, veredicto_llm: llm.veredicto, score_tecnico: scoreTecnico },
     links,
   };

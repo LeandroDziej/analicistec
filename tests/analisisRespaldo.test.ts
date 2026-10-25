@@ -33,3 +33,10 @@ test("una captura sola no se puede leer sin IA: devuelve el error", async () => 
 test("los errores que no son de Gemini no se tapan", async () => {
   await assert.rejects(analizarConRespaldo({ texto: "hola" }, async () => { throw new TypeError("bug"); }), TypeError);
 });
+
+test("un audio sin IA disponible devuelve un mensaje claro de qué hacer", async () => {
+  await assert.rejects(
+    analizarConRespaldo({ audio: { mimeType: "audio/ogg", base64: "AA==" } }, falla(429)),
+    (e: GeminiError) => /escuchar audios/.test(e.mensajeUsuario) && e.status === 429,
+  );
+});

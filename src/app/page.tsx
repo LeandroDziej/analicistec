@@ -43,7 +43,7 @@ export default function Home() {
             <BotonInstalar />
           </div>
           <Link href="/ayuda#video" className="w-fit font-semibold text-brand-800 underline underline-offset-2 hover:text-brand-900">
-            ▶ Mirá el video de cómo se usa (2 min)
+            ▶ Mirá el video de cómo se usa (4 min)
           </Link>
         </section>
 

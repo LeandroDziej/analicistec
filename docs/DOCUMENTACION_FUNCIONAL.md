@@ -24,7 +24,7 @@ AntiEstafa AR ayuda a cualquier persona a saber, en segundos, si un mensaje que 
 
 ## 3. Alcance
 
-**Incluye:** análisis de texto e imágenes, revisión directa de links, verificación técnica de links, puntaje de riesgo, recomendaciones, chequeo de alias/CBU/CVU, análisis de comprobantes, denuncia, alertas, guía para víctimas ("Ya caí"), accesibilidad, historial local, manual dentro de la app y app instalable.
+**Incluye:** análisis de texto, imágenes y audios, lectura de códigos QR, estafas del momento, práctica con quiz, revisión directa de links, verificación técnica de links, puntaje de riesgo, recomendaciones, chequeo de alias/CBU/CVU, análisis de comprobantes, denuncia, alertas, guía para víctimas ("Ya caí"), accesibilidad, historial local, manual dentro de la app y app instalable.
 
 **No incluye:** registro de usuarios, almacenamiento de mensajes en servidores, consulta a bases bancarias o de denuncias, bloqueo automático de números ni presentación automática de denuncias.
 
@@ -119,7 +119,7 @@ AntiEstafa AR ayuda a cualquier persona a saber, en segundos, si un mensaje que 
 - **Limitación:** una llamada telefónica no transmite texto; la denuncia escrita se entrega aparte (WhatsApp, mail o en la comisaría). En "Ya caí" el guion es genérico para completar.
 
 ### RF-21 · Video "Cómo se usa"
-- En /ayuda hay un video de unos 2 minutos, con subtítulos en español y portada, que recorre todas las funciones. Se accede también desde el inicio ("▶ Mirá el video de cómo se usa").
+- En /ayuda hay un video de unos 4 minutos, con subtítulos en español y portada, que recorre todas las funciones. Se accede también desde el inicio ("▶ Mirá el video de cómo se usa").
 - El video se genera automáticamente con un script de Playwright (`npm run demo:video`) que navega la app con cursor visible y carteles explicativos. Usa respuestas de ejemplo fijas para que la grabación sea siempre igual (opción `--real` para usar la IA). Se carga solo cuando el usuario lo reproduce.
 
 ### RF-22 · Motor propio sin IA (respaldo)
@@ -143,6 +143,24 @@ AntiEstafa AR ayuda a cualquier persona a saber, en segundos, si un mensaje que 
 ### RF-27 · Página "Para empresas" y "Privacidad y términos"
 - /empresas presenta canales, planes (Comunidad, Empresa, Empresa + IA), cómo se contrata y el código del botón web, con enlace a tecnoros.ar.
 - /privacidad explica qué se hace con lo que se pega, las condiciones de uso y el responsable del servicio.
+
+### RF-28 · Revisar un audio
+- Pestaña "Audio": subir una nota de voz de WhatsApp (.opus/.ogg), MP3, M4A, WAV, WEBM o AMR de hasta 4 MB, o grabar con el micrófono hasta 3 minutos (MediaRecorder, formato según el navegador). Se puede escuchar antes de enviar.
+- El servidor reconoce el formato por sus primeros bytes. Gemini escucha el audio, devuelve la transcripción (hasta 800 caracteres) y el análisis con el mismo formato que un mensaje; el prompt advierte sobre voces clonadas con IA.
+- El resultado muestra "Lo que dice el audio" y el mismo panel de veredicto, alerta, denuncia (con la transcripción) y botón al 911. Se guarda en "Mis análisis".
+- **Limitación:** sin IA disponible no se pueden analizar audios (el motor propio solo lee texto).
+
+### RF-29 · Escanear un QR
+- Pestaña "QR": sacar una foto o elegir una imagen. El QR se lee en el navegador (jsQR), sin subir la imagen.
+- Si es un link, se revisa como en "Link". Si es un QR de pago (formato EMV), muestra comercio, ciudad y monto. Si es otra cosa (texto, teléfono, wifi), lo muestra para que la persona decida.
+
+### RF-30 · Estafas del momento
+- Pestaña "Del momento" en "Más ayuda": lista curada de modalidades que circulan en Argentina, de la más nueva a la más vieja, con fecha, resumen, señales, consejo y fuente verificable.
+- Botón "Avisar a mi familia" que abre WhatsApp con un aviso corto y el link de la app.
+- Se actualiza agregando entradas en `src/lib/tendencias.ts`.
+
+### RF-31 · Practicá
+- Pestaña "Practicá" en "Más ayuda": quiz de mensajes reales y estafas (dominios ficticios .example). Después de cada respuesta explica por qué y "qué mirar". Al final muestra el nivel y permite compartir el resultado.
 
 ## 5. Flujos principales
 
@@ -216,6 +234,8 @@ Pestaña "Comprobante" → subir captura → "Revisar comprobante"
 - La instalación como app depende del navegador (Firefox en la compu no la permite).
 - El servicio de IA puede estar sobrecargado en momentos puntuales; en ese caso el motor propio da un análisis más simple y no puede leer capturas.
 - El medidor de uso sin Upstash se reinicia con cada despliegue.
+- "Estafas del momento" es una lista curada: hay que actualizarla a mano.
+- La lectura de QR depende de la calidad de la foto (luz, reflejos, distancia).
 
 ## 9. Glosario
 

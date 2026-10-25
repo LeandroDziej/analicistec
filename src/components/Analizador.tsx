@@ -16,7 +16,7 @@ import { guardarEntrada } from "./historialStore";
 import { textoParaLeer } from "@/lib/voz";
 import { generarAlerta, infoSemaforo, mensajeError, urlWhatsApp, validarImagenCliente } from "@/lib/ui";
 
-type Resultado = AnalisisFinal & { modelo?: string; sinIA?: boolean };
+export type Resultado = AnalisisFinal & { modelo?: string; sinIA?: boolean };
 
 // Tonos suaves: el color acompaña, pero el veredicto siempre se dice también con palabras e ícono.
 export const TONOS = {
@@ -322,7 +322,7 @@ export function Medidor({ valor, trazo, grande }: { valor: number; trazo: string
   );
 }
 
-function Veredicto({
+export function Veredicto({
   resultado,
   mensaje,
   modoAbuela,
