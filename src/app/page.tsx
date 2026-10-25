@@ -1,7 +1,8 @@
 import Link from "next/link";
 import Herramientas from "@/components/Herramientas";
 import BotonInstalar from "@/components/BotonInstalar";
-import Creditos from "@/components/Creditos";
+import Encabezado from "@/components/Encabezado";
+import PiePagina from "@/components/PiePagina";
 import AsistentePanda from "@/components/AsistentePanda";
 import MasAyuda from "@/components/MasAyuda";
 import { Icono, type NombreIcono } from "@/components/Iconos";
@@ -15,7 +16,7 @@ const GARANTIAS: { icono: NombreIcono; titulo: string; texto: string }[] = [
   {
     icono: "candado",
     titulo: "No guardamos tus mensajes",
-    texto: "Lo que pegás se analiza con una IA de Google (Gemini) y no queda registrado en nuestro sitio.",
+    texto: "Lo que pegás se analiza con una IA de Google (Gemini) o con nuestras reglas, y no queda guardado en nuestro sitio.",
   },
   {
     icono: "check",
@@ -27,16 +28,7 @@ const GARANTIAS: { icono: NombreIcono; titulo: string; texto: string }[] = [
 export default function Home() {
   return (
     <>
-      <header className="border-b border-line bg-white">
-        <div className="mx-auto flex w-full max-w-6xl items-center gap-3 px-4 py-4 sm:px-6">
-          <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-700 text-white">
-            <Icono nombre="escudo" className="h-6 w-6" />
-          </span>
-          <span className="titulo text-2xl text-ink">
-            AntiEstafa <span className="text-brand-700">AR</span>
-          </span>
-        </div>
-      </header>
+      <Encabezado />
 
       <main className="mx-auto grid w-full max-w-6xl flex-1 grid-cols-1 gap-x-12 gap-y-8 px-4 py-8 sm:px-6 sm:py-12 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)] lg:grid-rows-[auto_1fr]">
         <section className="flex flex-col gap-4 lg:pt-4">
@@ -75,23 +67,7 @@ export default function Home() {
         </ul>
       </main>
 
-      <footer className="border-t border-line bg-white">
-        <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-4 py-5 text-sm text-ink-mute sm:px-6">
-          <p>
-            Ante la duda, llamá a tu banco por el número que figura en tu tarjeta. Esta herramienta orienta, pero no reemplaza una denuncia ni el consejo de tu banco.
-          </p>
-          <p>
-            <Link href="/ayuda" className="font-semibold text-brand-800 underline">
-              Manual de usuario
-            </Link>
-            {" · "}
-            <a href="/docs/AntiEstafa-AR_Documentacion-funcional.pdf" download className="font-semibold text-brand-800 underline">
-              Documentación funcional (PDF)
-            </a>
-          </p>
-          <Creditos />
-        </div>
-      </footer>
+      <PiePagina />
 
       <AsistentePanda />
     </>

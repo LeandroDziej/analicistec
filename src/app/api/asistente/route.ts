@@ -1,6 +1,6 @@
 import { GeminiError } from "@/lib/gemini";
 import { EntradaError } from "@/lib/entrada";
-import { responderPanda, validarEntradaPanda } from "@/lib/asistente";
+import { respuestaPandaSinIA, responderPanda, validarEntradaPanda } from "@/lib/asistente";
 import { crearLimitador, ipDe } from "@/lib/rateLimit";
 
 // El chat genera más consultas que el análisis: un poco más de margen por minuto.
@@ -21,7 +21,14 @@ export async function POST(request: Request) {
     } catch {
       throw new EntradaError("No pudimos leer tu pregunta. Probá de nuevo.");
     }
-    return Response.json(await responderPanda(validarEntradaPanda(cuerpo)));
+    const entrada = validarEntradaPanda(cuerpo);
+    try {
+      return Response.json(await responderPanda(entrada));
+    } catch (err) {
+      if (!(err instanceof GeminiError)) throw err;
+      // Sin IA disponible, Pandi igual orienta con lo básico.
+      return Response.json({ respuesta: respuestaPandaSinIA(entrada.pregunta), sinIA: true });
+    }
   } catch (err) {
     if (err instanceof EntradaError) {
       return Response.json({ error: err.message }, { status: err.status });

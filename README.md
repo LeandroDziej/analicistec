@@ -63,6 +63,15 @@ Los mensajes son cada vez más creíbles (hoy también los escriben con IA) y lo
 - **Manual dentro de la app:** botón "¿Cómo se usa?" con la guía completa y descarga en PDF.
 - **Mobile first**, español rioplatense, sin registro.
 
+### 🏢 Para empresas (listo para vender con tecnoros.ar)
+- **Funciona sin pagar IA:** si no hay clave o se agota la cuota gratuita, sigue con el **motor propio** (reglas de estafas argentinas + chequeo de links). Pandi también responde lo básico.
+- **Marca blanca:** cada cliente con su nombre, logo y contacto, configurado con variables de entorno.
+- **API para bots de WhatsApp** (`/api/v1/analizar`) con clave por cliente, tope mensual de IA y respuesta lista para WhatsApp.
+- **Medidor de uso** por cliente y por mes, para cobrar la clave paga dentro del abono.
+- **Botón para cualquier web** con una línea (`widget.js`).
+- Páginas **Para empresas** (planes y cómo se contrata) y **Privacidad y términos**.
+- 👉 Guía paso a paso: **[Integración con tecnoros.ar](docs/INTEGRACION_TECNOROS.md)**.
+
 ### 🔒 Privacidad y seguridad
 - **No guardamos tus mensajes.** **Mis análisis** (los últimos 10 mensajes y links) queda solo en tu dispositivo; se puede apagar y borrar.
 - **Anti-SSRF:** el chequeo de links bloquea IPs privadas y localhost, con timeouts.
@@ -93,6 +102,7 @@ Usa respuestas de ejemplo fijas para que el video salga siempre igual. Opciones:
 ## Documentación
 
 - 📘 **[Manual de usuario](docs/MANUAL_DE_USUARIO.md):** cómo usar cada funcionalidad, paso a paso, y preguntas frecuentes.
+- 🏢 **[Integración con tecnoros.ar](docs/INTEGRACION_TECNOROS.md):** instalar la app para un cliente, bot de WhatsApp, botón web y cobro de la clave paga.
 - 📗 **[Documentación funcional](docs/DOCUMENTACION_FUNCIONAL.md):** usuarios, alcance, requisitos funcionales y no funcionales, flujos, mensajes del sistema y limitaciones.
 - 📄 **Versiones en PDF:** [Manual de usuario](public/docs/AntiEstafa-AR_Manual-de-usuario.pdf) · [Documentación funcional](public/docs/AntiEstafa-AR_Documentacion-funcional.pdf)
 
@@ -168,7 +178,7 @@ pregunta a Pandi ──► /api/asistente ──► Gemini (respuestas cortas, r
 
 ```bash
 npm install
-cp .env.example .env.local   # y completá GEMINI_API_KEY
+cp .env.example .env.local   # completá GEMINI_API_KEY (sin clave anda con el motor propio)
 npm run dev                  # http://localhost:3000
 npm test
 ```
@@ -184,6 +194,6 @@ En Windows (PowerShell), usá `Copy-Item .env.example .env.local` en lugar de `c
 | Manuel A. | [@Ridioortv](https://github.com/Ridioortv) | Programa base: análisis con IA y visión, chequeo de links, score, rate limit y deploy en Vercel; rediseño con pestañas, revisar link, "Ya caí" y "Mis análisis". |
 | María Sofía Genta | [@sofiigentaa](https://github.com/sofiigentaa) | Mejoras: alias/CBU, comprobante falso, denuncia, WhatsApp, voz, ejemplos, dominio resaltado, "así se ve el real", preguntas para afinar, historial, app instalable y optimización de velocidad. |
 
-**Hecho por Manuel A., María Sofía Genta y Leandro Dizej.**
+**Hecho por Manuel A. y María Sofía Genta.**
 
 _Construido en una hackatón con ayuda de agentes de IA (Claude Code) trabajando en paralelo sobre el mismo repositorio._

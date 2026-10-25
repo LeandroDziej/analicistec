@@ -16,7 +16,7 @@ import { guardarEntrada } from "./historialStore";
 import { textoParaLeer } from "@/lib/voz";
 import { generarAlerta, infoSemaforo, mensajeError, urlWhatsApp, validarImagenCliente } from "@/lib/ui";
 
-type Resultado = AnalisisFinal & { modelo?: string };
+type Resultado = AnalisisFinal & { modelo?: string; sinIA?: boolean };
 
 // Tonos suaves: el color acompaña, pero el veredicto siempre se dice también con palabras e ícono.
 export const TONOS = {
@@ -361,6 +361,13 @@ function Veredicto({
         </div>
         <Medidor valor={resultado.score} trazo={tono.trazo} grande={modoAbuela} />
       </div>
+
+      {resultado.sinIA && (
+        <p className="rounded-xl border border-line bg-paper px-4 py-3 text-sm text-ink-soft">
+          Lo revisamos con nuestras reglas de estafas, sin inteligencia artificial, porque ahora tiene mucha demanda. Es un análisis más
+          simple: si tenés dudas, probá de nuevo en un rato.
+        </p>
+      )}
 
       <label className="card flex cursor-pointer items-center gap-3 p-4">
         <Icono nombre="textoGrande" className="h-6 w-6 text-brand-700" />

@@ -4,8 +4,8 @@ import type { Metadata } from "next";
 import { cacheLife } from "next/cache";
 import Link from "next/link";
 import { manualAHtml } from "@/lib/manual";
-import Creditos from "@/components/Creditos";
-import { Icono } from "@/components/Iconos";
+import Encabezado from "@/components/Encabezado";
+import PiePagina from "@/components/PiePagina";
 import AsistentePanda from "@/components/AsistentePanda";
 import VideoDemo from "@/components/VideoDemo";
 
@@ -26,18 +26,7 @@ export default async function Ayuda() {
 
   return (
     <>
-      <header className="border-b border-line bg-white">
-        <div className="mx-auto flex w-full max-w-6xl items-center gap-3 px-4 py-4 sm:px-6">
-          <Link href="/" className="flex items-center gap-3" aria-label="Volver al detector">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-700 text-white">
-              <Icono nombre="escudo" className="h-6 w-6" />
-            </span>
-            <span className="titulo text-2xl text-ink">
-              AntiEstafa <span className="text-brand-700">AR</span>
-            </span>
-          </Link>
-        </div>
-      </header>
+      <Encabezado enlazarInicio />
 
       <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 py-8 sm:px-6 sm:py-12">
         <section className="flex flex-col gap-4">
@@ -67,11 +56,7 @@ export default async function Ayuda() {
         </Link>
       </main>
 
-      <footer className="border-t border-line bg-white">
-        <div className="mx-auto w-full max-w-6xl px-4 py-5 sm:px-6">
-          <Creditos />
-        </div>
-      </footer>
+      <PiePagina />
 
       <AsistentePanda />
     </>
