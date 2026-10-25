@@ -16,7 +16,7 @@ import { guardarEntrada } from "./historialStore";
 import { textoParaLeer } from "@/lib/voz";
 import { generarAlerta, infoSemaforo, mensajeError, urlWhatsApp, validarImagenCliente } from "@/lib/ui";
 
-type Resultado = AnalisisFinal & { modelo?: string; sinIA?: boolean };
+export type Resultado = AnalisisFinal & { modelo?: string; sinIA?: boolean };
 
 // Tonos suaves: el color acompaña, pero el veredicto siempre se dice también con palabras e ícono.
 export const TONOS = {
@@ -322,7 +322,7 @@ export function Medidor({ valor, trazo, grande }: { valor: number; trazo: string
   );
 }
 
-function Veredicto({
+export function Veredicto({
   resultado,
   mensaje,
   modoAbuela,
@@ -364,8 +364,9 @@ function Veredicto({
 
       {resultado.sinIA && (
         <p className="rounded-xl border border-line bg-paper px-4 py-3 text-sm text-ink-soft">
-          Lo revisamos con nuestras reglas de estafas, sin inteligencia artificial, porque ahora tiene mucha demanda. Es un análisis más
-          simple: si tenés dudas, probá de nuevo en un rato.
+          {resultado.modelo?.startsWith("voz-propia")
+            ? "La inteligencia artificial tiene mucha demanda, así que escuchamos el audio con nuestro propio reconocedor de voz y lo revisamos con nuestras reglas. Es un análisis más simple: si tenés dudas, probá de nuevo en un rato."
+            : "Lo revisamos con nuestras reglas de estafas, sin inteligencia artificial, porque ahora tiene mucha demanda. Es un análisis más simple: si tenés dudas, probá de nuevo en un rato."}
         </p>
       )}
 

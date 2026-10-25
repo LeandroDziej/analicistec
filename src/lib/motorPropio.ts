@@ -30,7 +30,8 @@ const MARCAS = /\b(arca|afip|anses|mercado ?pago|mercado ?libre|correo argentino
 export const REGLAS: Regla[] = [
   {
     id: "codigo",
-    patrones: [/\b(codigo|clave|contrasena|token|pin|password)\b.{0,40}\b(verificacion|seguridad|sms|que te (llego|llega|enviamos)|de 6|recibiste)\b/, /\b(pasame|mandame|enviame|decime|dictame|compart[ie]) (el|tu|la) (codigo|clave|token|pin)\b/, /\bcodigo de (6|seis) (digitos|numeros)\b/, /\bcodigo\b.{0,60}\b(me lo|pasas|pasame|mandas|mandame|reenvia|reenviame)\b/],
+    patrones: [/\b(codigo|clave|contrasena|token|pin|password)\b.{0,40}\b(verificacion|seguridad|sms|que te (llego|llega|enviamos)|de 6|recibiste)\b/, /\b(pasame|mandame|enviame|decime|dictame|compart[ie]) (el|tu|la) (codigo|clave|token|pin)\b/, /\bcodigo de (6|seis) (digitos|numeros)\b/, /\b(codigo|clave|token)\b.{0,30}\b(que (te|le) (acaba de llegar|llego|llega|mandamos|enviamos)|por (sms|mensaje))\b/,
+      /\b(el|la|los|ese) \w+ que (te|le) (acaba de llegar|acabamos de mandar|acabamos de enviar|llego|mandamos|enviamos) por (mensaje|sms|whatsapp)\b/, /\bcodigo\b.{0,60}\b(me lo|pasas|pasame|mandas|mandame|reenvia|reenviame)\b/],
     puntos: 55,
     bandera: "Te pide un código, una clave o un token. Nadie de verdad te los pide por mensaje.",
     consejo: "No pases ningún código ni clave, aunque digan que es para protegerte.",
@@ -107,7 +108,77 @@ export const REGLAS: Regla[] = [
     bandera: "Te pide validar o actualizar datos desde un mensaje.",
     consejo: "Si querés revisar tu cuenta, entrá a la app oficial o escribí vos la dirección. Nunca desde el link del mensaje.",
   },
+  {
+    id: "voz-conocido",
+    patrones: [
+      /\bsoy yo\b.{0,80}\b(numero|celu|celular|telefono)\b/,
+      /\bse me (rompio|perdio|cayo|mojo) el (celu|celular|telefono)\b/,
+      /\b(te|le) (hablo|escribo|llamo) (desde|de) (este|otro|un) (numero|celu|celular|telefono)\b/,
+      /\b(numero|celular|telefono) nuevo\b/,
+    ],
+    puntos: 40,
+    bandera: "Dice ser alguien conocido que habla desde otro número.",
+    consejo: "Cortá y llamá a esa persona al número de siempre antes de hacer nada.",
+  },
+  {
+    id: "voz-banco",
+    patrones: [
+      /\b(le|te|les) (hablamos|llamamos|habla|llama|comunicamos)\b.{0,30}\b(banco|area de seguridad|seguridad|soporte|fraudes|prevencion)\b/,
+      /\bmovimiento(s)? (sospechoso|inusual|extrano|no reconocido)/,
+      /\b(dicte|dictame|dictar|digame|decime|dime|pasame|paseme|leame|leeme) (el|ese|los|la) (codigo|numero|clave|token)\b/,
+    ],
+    puntos: 45,
+    bandera: "Dice llamar del banco o de “seguridad” por un movimiento raro. Es el engaño más común por teléfono.",
+    consejo: "Cortá. Llamá vos al banco al número que figura atrás de tu tarjeta.",
+  },
+  {
+    id: "pedido-plata",
+    patrones: [/\b\d[\d.]*\s*(mil )?pesos\b/, /\bnecesito que me (transf\w*|deposit\w*|mandes|pases|prestes|envies)\b/, /\b(mil|millon|millones) de pesos\b/],
+    puntos: 15,
+    bandera: "Pide una suma de plata concreta.",
+  },
 ];
+
+/** Palabras clave que la transcripción automática a veces escribe mal ("transiera", "códico"). */
+const VOCABULARIO_VOZ = [
+  "transfieras", "transferi", "transferime", "transferir", "transferencia", "depositame", "depositar",
+  "codigo", "clave", "token", "urgente", "numero", "celular", "telefono", "banco", "cuenta", "tarjeta", "seguridad",
+  "sospechoso", "bloquear", "bloquearlo", "dicte", "dictame", "pesos", "plata", "alias", "llames", "atender", "explico",
+  "verificacion", "mensaje", "rompio", "nuevo", "necesito", "movimiento",
+];
+
+function distancia(a: string, b: string): number {
+  const fila = Array.from({ length: b.length + 1 }, (_, j) => j);
+  for (let i = 1; i <= a.length; i++) {
+    let previo = fila[0];
+    fila[0] = i;
+    for (let j = 1; j <= b.length; j++) {
+      const actual = fila[j];
+      fila[j] = Math.min(fila[j] + 1, fila[j - 1] + 1, previo + (a[i - 1] === b[j - 1] ? 0 : 1));
+      previo = actual;
+    }
+  }
+  return fila[b.length];
+}
+
+/** Corrige palabras clave mal transcriptas comparándolas con el vocabulario (texto ya normalizado). */
+export function corregirTranscripcion(t: string): string {
+  return t.replace(/[a-zñ]{4,}/g, (palabra) => {
+    if (VOCABULARIO_VOZ.includes(palabra)) return palabra;
+    const tope = palabra.length >= 8 ? 2 : 1;
+    let mejor: string | null = null;
+    let menor = tope + 1;
+    for (const v of VOCABULARIO_VOZ) {
+      if (Math.abs(v.length - palabra.length) > tope || v[0] !== palabra[0]) continue;
+      const d = distancia(palabra, v);
+      if (d < menor) {
+        menor = d;
+        mejor = v;
+      }
+    }
+    return mejor ?? palabra;
+  });
+}
 
 const HAY_LINK = /\bhttps?:\/\/|\bwww\.|\b[a-z0-9-]+\.(com|net|xyz|top|online|site|info|ar|app|link|click|shop)\b/;
 
@@ -116,8 +187,9 @@ export interface ResultadoMotor extends AnalisisLLM {
 }
 
 /** Analiza un texto solo con reglas. No usa red ni IA, así que no cuesta nada. */
-export function analizarSinIA(texto: string): ResultadoMotor {
-  const t = normalizar(texto);
+export function analizarSinIA(texto: string, opciones: { audio?: boolean } = {}): ResultadoMotor {
+  const audio = Boolean(opciones.audio);
+  const t = audio ? corregirTranscripcion(normalizar(texto)) : normalizar(texto);
   const cumplidas = REGLAS.filter((r) => r.patrones.some((p) => p.test(t)));
   let puntos = cumplidas.reduce((s, r) => s + r.puntos, 0);
 
@@ -132,19 +204,30 @@ export function analizarSinIA(texto: string): ResultadoMotor {
   if (hayLink && cumplidas.length > 0) puntos += 10;
   // Combinaciones típicas: "familiar con número nuevo" o "premio/inversión" que además piden plata.
   const ids = new Set(cumplidas.map((r) => r.id));
-  if (ids.has("plata") && (ids.has("familiar") || ids.has("premio") || ids.has("inversion"))) puntos += 20;
+  const pidePlata = ids.has("plata") || ids.has("pedido-plata");
+  if (pidePlata && (ids.has("familiar") || ids.has("voz-conocido") || ids.has("premio") || ids.has("inversion"))) puntos += 20;
+  if (ids.has("voz-banco") && (ids.has("codigo") || ids.has("tarjeta") || ids.has("acceso-remoto"))) puntos += 20;
 
   // Sin IA no podemos estar seguros de nada: tope en 95 y piso en 10.
   const score = Math.min(95, Math.max(10, puntos));
   const veredicto = score >= 70 ? "estafa" : score >= 35 ? "sospechoso" : "seguro";
 
   const queHacer = cumplidas.map((r) => r.consejo).filter((c): c is string => Boolean(c));
+  if (audio && veredicto !== "seguro") {
+    banderas.push("Es un audio: hoy las voces se pueden imitar con inteligencia artificial, aunque suene igual a alguien que conocés.");
+    queHacer.unshift("No hagas nada de lo que te pide el audio hasta hablar vos con la persona o el banco por el número de siempre.");
+  }
   if (hayLink && veredicto !== "seguro") queHacer.unshift("No abras el link ni cargues datos ahí.");
   if (veredicto === "seguro") queHacer.push("Si algo te parece raro, consultá con alguien de confianza antes de responder.");
   queHacer.push("Ante la duda, comunicate con la empresa o la persona por un canal que vos conozcas.");
 
-  const resumen =
-    veredicto === "estafa"
+  const resumen = audio
+    ? veredicto === "estafa"
+      ? "Este audio tiene todas las señales de una estafa.\nNo mandes plata ni códigos: llamá vos a la persona."
+      : veredicto === "sospechoso"
+        ? "Este audio tiene señales raras.\nAntes de hacer nada, llamá vos a la persona."
+        : "No escuchamos señales claras de estafa.\nIgual, nunca pases claves ni códigos."
+    : veredicto === "estafa"
       ? "Esto tiene todas las señales de una estafa.\nNo respondas, no pagues y no abras links."
       : veredicto === "sospechoso"
         ? "Este mensaje tiene señales raras.\nAntes de hacer nada, confirmalo por otro lado."

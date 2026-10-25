@@ -9,11 +9,15 @@ export interface AnalisisLLM {
   banderas: string[];
   que_hacer: string[];
   resumen_abuela: string;
+  /** Solo para audios: lo que dice el audio, escrito. */
+  transcripcion?: string;
 }
 
 export interface EntradaAnalisis {
   texto?: string;
   imagen?: { mimeType: string; base64: string };
+  /** Audio (nota de voz de WhatsApp, mp3, m4a…). */
+  audio?: { mimeType: string; base64: string };
   contexto?: ContextoUsuario;
 }
 
@@ -50,7 +54,8 @@ Respondé SOLO con el JSON pedido, en español rioplatense, claro y sin tecnicis
 - banderas: señales concretas que encontraste (vacío si no hay).
 - que_hacer: 2 a 4 pasos concretos para la persona ahora mismo.
 - resumen_abuela: exactamente 2 líneas cortas, para alguien mayor, sin palabras técnicas.
-Si el contenido no tiene nada sospechoso, decilo y usá score bajo. No inventes datos que no estén en el mensaje.`;
+Si el contenido no tiene nada sospechoso, decilo y usá score bajo. No inventes datos que no estén en el mensaje.
+Si recibís un AUDIO (nota de voz o llamada grabada): escribí en "transcripcion" lo que se dice (máximo 600 caracteres, sin inventar lo que no se entiende) y analizalo igual. Ojo con voces que dicen ser un familiar, el banco o un organismo y piden plata, códigos o datos: hoy las voces se pueden clonar con IA. Si no es un audio, dejá "transcripcion" vacío.`;
 
 export const RESPONSE_SCHEMA = {
   type: Type.OBJECT,
@@ -60,9 +65,10 @@ export const RESPONSE_SCHEMA = {
     banderas: { type: Type.ARRAY, items: { type: Type.STRING } },
     que_hacer: { type: Type.ARRAY, items: { type: Type.STRING } },
     resumen_abuela: { type: Type.STRING },
+    transcripcion: { type: Type.STRING },
   },
   required: ["veredicto", "score", "banderas", "que_hacer", "resumen_abuela"],
-  propertyOrdering: ["veredicto", "score", "banderas", "que_hacer", "resumen_abuela"],
+  propertyOrdering: ["veredicto", "score", "banderas", "que_hacer", "resumen_abuela", "transcripcion"],
 };
 
 /** Pensar lo mínimo que acepta el modelo: "thinkingLevel" LOW (MINIMAL da 400 en gemini-3.8-flash) en Gemini 3+, "thinkingBudget" 0 en versiones anteriores. */
@@ -110,6 +116,7 @@ export function parsearRespuesta(texto: string | undefined): AnalisisLLM {
     banderas: lista(d.banderas),
     que_hacer: lista(d.que_hacer),
     resumen_abuela: typeof d.resumen_abuela === "string" ? d.resumen_abuela.trim() : "",
+    ...(typeof d.transcripcion === "string" && d.transcripcion.trim() ? { transcripcion: d.transcripcion.trim().slice(0, 800) } : {}),
   };
 }
 
@@ -194,13 +201,14 @@ async function listarModelos(cliente: ClienteGemini): Promise<{ flash: string[];
 function construirContenido(entrada: EntradaAnalisis) {
   const parts: Record<string, unknown>[] = [];
   if (entrada.imagen) parts.push({ inlineData: { mimeType: entrada.imagen.mimeType, data: entrada.imagen.base64 } });
+  if (entrada.audio) parts.push({ inlineData: { mimeType: entrada.audio.mimeType, data: entrada.audio.base64 } });
   const texto = entrada.texto?.trim();
-  parts.push({
-    text:
-      (texto
-        ? `Analizá este mensaje recibido:\n"""\n${texto}\n"""`
-        : "Analizá la captura de pantalla adjunta (leé todo el texto visible).") + textoContexto(entrada.contexto),
-  });
+  const pedido = texto
+    ? `Analizá este mensaje recibido:\n"""\n${texto}\n"""`
+    : entrada.audio
+      ? "Escuchá el audio adjunto (una nota de voz o llamada que recibió la persona), transcribilo y analizalo."
+      : "Analizá la captura de pantalla adjunta (leé todo el texto visible).";
+  parts.push({ text: pedido + textoContexto(entrada.contexto) });
   return [{ role: "user", parts }];
 }
 

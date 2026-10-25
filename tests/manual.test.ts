@@ -14,8 +14,9 @@ test("el manual se convierte a HTML sin el título y con anclas para el índice"
   const html = manualAHtml(md);
   assert.doesNotMatch(html, /<h1/);
   assert.match(html, /<h2 id="2-instalar-la-app">/);
-  assert.match(html, /<h2 id="11-mis-analisis">/);
-  assert.match(html, /<h2 id="13-preguntale-a-pandi">/);
+  assert.match(html, /<h2 id="15-mis-analisis">/);
+  assert.match(html, /<h2 id="17-preguntale-a-pandi">/);
+  assert.match(html, /<h2 id="6-revisar-un-audio">/);
   assert.match(html, /<table>/);
   // cada link del índice apunta a un título que existe
   const anclas = [...html.matchAll(/href="#([^"]+)"/g)].map((m) => m[1]);

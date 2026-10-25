@@ -55,6 +55,19 @@ const TRAZOS: Record<string, ReactNode> = {
     </>
   ),
   detener: <rect x="6" y="6" width="12" height="12" rx="2" />,
+  microfono: (
+    <>
+      <rect x="9" y="3" width="6" height="11" rx="3" />
+      <path d="M5 11a7 7 0 0 0 14 0" />
+      <path d="M12 18v3" />
+    </>
+  ),
+  tendencia: (
+    <>
+      <path d="M3 17l6-6 4 4 7-7" />
+      <path d="M14 8h6v6" />
+    </>
+  ),
   link: (
     <>
       <path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1" />

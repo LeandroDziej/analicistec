@@ -19,7 +19,7 @@ const sinIA = async () => {
 
 /**
  * API para bots y sistemas de terceros (por ejemplo, el bot de WhatsApp de tecnoros).
- * POST con "Authorization: Bearer <clave>" y JSON { "texto": "...", "imagen": "<base64 opcional>" }.
+ * POST con "Authorization: Bearer <clave>" y JSON { "texto": "...", "imagen"?: "<base64>", "audio"?: "<base64>" }.
  */
 export async function POST(request: Request) {
   const cliente = autenticar(request.headers, leerClientes(process.env.ANTIESTAFA_API_CLIENTES));
@@ -50,6 +50,7 @@ export async function POST(request: Request) {
       que_hacer: final.que_hacer,
       links: final.links.map((l) => ({ dominio: l.dominio, senales: l.senales, antiguedad_dias: l.antiguedadDias })),
       texto_whatsapp: textoParaWhatsApp(final, MARCA.urlApp),
+      ...(final.transcripcion ? { transcripcion: final.transcripcion } : {}),
       sin_ia: usoMotorPropio,
       modelo,
       uso: { cliente: cliente.nombre, mes: usoMes, tope: cliente.tope },

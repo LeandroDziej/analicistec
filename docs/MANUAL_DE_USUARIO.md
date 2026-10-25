@@ -4,7 +4,7 @@
 
 Entrá a **https://antiestafa-ar-2.vercel.app** desde el celular o la compu. Es gratis y no hace falta registrarse. Esta misma guía está dentro de la app: tocá **📘 ¿Cómo se usa?**.
 
-> **¿Preferís verlo?** En **¿Cómo se usa?** hay un **video de 2 minutos con subtítulos** que muestra todas las funciones. También se abre desde el inicio con **▶ Mirá el video de cómo se usa**.
+> **¿Preferís verlo?** En **¿Cómo se usa?** hay un **video de 4 minutos con subtítulos** que muestra todas las funciones. También se abre desde el inicio con **▶ Mirá el video de cómo se usa**.
 
 ---
 
@@ -15,17 +15,21 @@ Entrá a **https://antiestafa-ar-2.vercel.app** desde el celular o la compu. Es 
 3. [Revisar si un mensaje es estafa](#3-revisar-si-un-mensaje-es-estafa)
 4. [Entender el resultado](#4-entender-el-resultado)
 5. [Revisar un link](#5-revisar-un-link)
-6. [Avisar a tu familia](#6-avisar-a-tu-familia)
-7. [Hacer la denuncia](#7-hacer-la-denuncia)
-8. [Antes de transferir: revisar un alias o CBU](#8-antes-de-transferir)
-9. [Revisar un comprobante de transferencia](#9-revisar-un-comprobante)
-10. [Ya caí: qué hacer ahora](#10-ya-cai-que-hacer-ahora)
-11. [Mis análisis](#11-mis-analisis)
-12. [Modo abuela y lectura en voz alta](#12-modo-abuela-y-voz)
-13. [Preguntale a Pandi, el asistente](#13-preguntale-a-pandi)
-14. [Llamar al 911 con la denuncia lista](#14-llamar-al-911)
-15. [Preguntas frecuentes](#15-preguntas-frecuentes)
-16. [Si algo no funciona](#16-si-algo-no-funciona)
+6. [Revisar un audio de WhatsApp](#6-revisar-un-audio)
+7. [Escanear un QR antes de pagar](#7-escanear-un-qr-antes-de-pagar)
+8. [Avisar a tu familia](#8-avisar-a-tu-familia)
+9. [Hacer la denuncia](#9-hacer-la-denuncia)
+10. [Antes de transferir: revisar un alias o CBU](#10-antes-de-transferir)
+11. [Revisar un comprobante de transferencia](#11-revisar-un-comprobante)
+12. [Ya caí: qué hacer ahora](#12-ya-cai-que-hacer-ahora)
+13. [Estafas del momento](#13-estafas-del-momento)
+14. [Practicá: ¿es estafa o es real?](#14-practica-es-estafa-o-es-real)
+15. [Mis análisis](#15-mis-analisis)
+16. [Modo abuela y lectura en voz alta](#16-modo-abuela-y-voz)
+17. [Preguntale a Pandi, el asistente](#17-preguntale-a-pandi)
+18. [Llamar al 911 con la denuncia lista](#18-llamar-al-911)
+19. [Preguntas frecuentes](#19-preguntas-frecuentes)
+20. [Si algo no funciona](#20-si-algo-no-funciona)
 
 ---
 
@@ -38,10 +42,12 @@ Entrá a **https://antiestafa-ar-2.vercel.app** desde el celular o la compu. Es 
 |---|---|
 | **Mensaje** | Un texto o una captura de WhatsApp, SMS o mail. |
 | **Link** | Una dirección web que te mandaron. |
+| **Audio** | Una nota de voz o un audio que te mandaron. |
+| **QR** | Un código QR antes de pagar o entrar. |
 | **Comprobante** | La captura de una transferencia que te enviaron. |
 | **Transferencia** | Un alias, CBU o CVU al que te piden mandar plata. |
 
-- **Más ayuda:** otro recuadro con dos pestañas: **Ya caí** (qué hacer si ya te estafaron) y **Mis análisis** (lo que revisaste).
+- **Más ayuda:** otro recuadro con cuatro pestañas: **Ya caí** (qué hacer si ya te estafaron), **Del momento** (las estafas que circulan ahora), **Practicá** (un juego para aprender a detectarlas) y **Mis análisis** (lo que revisaste).
 - **Pandi 🐼:** el osito panda que aparece abajo a la derecha es el asistente. Tocalo para hacerle preguntas. Si lo arrastrás, ¡le encanta!
 
 En el celular, si no ves todas las pestañas, deslizá la fila hacia el costado.
@@ -103,14 +109,47 @@ Además del color vas a ver:
 
 Te mostramos **qué nos llamó la atención**, **qué hacer ahora** y los **datos del link**: cuántos días tiene el sitio, si tiene candado y si imita a una marca conocida. También podés copiar una **alerta para compartir**.
 
-## 6. Avisar a tu familia
+## 6. Revisar un audio
+
+¿Te llegó una **nota de voz** de un "familiar" que pide plata, del "banco" o de un organismo? Hoy las voces se pueden **imitar con inteligencia artificial**, así que conviene revisarla.
+
+1. Entrá a la pestaña **Audio**.
+2. Elegí una de las dos formas:
+    - **Subir el audio:** la nota de voz de WhatsApp (.opus), un MP3 o un M4A. Revisamos hasta **2 minutos**: si es más largo, los primeros 2.
+    - **Grabar con el micrófono:** poné el audio en altavoz en el otro celular y grabalo (hasta 2 minutos). La primera vez el navegador te pide permiso para usar el micrófono.
+3. Podés escucharlo antes de mandarlo. Tocá **¿Es estafa? Analizar audio**.
+
+Te mostramos **lo que dice el audio** escrito y el mismo resultado que para un mensaje: semáforo, puntaje, qué hacer, alerta, denuncia y botón al 911.
+
+**Funciona aunque la IA no esté disponible.** Si la inteligencia artificial tiene mucha demanda, la app escucha el audio con su **propio reconocedor de voz**, que corre en nuestro servidor (no se manda a nadie más), y lo analiza con reglas pensadas para llamadas y audios: alguien que dice ser un familiar desde otro número, "le hablamos del banco", pedidos de códigos o de plata. En ese caso te avisamos que fue un análisis más simple.
+
+**¿Cómo saco el audio de WhatsApp?**
+- **Android:** mantené apretado el audio → **Compartir** → guardalo en Archivos o mandátelo a vos.
+- **iPhone:** mantené apretado el audio → **Reenviar** → botón de compartir → **Guardar en Archivos**.
+
+> Si un familiar te pide plata por audio, **llamalo al número de siempre** antes de hacer nada, aunque la voz sea igual a la suya.
+
+## 7. Escanear un QR antes de pagar
+
+Los QR pegados en comercios, estacionamientos o que te mandan por mensaje pueden estar **adulterados** para que le pagues a otra persona o entres a un sitio trucho.
+
+1. Entrá a la pestaña **QR**.
+2. Tocá **Sacar una foto** para usar la cámara, o **Elegir una imagen** si ya tenés una captura del QR.
+3. Leemos el QR **dentro de tu celular** (la imagen no se sube a ningún lado) y te decimos qué es:
+    - **Un link:** lo revisamos como en la pestaña Link (antigüedad, candado y marca imitada).
+    - **Un pago:** te mostramos **a quién le pagás**, la ciudad y el monto. Fijate que coincida con el comercio.
+    - **Otra cosa** (texto, teléfono, wifi): te lo mostramos para que decidas.
+
+> Si el nombre del comercio no coincide con el lugar donde estás, **no pagues**.
+
+## 8. Avisar a tu familia
 
 En **Alerta para compartir** ya tenés un mensaje armado para que nadie más caiga.
 
 - **Mandar por WhatsApp:** abre WhatsApp con el texto listo; elegí el grupo de la familia y enviá.
 - **Copiar texto:** para pegarlo donde quieras.
 
-## 7. Hacer la denuncia
+## 9. Hacer la denuncia
 
 En **Denuncia** se arma un texto formal con todo lo necesario: fecha, el mensaje, los links y las señales detectadas.
 
@@ -118,9 +157,9 @@ En **Denuncia** se arma un texto formal con todo lo necesario: fecha, el mensaje
 - **Descargar .txt:** guarda un archivo de texto.
 - **Imprimir / PDF:** para llevarla impresa o guardarla como PDF.
 
-Presentala en la fiscalía de cibercrimen de tu provincia, en la comisaría o en Defensa del Consumidor. Si ya perdiste plata, mirá antes la sección [Ya caí](#10-ya-cai-que-hacer-ahora).
+Presentala en la fiscalía de cibercrimen de tu provincia, en la comisaría o en Defensa del Consumidor. Si ya perdiste plata, mirá antes la sección [Ya caí](#12-ya-cai-que-hacer-ahora).
 
-## 8. Antes de transferir
+## 10. Antes de transferir
 
 ¿Te pidieron que transfieras plata? Revisalo antes.
 
@@ -133,7 +172,7 @@ Vas a ver un riesgo **bajo, medio o alto**, las señales y una recomendación. S
 
 > La app **nunca** te va a decir que una cuenta es segura. Antes de transferir, confirmá siempre con la persona por **otro medio** (una llamada, en persona).
 
-## 9. Revisar un comprobante
+## 11. Revisar un comprobante
 
 ¿Vendiste algo y te mandaron un comprobante de transferencia?
 
@@ -145,7 +184,7 @@ El resultado puede ser **parece real**, **sospechoso** o **probablemente falso**
 
 > Aunque parezca real, **entregá el producto solo cuando veas la plata en la app de tu banco o billetera**. Los comprobantes falsos son muy fáciles de hacer.
 
-## 10. Ya caí: qué hacer ahora
+## 12. Ya caí: qué hacer ahora
 
 Si ya te estafaron, no te quedes solo con la culpa: **actuá rápido**.
 
@@ -162,22 +201,40 @@ Si ya te estafaron, no te quedes solo con la culpa: **actuá rápido**.
 
 > **Nunca pagues para "recuperar" la plata.** Si alguien te ofrece recuperarla a cambio de un adelanto, es una segunda estafa.
 
-## 11. Mis análisis
+## 13. Estafas del momento
 
-En **Más ayuda → Mis análisis** ves lo último que revisaste (mensajes y links), con su resultado.
+En **Más ayuda → Del momento** están las estafas que **están circulando ahora** en Argentina: cómo son, las señales para reconocerlas y qué hacer.
+
+- Cada una tiene la **fecha** y la **fuente** (la noticia o el aviso oficial) para que puedas leer más.
+- Con **Avisar a mi familia** mandás un aviso corto por WhatsApp al grupo de la familia.
+
+## 14. Practicá: ¿es estafa o es real?
+
+En **Más ayuda → Practicá** hay un juego corto para aprender a darte cuenta.
+
+1. Leé el mensaje.
+2. Elegí **Es una estafa** o **Parece real**.
+3. Te explicamos la respuesta y **qué mirar** en ese mensaje.
+4. Al final ves tu resultado y lo podés **compartir** para que tu familia también practique.
+
+Los links de los ejemplos son inventados: no llevan a ningún lado.
+
+## 15. Mis análisis
+
+En **Más ayuda → Mis análisis** ves lo último que revisaste (mensajes, audios, links y QR), con su resultado.
 
 - Se guarda **solo en tu dispositivo**: no se envía a ningún lado.
 - Con el interruptor **Guardar mis análisis en este dispositivo** lo podés apagar. Si lo apagás, se borra lo que había.
 - **Borrar historial** borra todo (te pide tocar dos veces para confirmar).
 
-## 12. Modo abuela y voz
+## 16. Modo abuela y voz
 
 - Activá **Modo abuela** en el resultado para ver **letra grande y solo lo importante**.
 - Tocá **Escuchar** para que la app lea el resumen en voz alta. **Detener** para cortar.
 
 Si tu navegador no puede leer en voz alta, el botón no aparece.
 
-## 13. Preguntale a Pandi
+## 17. Preguntale a Pandi
 
 Pandi es el panda asistente de la app. Le podés preguntar con tus palabras, por ejemplo: "¿esto es estafa?", "me pidieron el código de WhatsApp, ¿qué hago?" o "¿cómo uso la app?".
 
@@ -190,7 +247,7 @@ Pandi es el panda asistente de la app. Le podés preguntar con tus palabras, por
 
 > Pandi puede equivocarse: si te dice que algo es sospechoso, no actúes. Y **nunca le pases claves, códigos ni datos de tu tarjeta** (ni a Pandi ni a nadie).
 
-## 14. Llamar al 911
+## 18. Llamar al 911
 
 Si querés denunciar, el botón rojo **📞 Llamar al 911 · Policía** te ahorra tiempo. Está en el resultado de un mensaje (cuando da estafa o sospechoso) y en **Más ayuda → Ya caí**.
 
@@ -202,7 +259,7 @@ Con un solo toque:
 
 > La llamada no puede llevar la denuncia escrita: por eso te dejamos el guion para leerlo cuando te atienden. Si perdiste plata, llamá **también a tu banco** al número que figura atrás de tu tarjeta.
 
-## 15. Preguntas frecuentes
+## 19. Preguntas frecuentes
 
 **¿Qué pasa con lo que pego? ¿Es privado?**
 En la sección **Privacidad y términos** (abajo de todo) está explicado en detalle. En corto: no guardamos tus mensajes, pero para analizarlos se envían a la IA de Google. Tapá tus datos personales antes de subir una captura.
@@ -222,7 +279,10 @@ Entrá a **Más ayuda → Ya caí** y elegí lo que te pasó. Lo más urgente ca
 **¿Sirve para mensajes de mail o SMS?**
 Sí. Pegá el texto o subí una captura de cualquier mensaje.
 
-## 16. Si algo no funciona
+**¿Y para audios o llamadas?**
+Sí. En la pestaña **Audio** subí la nota de voz o grabala con el micrófono mientras suena en altavoz.
+
+## 20. Si algo no funciona
 
 | Ves esto | Qué hacer |
 |---|---|
@@ -230,6 +290,10 @@ Sí. Pegá el texto o subí una captura de cualquier mensaje.
 | "No pudimos conectarnos…" | Revisá tu conexión a internet y probá de nuevo. |
 | Un mensaje que dice que el servicio está ocupado | La IA está con mucha demanda. Esperá unos minutos y volvé a intentar. |
 | "La imagen pesa demasiado…" | Recortá la captura o sacá una nueva (máximo 4 MB). |
+| "El audio es muy largo para revisarlo" | Grabá solo la parte importante con el micrófono (hasta 2 minutos). |
+| "No pudimos entender el audio" | Probá con un audio más claro, o grabalo con el micrófono acercando el celular al parlante. |
+| "No pudimos usar el micrófono" | Dale permiso al navegador (el candado al lado de la dirección → Micrófono → Permitir) o subí el archivo. |
+| "No encontramos un código QR" | Sacá la foto más cerca, con buena luz y sin reflejos. |
 | No te deja copiar | Mantené apretado el texto y elegí **Copiar**. |
 | El botón **Pegar** dice que no pudo pegar | Mantené apretado el cuadro de texto y elegí **Pegar**. Algunos navegadores no permiten pegar con el botón. |
 | No aparece el botón **Pegar** | Tu navegador no lo permite. Pegá a mano: mantené apretado el cuadro y elegí **Pegar**. |

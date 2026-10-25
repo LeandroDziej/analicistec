@@ -39,6 +39,8 @@ Los mensajes son cada vez más creíbles (hoy también los escriben con IA) y lo
 - **Ejemplos de un toque.** Mensajes de ejemplo para probar la app sin tener que pegar nada.
 - **Carga sin esfuerzo:** botón "Pegar", pegar una captura con Ctrl+V, arrastrar y soltar la imagen, Ctrl+Enter para analizar, y la pantalla baja sola hasta el resultado.
 - **Revisar un link** sin abrirlo: antigüedad, candado y marca imitada.
+- **Revisar un audio:** la nota de voz de WhatsApp (o grabada con el micrófono) se transcribe y se analiza. Avisa sobre voces clonadas con IA. **Funciona aunque no haya IA:** tiene su propio reconocedor de voz (Whisper tiny, corre en el servidor, gratis).
+- **Escanear un QR** antes de pagar: se lee en el celular y muestra a dónde lleva o a quién le pagás.
 
 ### 💸 Antes de transferir
 - **Chequeo de alias/CBU/CVU.** Valida el formato (incluidos los dígitos verificadores del CBU/CVU) y evalúa con IA si el pedido es sospechoso. Nunca afirma que una cuenta es segura: siempre recomienda verificar por otro canal.
@@ -46,6 +48,10 @@ Los mensajes son cada vez más creíbles (hoy también los escriben con IA) y lo
 
 ### 🆘 Si ya caíste
 - **Ya caí:** guía paso a paso según lo que pasó (transferiste plata, diste una clave, pasaste datos de la tarjeta o el DNI, instalaste una app, te extorsionan), con los pasos urgentes primero.
+
+### 📚 Aprender y estar al día
+- **Estafas del momento:** las modalidades que circulan ahora en Argentina, con fuente y botón para avisar a la familia.
+- **Practicá:** un quiz de "¿es estafa o es real?" con las pistas de cada mensaje.
 
 ### 🐼 Pandi, el asistente
 - Un **osito panda** que se asoma, saluda y responde preguntas sobre estafas y sobre cómo usar la app, en lenguaje simple. **Se puede arrastrar**: dice «¡Wiii!» y, cuando lo soltás, vuelve solito a su lugar. Nunca pide datos y no inventa teléfonos.
@@ -73,7 +79,7 @@ Los mensajes son cada vez más creíbles (hoy también los escriben con IA) y lo
 - 👉 Guía paso a paso: **[Integración con tecnoros.ar](docs/INTEGRACION_TECNOROS.md)**.
 
 ### 🔒 Privacidad y seguridad
-- **No guardamos tus mensajes.** **Mis análisis** (los últimos 10 mensajes y links) queda solo en tu dispositivo; se puede apagar y borrar.
+- **No guardamos tus mensajes.** **Mis análisis** (los últimos 10 mensajes, audios, links y QR) queda solo en tu dispositivo; se puede apagar y borrar.
 - **Anti-SSRF:** el chequeo de links bloquea IPs privadas y localhost, con timeouts.
 - **Rate limit por IP**, límite de 4 MB por imagen y reintentos ante sobrecarga de Gemini, con mensajes amables al usuario.
 
@@ -86,7 +92,7 @@ Los mensajes son cada vez más creíbles (hoy también los escriben con IA) y lo
 
 ## Video de demostración
 
-▶ **[Mirá cómo se usa en 2 minutos](https://antiestafa-ar-2.vercel.app/ayuda#video)** (con subtítulos).
+▶ **[Mirá cómo se usa en 4 minutos](https://antiestafa-ar-2.vercel.app/ayuda#video)** (con subtítulos).
 
 El video se graba solo con Playwright, recorriendo todas las funciones:
 
@@ -147,7 +153,7 @@ No todo es alarma.
 ## Cómo funciona
 
 ```
-texto / imagen ──► /api/analyze ──┬─► links ─► RDAP · SSL · redirecciones · marcas  (en paralelo, con caché)
+texto / imagen / audio ──► /api/analyze ──┬─► links ─► RDAP · SSL · redirecciones · marcas  (en paralelo, con caché)
                                   └─► Gemini (JSON con responseSchema)
                                            │
                                 score combinado + veredicto ─► UI
@@ -169,7 +175,7 @@ pregunta a Pandi ──► /api/asistente ──► Gemini (respuestas cortas, r
 | `src/lib/pwa.ts` | Manifest y detección de navegador para instalar la app. |
 | `src/components/` | UI: analizador, semáforo, modo abuela y cada funcionalidad. |
 
-**Stack:** Next.js (App Router) · TypeScript · Tailwind · `@google/genai` (Gemini con visión) · RDAP · Vercel.
+**Stack:** Next.js (App Router) · TypeScript · Tailwind · `@google/genai` (Gemini con visión y audio) · Whisper tiny + sherpa-onnx (voz sin IA paga) · RDAP · Vercel.
 **Calidad:** más de 100 tests automáticos (con Gemini y red simulados, no gastan cuota), lint y build en cada cambio.
 
 ---

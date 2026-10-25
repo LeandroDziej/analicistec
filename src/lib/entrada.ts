@@ -28,6 +28,29 @@ export function detectarMimeImagen(bytes: Uint8Array): string | null {
   return null;
 }
 
+/** Detecta audios por sus primeros bytes: notas de voz de WhatsApp (ogg/opus), mp3, m4a, wav, webm, amr, aac. */
+export function detectarMimeAudio(bytes: Uint8Array): string | null {
+  const b = bytes;
+  const ascii = (desde: number, hasta: number) => String.fromCharCode(...b.subarray(desde, hasta));
+  if (b.length >= 4 && ascii(0, 4) === "OggS") return "audio/ogg";
+  if (b.length >= 3 && ascii(0, 3) === "ID3") return "audio/mpeg";
+  if (b.length >= 2 && b[0] === 0xff && (b[1] & 0xf6) === 0xf0) return "audio/aac";
+  if (b.length >= 2 && b[0] === 0xff && (b[1] & 0xe0) === 0xe0) return "audio/mpeg";
+  if (b.length >= 12 && ascii(0, 4) === "RIFF" && ascii(8, 12) === "WAVE") return "audio/wav";
+  if (b.length >= 4 && b[0] === 0x1a && b[1] === 0x45 && b[2] === 0xdf && b[3] === 0xa3) return "audio/webm";
+  if (b.length >= 6 && ascii(0, 6) === "#!AMR\n") return "audio/amr";
+  if (b.length >= 12 && ascii(4, 8) === "ftyp" && /^(M4A |M4B |mp42|mp41|isom|iso2|dash|3gp\d|3g2\w)$/.test(ascii(8, 12))) return "audio/mp4";
+  return null;
+}
+
+function validarAudio(bytes: Uint8Array): { mimeType: string; base64: string } {
+  if (bytes.length === 0) throw new EntradaError("El audio está vacío.");
+  if (bytes.length > MAX_IMAGEN_BYTES) throw new EntradaError("El audio pesa más de 4 MB. Probá con uno más corto (hasta 3 o 4 minutos).", 413);
+  const mimeType = detectarMimeAudio(bytes);
+  if (!mimeType) throw new EntradaError("Solo aceptamos audios de WhatsApp (.opus u .ogg), MP3, M4A, WAV o WEBM.", 415);
+  return { mimeType, base64: Buffer.from(bytes).toString("base64") };
+}
+
 function validarImagen(bytes: Uint8Array): { mimeType: string; base64: string } {
   if (bytes.length === 0) throw new EntradaError("La imagen está vacía.");
   if (bytes.length > MAX_IMAGEN_BYTES) throw new EntradaError("La imagen pesa más de 4 MB. Probá con una captura más liviana.", 413);
@@ -46,26 +69,27 @@ function validarTexto(raw: unknown): string {
 function decodificarBase64(raw: string): Uint8Array {
   const limpio = raw.replace(/^data:[^;,]*;base64,/, "").replace(/\s/g, "");
   if (limpio.length > Math.ceil((MAX_IMAGEN_BYTES * 4) / 3) + 4) {
-    throw new EntradaError("La imagen pesa más de 4 MB. Probá con una captura más liviana.", 413);
+    throw new EntradaError("El archivo pesa más de 4 MB. Probá con uno más liviano.", 413);
   }
-  if (!/^[A-Za-z0-9+/]*={0,2}$/.test(limpio)) throw new EntradaError("La imagen no es válida.");
+  if (!/^[A-Za-z0-9+/]*={0,2}$/.test(limpio)) throw new EntradaError("El archivo no es válido.");
   return new Uint8Array(Buffer.from(limpio, "base64"));
 }
 
 /**
  * Lee el body de /api/analyze. Acepta:
- * - multipart/form-data con campos "texto" y/o "imagen" (archivo)
- * - JSON { texto?: string, imagen?: string (base64 o data URL) }
+ * - multipart/form-data con campos "texto", "imagen" y/o "audio" (archivos)
+ * - JSON { texto?: string, imagen?: string, audio?: string } (archivos en base64 o data URL)
  */
 export async function leerEntrada(request: Request): Promise<EntradaAnalisis> {
   const tipo = request.headers.get("content-type") ?? "";
   const largo = Number(request.headers.get("content-length") ?? 0);
   if (largo > MAX_IMAGEN_BYTES * 1.4 + 64 * 1024) {
-    throw new EntradaError("La imagen pesa más de 4 MB. Probá con una captura más liviana.", 413);
+    throw new EntradaError("El archivo pesa más de 4 MB. Probá con uno más liviano.", 413);
   }
 
   let texto = "";
   let imagen: EntradaAnalisis["imagen"];
+  let audio: EntradaAnalisis["audio"];
   let contexto: EntradaAnalisis["contexto"];
 
   if (tipo.includes("multipart/form-data")) {
@@ -82,8 +106,13 @@ export async function leerEntrada(request: Request): Promise<EntradaAnalisis> {
       if (archivo.size > MAX_IMAGEN_BYTES) throw new EntradaError("La imagen pesa más de 4 MB. Probá con una captura más liviana.", 413);
       imagen = validarImagen(new Uint8Array(await archivo.arrayBuffer()));
     }
+    const sonido = form.get("audio");
+    if (sonido && typeof sonido !== "string" && sonido.size > 0) {
+      if (sonido.size > MAX_IMAGEN_BYTES) throw new EntradaError("El audio pesa más de 4 MB. Probá con uno más corto (hasta 3 o 4 minutos).", 413);
+      audio = validarAudio(new Uint8Array(await sonido.arrayBuffer()));
+    }
   } else {
-    let body: { texto?: unknown; imagen?: unknown; contexto?: unknown };
+    let body: { texto?: unknown; imagen?: unknown; audio?: unknown; contexto?: unknown };
     try {
       body = await request.json();
     } catch {
@@ -94,9 +123,17 @@ export async function leerEntrada(request: Request): Promise<EntradaAnalisis> {
     if (typeof body?.imagen === "string" && body.imagen.trim()) {
       imagen = validarImagen(decodificarBase64(body.imagen));
     }
+    if (typeof body?.audio === "string" && body.audio.trim()) {
+      audio = validarAudio(decodificarBase64(body.audio));
+    }
   }
 
-  if (!texto && !imagen) throw new EntradaError("Pegá el mensaje o subí una captura para revisar.");
+  if (!texto && !imagen && !audio) throw new EntradaError("Pegá el mensaje o subí una captura para revisar.");
   const conContexto = contexto && Object.keys(contexto).length > 0;
-  return { ...(texto ? { texto } : {}), ...(imagen ? { imagen } : {}), ...(conContexto ? { contexto } : {}) };
+  return {
+    ...(texto ? { texto } : {}),
+    ...(imagen ? { imagen } : {}),
+    ...(audio ? { audio } : {}),
+    ...(conContexto ? { contexto } : {}),
+  };
 }
