@@ -18,7 +18,7 @@ export function slug(texto: string): string {
  * El contenido es nuestro (docs/MANUAL_DE_USUARIO.md), no lo escribe el usuario.
  */
 export function manualAHtml(markdown: string): string {
-  const sinTitulo = markdown.replace(/^# .*\n+/, "");
+  const sinTitulo = markdown.replace(/^# [^\n]*\n(?:\r?\n)*/, "");
   const marked = new Marked({
     gfm: true,
     renderer: {
